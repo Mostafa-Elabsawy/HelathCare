@@ -1,0 +1,16 @@
+
+p-chip.red{
+    --p-chip-background: var(--color-red-200);
+    --p-chip-color: var(--color-red-600);
+    --p-chip-icon-color: var(--color-red-600);  
+  }
+  p-chip.yellow{
+    --p-chip-background: var(--color-yellow-200);
+    --p-chip-color: var(--color-yellow-600);
+    --p-chip-remove-icon-color: var(--color-yellow-600);  
+  }
+  p-chip.blue{
+    --p-chip-background: var(--color-blue-200);
+    --p-chip-color: var(--color-blue-600);
+    --p-chip-remove-icon-color: var(--color-blue-600);  
+  }

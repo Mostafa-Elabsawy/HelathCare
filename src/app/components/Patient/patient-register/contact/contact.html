@@ -1,0 +1,27 @@
+<div class="flex-column space-y-4  p-4 " [formGroup]="contactData" >
+  <div class="grid grid-cols-1  md:grid-cols-2 x  gap-2 sm:gap-4 ">
+    <div>
+      <label class="input-label">Email *</label>
+      <input pInputText [invalid]="valid(email)" placeholder="john@example.com" class="w-full" formControlName="email"  />
+    </div>
+    <div>
+        <label for="" class="input-label">Phone *</label>
+        <p-inputgroup>
+            <p-inputgroup-addon><p-button severity="secondary">+20</p-button></p-inputgroup-addon>
+            <input pInputText [invalid]="valid(phone)" class="w-full" formControlName="phone" placeholder="Phone Number" />
+        </p-inputgroup>
+    </div>
+    <div>
+        <label for="" class="input-label">governorate *</label>
+        <p-select [invalid]="valid(governate)" [options]="GovernatesNames" placeholder="governorate" class="w-full" formControlName="governorate" ></p-select>
+    </div>
+    <div>
+        <label for="" class="input-label">City *</label>
+        <p-select [invalid]="valid(city)" [options]="citiesName()" placeholder="cities" class="w-full" formControlName="city" ></p-select>
+    </div>
+    <div class="col-span-full">
+        <label for="" class="input-label">Address *</label>
+        <input pInputText [invalid]="valid(address)" placeholder="Address" class="w-full" formControlName="address"  />
+    </div>
+  </div>
+</div>

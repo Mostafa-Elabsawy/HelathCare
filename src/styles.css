@@ -1,1 +1,20 @@
-/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+@import "tailwindcss-primeui"; 
+@import "primeicons/primeicons.css";
+:root{
+  --p-inputtext-border-radius: 100%;
+  --my :115deg, #fff -20.04%, #67AEEA 139.72%;
+  --main:#67AEEA;
+}
+
+.input-label{
+  @apply text-sm font-semibold text-black;
+}
+p-stepper-separator.p-stepper-separator
+{
+  /* --p-stepper-separator-background:red; */
+/* --p-stepper-separator-active-background:green; */
+--p-stepper-separator-size:5px;
+border-radius: 2px;
+
+}

@@ -1,0 +1,123 @@
+<!-- Container -->
+<div class="min-h-screen bg-gray-100 flex justify-center py-10 px-4 ">
+  <div class="w-full max-w-3xl bg-white p-8 rounded-2xl shadow">
+
+    <!-- Steps indicator -->
+    <div class="flex justify-center mb-8 gap-3">
+      <div class="w-10 h-10 flex items-center justify-center rounded-full bg-blue-600 text-white font-semibold">1</div>
+      <div class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 text-gray-600 font-semibold">2</div>
+      <div class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 text-gray-600 font-semibold">3</div>
+      <div class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 text-gray-600 font-semibold">4</div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="space-y-4">
+      <h2 class="text-xl font-semibold">Personal Information</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input placeholder="First Name" class="border p-3 rounded w-full ">
+        <input placeholder="Last Name" class="border p-3 rounded w-full">
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <input type="date" class="border p-3 rounded w-full">
+        <select class="border p-3 rounded w-full">
+          <option value="">Gender</option>
+          <option>Male</option>
+          <option>Female</option>
+          <option>Other</option>
+        </select>
+        <input placeholder="Insurance Provider" class="border p-3 rounded w-full">
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="space-y-4 mt-10">
+      <h2 class="text-xl font-semibold">Contact Information</h2>
+
+      <input placeholder="Email" class="border p-3 rounded w-full">
+      <input placeholder="Phone Number" class="border p-3 rounded w-full">
+
+      <textarea placeholder="Full Address" class="border p-3 rounded w-full h-24"></textarea>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <input placeholder="City" class="border p-3 rounded w-full">
+        <input placeholder="State" class="border p-3 rounded w-full">
+        <input placeholder="ZIP Code" class="border p-3 rounded w-full">
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+     <!-- STEP 3: Medical History -->
+<div class="space-y-4 mt-10">
+  <h2 class="text-xl font-semibold">Medical History</h2>
+
+  <!-- Allergies -->
+  <div class="space-y-2">
+    <label class="block font-medium">Allergies</label>
+    <div class="flex gap-2">
+      <input type="text" placeholder="Enter allergy" class="border p-3 rounded w-full">
+      <button class="px-3 py-2 border rounded bg-gray-200 hover:bg-gray-300">Add</button>
+    </div>
+    <div class="flex flex-wrap gap-2 mt-2">
+      <!-- example tags -->
+      <span class="px-3 py-1 rounded-full bg-red-200 text-red-700 text-sm flex items-center gap-1">
+        Penicillin
+        <button class="ml-1">&times;</button>
+      </span>
+    </div>
+  </div>
+
+  <!-- Chronic Diseases -->
+  <div class="space-y-2">
+    <label class="block font-medium">Chronic Diseases / Conditions</label>
+    <div class="flex gap-2">
+      <input type="text" placeholder="Enter condition" class="border p-3 rounded w-full">
+      <button class="px-3 py-2 border rounded bg-gray-200 hover:bg-gray-300">Add</button>
+    </div>
+    <div class="flex flex-wrap gap-2 mt-2">
+      <!-- example tags -->
+      <span class="px-3 py-1 rounded-full bg-yellow-200 text-yellow-700 text-sm flex items-center gap-1">
+        Diabetes
+        <button class="ml-1">&times;</button>
+      </span>
+    </div>
+  </div>
+
+  <!-- Previous Surgeries -->
+  <div class="space-y-2">
+    <label class="block font-medium">Previous Surgeries</label>
+    <div class="flex gap-2">
+      <input type="text" placeholder="Enter surgery" class="border p-3 rounded w-full">
+      <button class="px-3 py-2 border rounded bg-gray-200 hover:bg-gray-300">Add</button>
+    </div>
+    <div class="flex flex-wrap gap-2 mt-2">
+      <!-- example tags -->
+      <span class="px-3 py-1 rounded-full bg-blue-200 text-blue-700 text-sm flex items-center gap-1">
+        Appendectomy
+        <button class="ml-1">&times;</button>
+      </span>
+    </div>
+  </div>
+</div>
+<!-- step 4 -->
+    <div class="space-y-3 mt-10">
+      <h2 class="text-xl font-semibold">Confirm Submission</h2>
+      <p class="text-gray-600">
+        Review your information and submit your registration.
+      </p>
+
+      <div class="bg-gray-100 rounded p-4 text-sm">
+        <!-- Placeholder for summary -->
+        <p class="text-gray-500">Summary information will appear here...</p>
+      </div>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="flex justify-between pt-6 mt-6">
+      <button class="px-5 py-2 bg-gray-200 rounded hover:bg-gray-300">Back</button>
+      <button class="px-5 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Next</button>
+    </div>
+
+  </div>
+</div>

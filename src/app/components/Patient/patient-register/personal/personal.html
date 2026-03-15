@@ -1,0 +1,28 @@
+<div class="flex-column space-y-4  p-4 " [formGroup]="personalData" >
+  <div class="grid grid-cols-1  md:grid-cols-2 x  gap-2 sm:gap-4 ">
+    <div>
+      <label class="input-label">First Name *</label>
+      <input pInputText [invalid]="valid(firstName)" placeholder="First Name" class="w-full" formControlName="firstName"  />
+    </div>
+    <div>
+      <label class="input-label">Middle Name *</label>
+      <input pInputText [invalid]="valid(middleName)" placeholder="Middle Name" class="w-full" formControlName="middleName"/>
+    </div>
+    <div>
+      <label class="input-label">Last Name *</label>
+      <input pInputText [invalid]="valid(lastName)" placeholder="Last Name" class="w-full"formControlName="lastName" />
+    </div>
+    <div>
+      <label class="input-label">Date of Birth *</label>
+      <p-date-picker dateFormat="dd-mm-yy" [invalid]="valid(dateOfBirth)" fluid placeholder="Date of Birth" showIcon   class="w-full" formControlName="dateOfBirth"></p-date-picker>
+    </div>
+    <div>
+      <label class="input-label">National ID *</label>
+      <input pInputText [invalid]="valid(nationalId)" placeholder="National ID" class="w-full"  formControlName="nationalID" />
+    </div>
+    <div>
+      <label class="input-label "  >Gender *</label>
+      <p-select [invalid]="valid(gender)"  [options]="genders" placeholder="Gender" class="w-full" formControlName="gender" ></p-select>
+    </div>
+  </div>
+</div>
