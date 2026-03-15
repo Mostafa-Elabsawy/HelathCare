@@ -1,20 +1,24 @@
-@import "tailwindcss";
-@import "tailwindcss-primeui"; 
-@import "primeicons/primeicons.css";
-:root{
+@import 'tailwindcss';
+@import 'tailwindcss-primeui';
+@import 'primeicons/primeicons.css';
+:root {
   --p-inputtext-border-radius: 100%;
-  --my :115deg, #fff -20.04%, #67AEEA 139.72%;
-  --main:#67AEEA;
+  --my: 115deg, #fff -20.04%, #67aeea 139.72%;
+  --main: #67aeea;
 }
 
-.input-label{
+.input-label {
   @apply text-sm font-semibold text-black;
 }
-p-stepper-separator.p-stepper-separator
-{
+p-stepper-separator.p-stepper-separator {
   /* --p-stepper-separator-background:red; */
-/* --p-stepper-separator-active-background:green; */
---p-stepper-separator-size:5px;
-border-radius: 2px;
-
+  /* --p-stepper-separator-active-background:green; */
+  --p-stepper-separator-size: 5px;
+  border-radius: 2px;
+}
+@media (max-width: 640px) {
+  p-stepper-separator.p-stepper-separator {
+    --p-stepper-separator-size: 0px;
+    border-radius: 2px;
+  }
 }

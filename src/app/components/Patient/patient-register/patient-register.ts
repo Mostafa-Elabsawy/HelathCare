@@ -31,7 +31,7 @@ import { Password } from 'primeng/password';
 })
 export class PatientRegister {
   activeStep = 1;
-  validation=signal<boolean>(true);
+  validation=signal<boolean>(false);
   personaldata = signal<PersonalDataSchema>(defaultPersonalData);
   contactdata = signal<ContatactDataSchema>(defaultContactData);
   medicaldata = signal<MedicalDataSchema>(defaultMeicalData);
