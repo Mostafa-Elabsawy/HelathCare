@@ -18,7 +18,7 @@ p-stepper-separator.p-stepper-separator {
 }
 @media (max-width: 640px) {
   p-stepper-separator.p-stepper-separator {
-    --p-stepper-separator-size: 0px;
+    --p-stepper-separator-size: 2px;
     border-radius: 2px;
   }
 }
