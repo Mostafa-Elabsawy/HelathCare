@@ -58,7 +58,12 @@ export class Personal {
   });
 
   valid(input: FormControl): boolean {
-    return input.invalid && input.touched;
+    // console.log("hellow from validation");
+
+    console.log("name",this.firstName.touched, this.firstName.invalid );
+    console.log("input",input.touched, input.invalid, );
+    return (input.invalid && (input.touched || input.dirty));
+    // return false;
   }
 
   genders = [
@@ -66,6 +71,12 @@ export class Personal {
     { label: 'Female', value: 'female' },
   ];
   constructor() {
+    // console.log("hellow from rxjs");
+
+    this.firstName.valueChanges.subscribe((value) => {
+      // console.log(this.firstName.touched,this.firstName.invalid,value);
+      console.log('pipi');
+    });
     this.personalData.valueChanges.pipe(debounceTime(500)).subscribe((value) => {
       let data: PersonalDataSchema = {
         value: this.personalData.getRawValue(),
@@ -76,8 +87,7 @@ export class Personal {
       // console.log(data);
     });
   }
-  formatDate(currentdate: string): string
-  {
+  formatDate(currentdate: string): string {
     const date = new Date(currentdate);
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');

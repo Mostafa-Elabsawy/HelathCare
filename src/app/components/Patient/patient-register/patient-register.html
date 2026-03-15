@@ -73,7 +73,7 @@
                            
                         <div class="flex pt-6 justify-between">
                             <p-button (onClick)="activateCallback(3)"  label="Back" severity="secondary" icon="pi pi-arrow-left" />
-                            <p-button (onClick)="submit()" label="Complete Regsistration" severity="primary" icon="pi pi-check" iconPos="right" />
+                            <p-button (onClick)="submit()" label="Complete Regsistration" [disabled]="validation() && !(personaldata().valid && contactdata().valid && medicaldata().valid && securitydata().valid)" severity="primary" icon="pi pi-check" iconPos="right" />
                         </div>
                     </ng-template>
                 </p-step-panel>

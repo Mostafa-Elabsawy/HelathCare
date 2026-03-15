@@ -81,7 +81,7 @@ export const defaultMeicalData: MedicalDataSchema = {
     bloodGroup: '',
     hasInsurance: '',
   },
-  valid:false
+  valid:true
 };
 export interface SecurityDataSchema{
   value: {

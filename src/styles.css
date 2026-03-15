@@ -22,3 +22,10 @@ p-stepper-separator.p-stepper-separator {
     border-radius: 2px;
   }
 }
+p.err
+{
+  @apply text-red-500!;
+  i{
+    @apply mx-0.5!;
+  }
+}

@@ -2,15 +2,11 @@
   <div class="grid grid-cols-1 md:grid-cols-2   gap-2 sm:gap-4 ">
     <div>
       <label class="input-label">Password *</label>
-      <p-password  [invalid]="valid(password)" placeholder="Password" fluid class="w-full" formControlName="password" [toggleMask]="true" />
-      @if (password.invalid && password.touched) {
+      <p-password  [invalid]="valid(password)" placeholder="Password" [feedback]="false" fluid class="w-full" formControlName="password" [toggleMask]="true" />
+      @if (password.invalid && (password.touched||password.dirty)) {
 
-        <div class="text-red-500 space-y-0" >
-          <p class="text-black">Password must conatin at least</p>
-          <p>8 characters length</p>
-          <p>1 uppercase litter</p>
-          <p>1 digit</p>
-          <p>1 special character</p>
+        <div class="text-red-500! space-y-0 text-sm" >
+          <p class="text-base "> <i class="pi pi-exclamation-circle"></i>  Password must be 8+ characters with uppercase, number, and special character.  </p>
           
         </div>
       }
@@ -25,16 +21,21 @@
     <div class="col-span-full">
       <hr class="border-gray-400">
     </div>
-    <div class="flex col-span-full gap-x-4">
-      <p-checkbox [binary]="true" [invalid]="valid(checkBox)" [formControl]="checkBox">
-      </p-checkbox>
-      <label for="" class="input-label"> I agree to the Terms of Service and Privacy Policy *</label>
-    </div>
+
     <div class="col-span-full">
-      <p >By registering, you consent to the collection and use of your health information as described in our privacy policy.</p>
-      @if (checkBox.invalid) {
-        <p class="text-red-500"> You must accept the terms to Complete Registartion</p>
+      <p >
+By registering, you agree to the use of your health information. Our Privacy Policy explains how your data is handled and protected.
+      </p>
+      </div>    
+      <div class="col-span-full space-y-3 ">
+        <div class="flex gap-x-4">
+          <p-checkbox [binary]="true" [invalid]="valid(checkBox)" [formControl]="checkBox">
+          </p-checkbox>
+          <label for="" class="input-label"> I agree to the Terms of Service and Privacy Policy *</label>
+        </div>
+         @if (checkBox.invalid) {
+        <p class="text-red-500"><i class="pi pi-exclamation-circle"></i> You must accept the terms to complete registartion</p>
       }
-      </div>
+    </div>
   </div>
 </div> 

@@ -48,6 +48,8 @@ export class Medical {
     return input.invalid && input.touched;
   }
   constructor() {
+    console.log(this.allergiesArray.errors,this.healthInsurance.errors);
+    
     this.medicalData.valueChanges.pipe(debounceTime(500)).subscribe((value) => {
       let data: MedicalDataSchema = {
         value: this.medicalData.getRawValue(),
