@@ -1,0 +1,79 @@
+<div class="space-y-5">
+    <section class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white/70 backdrop-blur-xl border border-gray-100 rounded-2xl shadow-sm p-6">
+        <div>
+            <h2 class="text-2xl font-bold text-gray-800 tracking-tight">Upload Results</h2>
+            <p class="text-gray-500 text-sm mt-1">Submit completed test results for patient records.</p>
+        </div>
+        <button class="px-5 py-3 rounded-xl bg-violet-500 text-white text-sm font-semibold hover:bg-violet-600 transition">
+            <i class="pi pi-upload mr-2"></i>
+            New Upload
+        </button>
+    </section>
+
+    <section class="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
+        <article class="bg-white/70 backdrop-blur-xl border border-gray-100 rounded-2xl shadow-sm p-5">
+            <p class="text-sm text-gray-400">Uploads Today</p>
+            <h3 class="text-3xl font-bold text-gray-800 mt-2">24</h3>
+            <p class="text-xs text-violet-600 font-medium mt-2">8 pending review</p>
+        </article>
+        <article class="bg-white/70 backdrop-blur-xl border border-gray-100 rounded-2xl shadow-sm p-5">
+            <p class="text-sm text-gray-400">Pending Review</p>
+            <h3 class="text-3xl font-bold text-gray-800 mt-2">12</h3>
+            <p class="text-xs text-yellow-600 font-medium mt-2">Requires verification</p>
+        </article>
+        <article class="bg-white/70 backdrop-blur-xl border border-gray-100 rounded-2xl shadow-sm p-5">
+            <p class="text-sm text-gray-400">Verified Results</p>
+            <h3 class="text-3xl font-bold text-gray-800 mt-2">156</h3>
+            <p class="text-xs text-emerald-600 font-medium mt-2">This month</p>
+        </article>
+        <article class="bg-white/70 backdrop-blur-xl border border-gray-100 rounded-2xl shadow-sm p-5">
+            <p class="text-sm text-gray-400">Avg. Processing Time</p>
+            <h3 class="text-3xl font-bold text-gray-800 mt-2">45m</h3>
+            <p class="text-xs text-blue-600 font-medium mt-2">Within target range</p>
+        </article>
+    </section>
+
+    <section class="bg-white/70 backdrop-blur-xl border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+        <div class="p-5 border-b border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+                <h3 class="font-semibold text-gray-800">Recent Uploads</h3>
+                <p class="text-sm text-gray-500">Latest test results uploaded to the system</p>
+            </div>
+            <div class="flex gap-2">
+                <button class="px-4 py-2 rounded-xl bg-violet-50 text-violet-600 text-sm font-semibold border border-violet-100">All</button>
+                <button class="px-4 py-2 rounded-xl bg-gray-50 text-gray-500 text-sm font-semibold border border-gray-100">Pending</button>
+                <button class="px-4 py-2 rounded-xl bg-gray-50 text-gray-500 text-sm font-semibold border border-gray-100">Completed</button>
+            </div>
+        </div>
+
+        <div class="divide-y divide-gray-100">
+            @for (upload of recentUploads; track upload.id) {
+            <div class="grid md:grid-cols-12 gap-4 items-center p-5">
+                <div class="md:col-span-5 flex items-center gap-3">
+                    <div class="w-11 h-11 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center">
+                        @if (upload.type === 'vial') {
+                        <i class="fa-solid fa-vial"></i>
+                        } @else if (upload.type === 'droplet') {
+                        <i class="fa-solid fa-droplet"></i>
+                        } @else {
+                        <i class="fa-solid fa-flask"></i>
+                        }
+                    </div>
+                    <div>
+                        <p class="font-semibold text-gray-800">{{ upload.testName }}</p>
+                        <p class="text-xs text-gray-500">{{ upload.patientName }} &bull; Laboratory</p>
+                    </div>
+                </div>
+                <p class="md:col-span-2 text-sm text-gray-600">{{ upload.date }}</p>
+                <p class="md:col-span-3 text-sm text-gray-600">{{ upload.lab }}</p>
+                @if (upload.status === 'Pending Review') {
+                <span class="md:col-span-1 text-xs px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 font-medium text-center">Pending</span>
+                } @else {
+                <span class="md:col-span-1 text-xs px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 font-medium text-center">Completed</span>
+                }
+                <button class="md:col-span-1 text-violet-600 hover:text-violet-700"><i class="pi pi-arrow-right"></i></button>
+            </div>
+            }
+        </div>
+    </section>
+</div>

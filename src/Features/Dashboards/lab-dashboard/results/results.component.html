@@ -1,0 +1,70 @@
+<div class="space-y-5">
+    <section class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white/70 backdrop-blur-xl border border-gray-100 rounded-2xl shadow-sm p-6">
+        <div>
+            <h2 class="text-2xl font-bold text-gray-800 tracking-tight">Test Results</h2>
+            <p class="text-gray-500 text-sm mt-1">Review and manage completed test results.</p>
+        </div>
+    </section>
+
+    <section class="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
+        <article class="bg-white/70 backdrop-blur-xl border border-gray-100 rounded-2xl shadow-sm p-5">
+            <p class="text-sm text-gray-400">Total Results</p>
+            <h3 class="text-3xl font-bold text-gray-800 mt-2">156</h3>
+            <p class="text-xs text-violet-600 font-medium mt-2">All time</p>
+        </article>
+        <article class="bg-white/70 backdrop-blur-xl border border-gray-100 rounded-2xl shadow-sm p-5">
+            <p class="text-sm text-gray-400">Reviewed</p>
+            <h3 class="text-3xl font-bold text-gray-800 mt-2">142</h3>
+            <p class="text-xs text-emerald-600 font-medium mt-2">Approved by doctors</p>
+        </article>
+        <article class="bg-white/70 backdrop-blur-xl border border-gray-100 rounded-2xl shadow-sm p-5">
+            <p class="text-sm text-gray-400">Pending Review</p>
+            <h3 class="text-3xl font-bold text-gray-800 mt-2">14</h3>
+            <p class="text-xs text-yellow-600 font-medium mt-2">Awaiting verification</p>
+        </article>
+        <article class="bg-white/70 backdrop-blur-xl border border-gray-100 rounded-2xl shadow-sm p-5">
+            <p class="text-sm text-gray-400">Abnormal Results</p>
+            <h3 class="text-3xl font-bold text-gray-800 mt-2">3</h3>
+            <p class="text-xs text-red-600 font-medium mt-2">Flagged for attention</p>
+        </article>
+    </section>
+
+    <section class="bg-white/70 backdrop-blur-xl border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+        <div class="p-5 border-b border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+                <h3 class="font-semibold text-gray-800">Completed Results</h3>
+                <p class="text-sm text-gray-500">All finalized test results</p>
+            </div>
+        </div>
+
+        <div class="divide-y divide-gray-100">
+            @for (result of completedResults; track result.id) {
+            <div class="grid md:grid-cols-12 gap-4 items-center p-5">
+                <div class="md:col-span-4 flex items-center gap-3">
+                    <div class="w-11 h-11 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center">
+                        @if (result.type === 'vial') {
+                        <i class="fa-solid fa-vial"></i>
+                        } @else if (result.type === 'droplet') {
+                        <i class="fa-solid fa-droplet"></i>
+                        } @else {
+                        <i class="fa-solid fa-flask"></i>
+                        }
+                    </div>
+                    <div>
+                        <p class="font-semibold text-gray-800">{{ result.testName }}</p>
+                        <p class="text-xs text-gray-500">{{ result.patientName }}</p>
+                    </div>
+                </div>
+                <p class="md:col-span-2 text-sm text-gray-600">{{ result.date }}</p>
+                <p class="md:col-span-3 text-sm text-gray-600">{{ result.orderedBy }}</p>
+                @if (result.status === 'Pending Review') {
+                <span class="md:col-span-2 text-xs px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 font-medium text-center">Pending Review</span>
+                } @else {
+                <span class="md:col-span-2 text-xs px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 font-medium text-center">Reviewed</span>
+                }
+                <button class="md:col-span-1 text-violet-600 hover:text-violet-700"><i class="pi pi-eye"></i></button>
+            </div>
+            }
+        </div>
+    </section>
+</div>

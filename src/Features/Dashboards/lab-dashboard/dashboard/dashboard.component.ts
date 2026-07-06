@@ -1,8 +1,84 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-lab-dashboard-overview',
-  imports: [],
-  template: `<p class="text-gray-500 text-center py-10">Lab Dashboard Overview - Coming Soon</p>`,
+  imports: [CommonModule],
+  templateUrl: './dashboard.component.html',
 })
-export class LabDashboardOverview {}
+export class LabDashboardOverview {
+  testRequests = [
+    {
+      id: 1,
+      patientName: 'Ahmed Ali',
+      avatar: 'A',
+      avatarColor: 'violet',
+      phone: '+20 0123456789',
+      date: '2026-07-06',
+      time: '09:00 AM',
+      testType: 'CBC',
+      urgency: 'normal',
+      status: 'pending',
+    },
+    {
+      id: 2,
+      patientName: 'Sara Mohamed',
+      avatar: 'S',
+      avatarColor: 'pink',
+      phone: '+20 0123456790',
+      date: '2026-07-06',
+      time: '10:30 AM',
+      testType: 'Blood Sugar',
+      urgency: 'normal',
+      status: 'pending',
+    },
+    {
+      id: 3,
+      patientName: 'Mohamed Ibrahim',
+      avatar: 'M',
+      avatarColor: 'violet',
+      phone: '+20 0123456791',
+      date: '2026-07-06',
+      time: '11:45 AM',
+      testType: 'Lipid Panel',
+      urgency: 'high',
+      status: 'pending',
+    },
+    {
+      id: 4,
+      patientName: 'Nour Adel',
+      avatar: 'N',
+      avatarColor: 'amber',
+      phone: '+20 0123456792',
+      date: '2026-07-06',
+      time: '01:00 PM',
+      testType: 'Thyroid Function',
+      urgency: 'medium',
+      status: 'pending',
+    },
+    {
+      id: 5,
+      patientName: 'Youssef Kareem',
+      avatar: 'Y',
+      avatarColor: 'violet',
+      phone: '+20 0123456793',
+      date: '2026-07-06',
+      time: '02:15 PM',
+      testType: 'Urinalysis',
+      urgency: 'normal',
+      status: 'pending',
+    },
+    {
+      id: 6,
+      patientName: 'Mariam Ali',
+      avatar: 'M',
+      avatarColor: 'pink',
+      phone: '+20 0123456794',
+      date: '2026-07-06',
+      time: '03:30 PM',
+      testType: 'Vitamin D',
+      urgency: 'medium',
+      status: 'pending',
+    },
+  ];
+}

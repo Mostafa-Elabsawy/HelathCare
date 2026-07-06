@@ -23,6 +23,12 @@ import { DashboardsComponent } from '../Features/Dashboards/main/dashboards.comp
 import { NotFoundComponent } from '../Features/not-found/not-found.component';
 import { SpinnerComponent } from '../Features/spinner/spinner.component';
 import { UnauthorizedComponent } from '../Features/unauthorized/unauthorized.component';
+import { LabDashboard } from '../Features/Dashboards/lab-dashboard/main/lab-dashboard.component';
+import { LabDashboardOverview } from '../Features/Dashboards/lab-dashboard/dashboard/dashboard.component';
+import { LabTests } from '../Features/Dashboards/lab-dashboard/tests/tests.component';
+import { LabUpload } from '../Features/Dashboards/lab-dashboard/upload/upload.component';
+import { LabResultsView } from '../Features/Dashboards/lab-dashboard/results/results.component';
+import { LabProfile } from '../Features/Dashboards/lab-dashboard/profile/profile.component';
 export const routes: Routes = [
   //redirect to home if path is empty
   {
@@ -116,6 +122,18 @@ export const routes: Routes = [
           },
         ],
       },
+      {
+        path: 'lab',
+        component: LabDashboard,
+        children: [
+          { path: '', redirectTo: 'Dashboard', pathMatch: 'full' },
+          { path: 'Dashboard', component: LabDashboardOverview },
+          { path: 'Tests', component: LabTests },
+          { path: 'Upload', component: LabUpload },
+          { path: 'Results', component: LabResultsView },
+          { path: 'Profile', component: LabProfile },
+        ],
+      }
     ],
   },
 

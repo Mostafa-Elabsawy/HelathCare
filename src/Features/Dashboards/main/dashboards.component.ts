@@ -19,15 +19,11 @@ export class DashboardsComponent {
       let currentRole = this.authService.role();
       console.log("user = ", this.authService.user());
 
-      if (currentRole)
-      {
-        console.log("role = ",currentRole);
-        this.router.navigate([`/dashboard/${currentRole.toLowerCase()}`], { replaceUrl: true }); 
-      }
-      else
-      {
-        this.router.navigate(['/unauthorized'],{ replaceUrl: true });
-      }
+      // if (currentRole)
+      // {
+      //   console.log("role = ",currentRole);
+      //   this.router.navigate([`/dashboard/${currentRole.toLowerCase()}`], { replaceUrl: true }); 
+      // }
     })
   }
   
