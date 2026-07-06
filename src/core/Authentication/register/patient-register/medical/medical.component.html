@@ -1,0 +1,57 @@
+<div class="flex-column space-y-4  py-4 " [formGroup]="medicalData" >
+  <div class="grid grid-cols-1 md:grid-cols-2  gap-2 sm:gap-4 ">
+    <div>
+        <label for="" class="input-label">BloodGroup</label>
+        <p-select  placeholder="BloodGroup" [options]="BloodGroups"  formControlName="bloodGroup" class="w-full"></p-select>
+    </div>
+    <div>
+        <label for="" class="input-label">Health Insurance</label>
+        <p-select  placeholder="Health insurance" [options]="healthInsurancesCompanies" formControlName="hasInsurance" class="w-full"></p-select>
+    </div>
+    <div class="col-span-full">
+        <label class="input-label">Allergies</label>
+        <div class="flex gap-2 w-[%]">
+        <input pInputText placeholder="Enter allergy" class="w-full" [formControl]="newAllergy" (keypress)="pressed($event)">
+          <button pButton type="button" icon="pi pi-plus" iconPos="right" (click)="addValue(newAllergy,allergiesArray)"></button>
+        </div>
+        <div class="flex flex-wrap gap-2 mt-2">
+          @for (item of  allergiesArray.getRawValue(); track $index) {
+            <p-chip class="red"  >
+                {{item}}
+                <i class="pi pi-times-circle hover:cursor-pointer " (click)="removeValue($index,allergiesArray)"  ></i>
+            </p-chip>
+          }
+        </div>
+      </div>
+      <div class="col-span-full">
+        <label class="input-label">Chroic Diseases</label>
+        <div class="flex gap-2 w-[%]">
+        <input pInputText placeholder="Enter Disease" class="w-full" [formControl]="newChronic" (keypress)="pressed($event)">
+          <button pButton type="button" icon="pi pi-plus" iconPos="right" (click)="addValue(newChronic,chronicDiseasesArray)"></button>
+        </div>
+        <div class="flex flex-wrap gap-2 mt-2">
+          @for (item of  chronicDiseasesArray.getRawValue(); track $index) {
+            <p-chip class="purple"  >
+                {{item}}
+                <i class="pi pi-times-circle hover:cursor-pointer "  (click)="removeValue($index,chronicDiseasesArray)"></i>
+            </p-chip>
+          }
+        </div>
+      </div>
+      <div class="col-span-full">
+        <label class="input-label">Previous surgeries</label>
+        <div class="flex gap-2 w-[%]">
+        <input pInputText placeholder="Enter surgery" class="w-full" [formControl]="newSurgery" (keypress)="pressed($event)">
+        <button pButton type="button" icon="pi pi-plus" iconPos="right" (click)="addValue(newSurgery,previousSurgeryArray)"></button>
+        </div>
+        <div class="flex flex-wrap gap-2 mt-2">
+          @for (item of  previousSurgeryArray.getRawValue(); track $index) {
+            <p-chip class="yellow"  >
+                {{item}}
+                <i class="pi pi-times-circle hover:cursor-pointer " (click)="removeValue($index,previousSurgeryArray)" ></i>
+            </p-chip>
+          }
+        </div>
+      </div>
+  </div>
+</div>

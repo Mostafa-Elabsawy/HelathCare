@@ -1,0 +1,59 @@
+<div class="min-h-screen text-slate-800 flex flex-col overflow-hidden relative">
+
+    <!-- Decorative Background (Matches 404 Page) -->
+    <div class="absolute inset-0 pointer-events-none overflow-hidden">
+        <div class="absolute -top-40 -left-40 h-96 w-96 rounded-full bg-primary-100 blur-3xl opacity-60">
+        </div>
+
+        <div class="absolute bottom-0 right-0 h-[30rem] w-[30rem] rounded-full bg-primary-50 blur-3xl opacity-70">
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="relative flex-1 flex items-center justify-center px-4 py-8">
+
+        <section class="w-full max-w-5xl rounded-3xl p-8 sm:p-10 lg:p-16">
+
+            <div class="space-y-8 text-center">
+
+                <!-- Visual Guard/Icon & Status Code -->
+                <div class="space-y-4">
+
+
+                    <h1 class="text-7xl sm:text-8xl md:text-9xl font-extrabold tracking-tight text-primary-500 pt-2">
+                        403
+                    </h1>
+
+                    <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900">
+                        Access Denied
+                    </h2>
+                </div>
+
+                <!-- Description -->
+                <p class="mx-auto max-w-2xl text-lg leading-relaxed text-slate-500">
+                    You do not have the required permissions to view this clinical record or administrative module.
+                    Please sign into an account with elevated privileges, or return to your main dashboard.
+                </p>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+
+                    <!-- Primary Action: Log In -->
+                    <button routerLink="/login" class="inline-flex w-full sm:w-auto items-center justify-center rounded-2xl bg-primary-500 px-8 py-4 font-semibold text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:bg-primary-600 cursor-pointer">
+                        Log In
+                    </button>
+
+                    <!-- Secondary Action: Go Home -->
+                    <button routerLink="/home" class="inline-flex w-full sm:w-auto items-center justify-center rounded-2xl border border-slate-300 bg-white px-8 py-4 font-semibold text-slate-700 transition-all duration-300 hover:bg-slate-100 cursor-pointer">
+                        Return to Home
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>

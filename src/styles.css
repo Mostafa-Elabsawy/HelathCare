@@ -1,0 +1,62 @@
+@import 'tailwindcss';
+@import 'tailwindcss-primeui';
+@import 'primeicons/primeicons.css';
+:root {
+  --p-inputtext-border-radius: 100%;
+  --my: 115deg, #fff -20.04%, #67aeea 139.72%;
+  --main: #67aeea;
+}
+
+.input-label {
+  @apply text-sm font-semibold text-black;
+}
+p-stepper-separator.p-stepper-separator {
+  /* --p-stepper-separator-background:red; */
+  --p-stepper-separator-size: 5px;
+  border-radius: 2px;
+}
+p-stepper.doctor p-step.p-step p-stepper-separator.p-stepper-separator{
+  
+  --p-stepper-separator-active-background:var(--color-emerald-500);
+
+}
+p-stepper.lab p-step.p-step p-stepper-separator.p-stepper-separator{
+    --p-stepper-separator-active-background:var(--color-violet-500);
+
+}
+@media (max-width: 640px) {
+  p-stepper-separator.p-stepper-separator {
+    --p-stepper-separator-size: 2px;
+    border-radius: 2px;
+  }
+}
+p.err
+{
+  @apply text-red-500!;
+  i{
+    @apply mx-0.5!;
+  }
+}
+p-chip.red{
+    --p-chip-background: var(--color-red-200);
+    --p-chip-color: var(--color-red-600);
+    --p-chip-icon-color: var(--color-red-600);  
+  }
+  p-chip.yellow{
+    --p-chip-background: var(--color-yellow-200);
+    --p-chip-color: var(--color-yellow-600);
+    --p-chip-remove-icon-color: var(--color-yellow-600);  
+  }
+  p-chip.blue{
+    --p-chip-background: var(--color-blue-200);
+    --p-chip-color: var(--color-blue-600);
+    --p-chip-remove-icon-color: var(--color-blue-600);  
+  }
+  p-chip.purple{
+    --p-chip-background: var(--color-purple-200);
+    --p-chip-color: var(--color-purple-600);
+    --p-chip-remove-icon-color: var(--color-purple-600);  
+  }
+  p-chip.sm{
+    @apply text-sm!;
+  }

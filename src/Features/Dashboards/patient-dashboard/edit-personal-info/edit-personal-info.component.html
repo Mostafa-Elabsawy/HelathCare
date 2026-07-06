@@ -1,0 +1,227 @@
+<div class=" p-5">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div class="flex items-center gap-3">
+            <div>
+                <h2 class="text-xl font-semibold text-gray-800"> Personal Information</h2>
+                <p class="text-sm text-gray-500">Update your profile details and picture.</p>
+            </div>
+        </div>
+
+        <p-button label="Edit Profile" icon="fa-solid fa-user-pen" styleClass="save-action" (onClick)="openEditDialog()" />
+    </div>
+</div>
+
+<p-dialog header="Edit Patient Profile" [visible]="editDialogVisible()" (visibleChange)="editDialogVisible.set($event)" [modal]="true" [draggable]="false" [resizable]="false" [style]="{ width: 'min(96vw, 980px)' }" [contentStyle]="{ 'max-height': '72vh', overflow: 'auto' }" styleClass="edit-profile-dialog">
+    <form [formGroup]="personalInfoForm" enctype="multipart/form-data" class="grid grid-cols-1 xl:grid-cols-12 gap-5 overflow-visible   ">
+        <section class="xl:col-span-4 bg-white/70 backdrop-blur rounded-2xl shadow-sm border border-gray-100 p-5">
+            <h3 class="font-semibold text-gray-800 mb-4">Profile Picture</h3>
+
+            <div class="flex flex-col items-center text-center gap-4">
+                <div class="w-36 h-36 rounded-2xl  overflow-hidden bg-gray-50 flex justify-center items-center">
+                    <p-image [src]="imagePreview()" alt="Patient profile" imageStyleClass="w-full h-full object-cover"></p-image>
+                </div>
+                <p-fileupload mode="basic" name="profileImage" [customUpload]="true" [auto]="true" chooseLabel="Change Profile Picture" chooseIcon="pi pi-camera" (uploadHandler)="updateProfilePicture($event)">
+                </p-fileupload>
+            </div>
+        </section>
+
+        <section class="xl:col-span-8 bg-white/70 backdrop-blur rounded-2xl shadow-sm border  border-gray-100 p-5">
+            <div class="flex gap-2 items-center mb-5">
+                <div class="bg-blue-100 rounded-lg w-10 h-10 flex items-center justify-center">
+                    <i class="pi pi-user text-blue-500 text-lg!"></i>
+                </div>
+                <h3 class="font-semibold text-gray-800">Personal Details</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2  gap-4">
+                <div class="field">
+                    <label>First Name</label>
+                    <input  pInputText [invalid]="valid(personalInfoForm.controls.firstName)" type="text" formControlName="firstName" placeholder="First name">
+                    @if (valid(personalInfoForm.controls.firstName)) {
+                    <p class="err"><i class="pi pi-exclamation-circle"></i>First name is required.</p>
+                    }
+                </div>
+
+                <div class="field">
+                    <label>Middle Name</label>
+                    <input  pInputText [invalid]="valid(personalInfoForm.controls.middleName)" type="text" formControlName="middleName" placeholder="Middle name">
+                    @if (valid(personalInfoForm.controls.middleName)) {
+                    <p class="err"><i class="pi pi-exclamation-circle"></i>Middle name is required.</p>
+                    }
+                </div>
+
+                <div class="field">
+                    <label>Last Name</label>
+                    <input pInputText [invalid]="valid(personalInfoForm.controls.lastName)" formControlName="lastName" placeholder="Last name">
+                    @if (valid(personalInfoForm.controls.lastName)) {
+                    <p class="err"><i class="pi pi-exclamation-circle"></i>Last name is required.</p>
+                    }
+                </div>
+                <div class="field">
+                    <label>National ID</label>
+                    <input pInputText [invalid]="valid(personalInfoForm.controls.nationalId)" type="text" formControlName="nationalId" placeholder="14-digit national ID">
+                    @if (valid(personalInfoForm.controls.nationalId)) {
+                    <p class="err"><i class="pi pi-exclamation-circle"></i>Enter a valid 14-digit ID.</p>
+                    }
+                </div>
+
+                <div class="field">
+                    <label>Date of Birth</label>
+                    <p-date-picker appendTo="body" dateFormat="dd-mm-yy" [invalid]="valid(personalInfoForm.controls.dateOfBirth)" fluid showIcon formControlName="dateOfBirth" placeholder="Date of birth" />
+                    @if (valid(personalInfoForm.controls.dateOfBirth)) {
+                    <p class="err"><i class="pi pi-exclamation-circle"></i>Date of birth is required.</p>
+                    }
+                </div>
+
+                <div class="field">
+                    <label>Gender</label>
+                    <p-select appendTo="body" [invalid]="valid(personalInfoForm.controls.gender)" [options]="genders" formControlName="gender" optionLabel="label" optionValue="value" placeholder="Select gender" class="w-full" />
+                    @if (valid(personalInfoForm.controls.gender)) {
+                    <p class="err"><i class="pi pi-exclamation-circle"></i>Gender is required.</p>
+                    }
+                </div>
+
+
+            </div>
+        </section>
+
+        <section class="xl:col-span-12 bg-white/70 backdrop-blur rounded-2xl shadow-sm border border-gray-100 p-5">
+            <div class="flex gap-2 items-center mb-5">
+                <div class="bg-emerald-100 rounded-lg w-10 h-10 flex items-center justify-center">
+                    <i class="pi pi-phone text-emerald-500 text-lg!"></i>
+                </div>
+                <h3 class="font-semibold text-gray-800">Contact Details</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2  gap-4">
+                <div class="field">
+                    <label>Email Address</label>
+                    <input pInputText [invalid]="valid(personalInfoForm.controls.email)" type="email" formControlName="email" placeholder="Email address">
+                    @if (valid(personalInfoForm.controls.email)) {
+                    <p class="err"><i class="pi pi-exclamation-circle"></i>Enter a valid email.</p>
+                    }
+                </div>
+
+                <div class="field">
+                    <label>Phone Number</label>
+                    <p-inputgroup>
+                        <p-inputgroup-addon><p-button severity="secondary" label="+20" /></p-inputgroup-addon>
+                        <input pInputText [invalid]="valid(personalInfoForm.controls.phone)" type="tel" formControlName="phone" placeholder="Phone number">
+                    </p-inputgroup>
+                    @if (valid(personalInfoForm.controls.phone)) {
+                    <p class="err"><i class="pi pi-exclamation-circle"></i>Enter a valid Egyptian phone number.</p>
+                    }
+                </div>
+
+                <div class="field">
+                    <label>Governorate</label>
+                    <p-select appendTo="body" [options]="GovernatesNames" [invalid]="valid(personalInfoForm.controls.governorate)" type="text" formControlName="governorate" placeholder="Governorate"></p-select>
+                    @if (valid(personalInfoForm.controls.governorate)) {
+                    <p class="err"><i class="pi pi-exclamation-circle"></i>Governorate is required.</p>
+                    }
+                </div>
+
+                <div class="field">
+                    <label>City</label>
+                    <p-select appendTo="body" [options]="citiesName()"  [invalid]="valid(personalInfoForm.controls.city)" type="text" formControlName="city" placeholder="City"></p-select>
+                    @if (valid(personalInfoForm.controls.city)) {
+                    <p class="err"><i class="pi pi-exclamation-circle"></i>City is required.</p>
+                    }
+                </div>
+
+                <div class="field col-span-2">
+                    <label>Address</label>
+                    <input pInputText [invalid]="valid(personalInfoForm.controls.address)" type="text" formControlName="address" placeholder="Address">
+                    @if (valid(personalInfoForm.controls.address)) {
+                    <p class="err"><i class="pi pi-exclamation-circle"></i>Address is required.</p>
+                    }
+                </div>
+            </div>
+        </section>
+
+        <section class="xl:col-span-12 bg-white/70 backdrop-blur rounded-2xl shadow-sm border border-gray-100 p-5">
+            <div class="flex gap-2 items-center mb-5">
+                <div class="bg-red-100 rounded-lg w-10 h-10 flex items-center justify-center">
+                    <i class="fa-solid fa-heart-pulse text-red-500 text-lg"></i>
+                </div>
+                <h3 class="font-semibold text-gray-800">Medical Details</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="field">
+                    <label>Blood Group</label>
+                    <p-select [invalid]="valid(personalInfoForm.controls.bloodGroup)" [options]="bloodGroups" placeholder="Blood group" class="w-full" formControlName="bloodGroup" />
+                    @if (valid(personalInfoForm.controls.bloodGroup)) {
+                    <p class="err"><i class="pi pi-exclamation-circle"></i>Blood group is required.</p>
+                    }
+                </div>
+
+                <div class="field">
+                    <label>Health Insurance</label>
+                    <p-select [options]="healthInsurancesCompanies" optionLabel="label" optionValue="value" placeholder="Health insurance" class="w-full" formControlName="hasInsurance" />
+                </div>
+
+                <div class="field md:col-span-2">
+                    <label>Allergies</label>
+                    <p-inputgroup>
+                        <input pInputText placeholder="Enter allergy" [formControl]="newAllergy" (keydown)="pressed($event, newAllergy, personalInfoForm.controls.allergies)">
+                        <p-inputgroup-addon>
+                            <p-button type="button" icon="pi pi-plus" (onClick)="addValue(newAllergy, personalInfoForm.controls.allergies)" />
+                        </p-inputgroup-addon>
+                    </p-inputgroup>
+                    <div class="chip-row">
+                        @for (item of personalInfoForm.controls.allergies.getRawValue(); track $index) {
+                        <p-chip class="red">
+                            {{ item }}
+                            <i class="pi pi-times-circle chip-remove" (click)="removeValue($index, personalInfoForm.controls.allergies)"></i>
+                        </p-chip>
+                        }
+                    </div>
+                </div>
+
+                <div class="field md:col-span-2">
+                    <label>Chronic Diseases</label>
+                    <p-inputgroup>
+                        <input pInputText placeholder="Enter chronic disease" [formControl]="newChronic" (keydown)="pressed($event, newChronic, personalInfoForm.controls.chronic)">
+                        <p-inputgroup-addon>
+                            <p-button type="button" icon="pi pi-plus" (onClick)="addValue(newChronic, personalInfoForm.controls.chronic)" />
+                        </p-inputgroup-addon>
+                    </p-inputgroup>
+                    <div class="chip-row">
+                        @for (item of personalInfoForm.controls.chronic.getRawValue(); track $index) {
+                        <p-chip class="purple">
+                            {{ item }}
+                            <i class="pi pi-times-circle chip-remove" (click)="removeValue($index, personalInfoForm.controls.chronic)"></i>
+                        </p-chip>
+                        }
+                    </div>
+                </div>
+
+                <div class="field md:col-span-2">
+                    <label>Previous Surgeries</label>
+                    <p-inputgroup>
+                        <input pInputText placeholder="Enter previous surgery" [formControl]="newSurgery" (keydown)="pressed($event, newSurgery, personalInfoForm.controls.previousSurgery)">
+                        <p-inputgroup-addon>
+                            <p-button type="button" icon="pi pi-plus" (onClick)="addValue(newSurgery, personalInfoForm.controls.previousSurgery)" />
+                        </p-inputgroup-addon>
+                    </p-inputgroup>
+                    <div class="chip-row">
+                        @for (item of personalInfoForm.controls.previousSurgery.getRawValue(); track $index) {
+                        <p-chip class="yellow">
+                            {{ item }}
+                            <i class="pi pi-times-circle chip-remove" (click)="removeValue($index, personalInfoForm.controls.previousSurgery)"></i>
+                        </p-chip>
+                        }
+                    </div>
+                </div>
+            </div>
+        </section>
+    </form>
+
+    <ng-template #footer>
+        <div class="flex flex-col sm:flex-row justify-end gap-2 w-full">
+            <p-button label="Cancel" severity="secondary" icon="pi pi-times" (onClick)="closeEditDialog()" />
+            <p-button label="Save Changes" icon="pi pi-check" styleClass="save-action" (onClick)="saveChanges()" />
+        </div>
+    </ng-template>
+</p-dialog>

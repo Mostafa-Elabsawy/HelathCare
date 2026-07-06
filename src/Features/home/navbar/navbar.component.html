@@ -1,0 +1,45 @@
+    <nav class="sticky top-0 z-50 bg-white/70 backdrop-blur-lg border-b  border-slate-100">
+        <div class=" container mx-auto max-sm:px-4">
+
+            <div class="py-4 flex flex-wrap items-center justify-between  ">
+                <!-- Logo -->
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-xl bg-primary-600 flex items-center justify-center shadow-sm">
+                        <i class="fa-solid fa-heart-pulse text-white text-2xl"></i>
+                    </div>
+                    <div class="leading-tight">
+                        <p class="text-lg font-semibold text-slate-900">Medical Pulse</p>
+                        <p class="text-md text-slate-500 hidden sm:block">Patient Health Platform</p>
+                    </div>
+                </div>
+                <!-- toggle button -->
+                <button (click)="toggleNavbar()" class="lg:hidden p-2 rounded-xl hover:bg-slate-100 transition">
+                    <i class="fa fa-bars text-2xl text-primary-500"></i>
+                </button>
+
+                <!-- Links -->
+                <div [ngClass]="{'max-lg:hidden': navbarCollapsed()}" class="flex max-lg:w-full flex-col lg:flex-row items-start lg:items-center gap-3 lg:gap-8 max-lg:py-3 text-sm font-medium text-slate-500">
+                    <a class="nav-link active">Home</a>
+                    <a class="nav-link">About</a>
+                    <a class="nav-link">Services</a>
+                    <a class="nav-link">Team</a>
+                    <a class="nav-link">Contact</a>
+                    <!-- CTA small screen -->
+                    <div class="lg:hidden w-full flex flex-col gap-2.5">
+                        <a pButton severity="primary" routerLink="/login"  [fluid]="true"> Login </a>
+                        <a pButton severity="secondary" routerLink="/register" [fluid]="true">Sign Up </a>
+                    </div>
+                </div>
+                <!-- CTA large screen -->
+                <div class="gap-4 hidden lg:flex">
+
+                    <a pButton severity="primary" routerLink="/login">
+                        Log In
+                    </a>
+                    <a pButton severity="secondary" routerLink="/register">
+                        Sign Up
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>

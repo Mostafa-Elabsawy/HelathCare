@@ -1,0 +1,163 @@
+<div class="">
+
+    <!-- HEADER -->
+        <!-- Header -->
+        <div class="flex items-center justify-between bg-white/70 backdrop-blur px-6 py-5 rounded-2xl border border-gray-100 shadow-sm">
+        
+            <div>
+                <h2 class="text-2xl font-bold text-gray-800 tracking-tight">
+                    Featured Appointments
+                </h2>
+        
+                <p class="text-gray-500 text-sm mt-1">
+                Your upcoming and important medical visits
+                </p>
+            </div>
+            <div>
+                <p-button label="New Appointment" icon="pi pi-plus" routerLink="/doctor-appointment" class="bg-blue-500 hover:bg-blue-600 text-white"></p-button>
+            </div>
+        </div>
+
+
+    <!-- CONTENT WRAPPER -->
+    <div class="space-y-4 mt-4">
+
+        <!-- ================= CARD 1 ================= -->
+        <div class="bg-white/70 backdrop-blur rounded-2xl border border-gray-100 p-4 shadow-sm hover:shadow-lg transition-all duration-300">
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+
+                <!-- DATE + INFO -->
+                <div class="md:col-span-4 flex items-center gap-3">
+
+                    <div class="w-14 h-14 md:w-16 md:h-16 rounded-xl bg-blue-50 flex flex-col items-center justify-center">
+                        <span class="text-sm font-bold text-blue-600">24</span>
+                        <span class="text-[10px] text-blue-500">Oct</span>
+                    </div>
+
+                    <div>
+                        <h2 class="font-semibold text-gray-800">Heart Checkup</h2>
+                        <p class="text-xs text-gray-500">Dr. Sarah Jenkins • Doctor Visit</p>
+                    </div>
+
+                </div>
+
+                <!-- TIME -->
+                <div class="bg-gray-50 p-3 rounded-xl md:col-span-2">
+                    <p class="text-xs text-gray-400">Time</p>
+                    <p class="font-medium text-gray-700">09:30 AM</p>
+                </div>
+
+                <!-- LOCATION -->
+                <div class="bg-gray-50 p-3 rounded-xl md:col-span-3">
+                    <p class="text-xs text-gray-400">Location</p>
+                    <p class="font-medium text-gray-700">Main Clinic</p>
+                </div>
+
+                <!-- STATUS -->
+                <div class="md:col-span-1 flex md:justify-center">
+                    <span class="text-xs px-3 py-1 bg-green-100 text-green-700 rounded-full font-medium">
+                        Confirmed
+                    </span>
+                </div>
+
+                <!-- ACTIONS -->
+                <div class="md:col-span-2 flex justify-end">
+                    <p-splitbutton label="Details" rounded size="small" severity="secondary" dropdownIcon="pi pi-ellipsis-h" [model]="items">
+                    </p-splitbutton>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- ================= CARD 2 ================= -->
+        <div class="bg-white/70 backdrop-blur rounded-2xl border border-gray-100 p-4 shadow-sm hover:shadow-lg transition-all duration-300">
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+
+                <div class="md:col-span-4 flex items-center gap-3">
+
+                    <div class="w-14 h-14 rounded-xl bg-purple-50 flex flex-col items-center justify-center">
+                        <span class="text-sm font-bold text-purple-600">25</span>
+                        <span class="text-[10px] text-purple-500">Oct</span>
+                    </div>
+
+                    <div>
+                        <h2 class="font-semibold text-gray-800">Blood Test</h2>
+                        <p class="text-xs text-gray-500">Alpha Lab • Diagnostics</p>
+                    </div>
+
+                </div>
+
+                <div class="bg-gray-50 p-3 rounded-xl md:col-span-2">
+                    <p class="text-xs text-gray-400">Time</p>
+                    <p class="font-medium text-gray-700">11:00 AM</p>
+                </div>
+
+                <div class="bg-gray-50 p-3 rounded-xl md:col-span-3">
+                    <p class="text-xs text-gray-400">Location</p>
+                    <p class="font-medium text-gray-700">Downtown Branch</p>
+                </div>
+
+                <div class="md:col-span-1 flex md:justify-center">
+                    <span class="text-xs px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full font-medium">
+                        Pending
+                    </span>
+                </div>
+
+                <div class="md:col-span-2 flex justify-end">
+                    <p-splitbutton label="Details" rounded size="small" severity="secondary" dropdownIcon="pi pi-ellipsis-h" [model]="items">
+                    </p-splitbutton>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- ================= CARD 3 ================= -->
+        <div class="bg-white/70 backdrop-blur rounded-2xl border border-gray-100 p-4 shadow-sm hover:shadow-lg transition-all duration-300">
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+
+                <div class="md:col-span-4 flex items-center gap-3">
+
+                    <div class="w-14 h-14 rounded-xl bg-indigo-50 flex flex-col items-center justify-center">
+                        <span class="text-sm font-bold text-indigo-600">26</span>
+                        <span class="text-[10px] text-indigo-500">Oct</span>
+                    </div>
+
+                    <div>
+                        <h2 class="font-semibold text-gray-800">Chest X-Ray</h2>
+                        <p class="text-xs text-gray-500">City Imaging • Radiology</p>
+                    </div>
+
+                </div>
+
+                <div class="bg-gray-50 p-3 rounded-xl md:col-span-2">
+                    <p class="text-xs text-gray-400">Time</p>
+                    <p class="font-medium text-gray-700">02:00 PM</p>
+                </div>
+
+                <div class="bg-gray-50 p-3 rounded-xl md:col-span-3">
+                    <p class="text-xs text-gray-400">Location</p>
+                    <p class="font-medium text-gray-700">Imaging Center</p>
+                </div>
+
+                <div class="md:col-span-1 flex md:justify-center">
+                    <span class="text-xs px-3 py-1 bg-red-100 text-red-500 rounded-full font-medium">
+                        Canceled
+                    </span>
+                </div>
+
+                <div class="md:col-span-2 flex justify-end">
+                    <p-splitbutton label="Details" rounded size="small" severity="secondary" dropdownIcon="pi pi-ellipsis-h" [model]="items">
+                    </p-splitbutton>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>

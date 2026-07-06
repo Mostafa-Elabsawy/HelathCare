@@ -1,0 +1,217 @@
+<div class="space-y-6">
+    <section class="bg-white/70  border border-gray-100 rounded-2xl shadow-sm p-6">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+            <div>
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 tracking-tight">Good morning, Dr. Mostafa</h2>
+                <p class="text-gray-500 text-sm mt-2">Overview of your Reports</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Statics Cards -->
+    <section class="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
+        <article class="bg-white/70  border border-gray-100 rounded-2xl shadow-md p-5 flex justify-between">
+            <div class="h-15 w-15  text-emerald-600 flex items-center justify-center">
+                <i class="fa-solid text-4xl fa-user-injured"></i>
+            </div>
+            <div class="flex flex-col items-end gap-2">
+                <h3 class="text-3xl font-bold text-gray-800">24</h3>
+                <p class="text-sm font-semibold text-gray-500">Total Patients</p>
+            </div>
+        </article>
+
+        <article class="bg-white/70 border border-gray-100 rounded-2xl shadow-sm p-5 flex justify-between">
+            <div class="h-15 w-15 text-blue-600 flex items-center justify-center">
+                <i class="fa-solid text-4xl fa-calendar-check"></i>
+            </div>
+
+            <div class="flex flex-col items-end gap-2">
+                <h3 class="text-3xl font-bold text-gray-800">18</h3>
+                <p class="text-sm font-semibold text-gray-500">Appointments Today</p>
+            </div>
+        </article>
+
+        <article class="bg-white/70 border border-gray-100 rounded-2xl shadow-sm p-5 flex justify-between">
+            <div class="h-15 w-15 text-yellow-400 flex items-center justify-center">
+                <i class="fa-solid text-4xl fa-star"></i>
+            </div>
+
+            <div class="flex flex-col items-end gap-2">
+                <h3 class="text-3xl font-bold text-gray-800">4.25/5</h3>
+                <p class="text-sm font-semibold text-gray-500">Average rating</p>
+            </div>
+        </article>
+
+        <article class="bg-white/70 border border-gray-100 rounded-2xl shadow-sm p-5 flex justify-between">
+            <div class="h-15 w-15 text-green-600 flex items-center justify-center">
+                <i class="fa-solid text-4xl fa-coins"></i>
+            </div>
+
+            <div class="flex flex-col items-end gap-2">
+                <h3 class="text-3xl font-bold text-gray-800">$12,500</h3>
+                <p class="text-sm font-semibold text-gray-500">Revenue this month</p>
+            </div>
+        </article>
+    </section>
+
+    <!-- New Rrequests -->
+    <section class="bg-white border border-gray-100 rounded-2xl shadow-sm p-5 h-full">
+
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-5">
+            <div>
+                <h2 class="text-lg font-bold text-gray-800">
+                    New Requests
+                </h2>
+
+                <p class="text-sm text-gray-400">
+                    Pending Requests
+                </p>
+            </div>
+
+            <span class="px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-xs font-semibold">
+                5 New
+            </span>
+        </div>
+
+        <!-- Requests -->
+        <div class="grid xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
+            <!-- Request 1 -->
+            @for (item of patientRequests; track $index) {
+            <article class="col-span-1 bg-emerald-50 border border-gray-100 rounded-2xl p-4 hover:bg-gray-100 transition">
+
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold">
+                        {{item.avatar}}
+                    </div>
+
+                    <div>
+                        <h3 class="font-semibold text-gray-800">{{item.name}}</h3>
+                        <h4 class="text-gray-600">{{item.phone}}</h4>
+                    </div>
+                </div>
+
+                <div class="mt-3  text-sm text-gray-600 flex items-center  gap-6">
+                    <span class="flex gap-2 items-center"> <i class=" fa fa-calendar"></i>{{item.date}}</span>
+                    <span class="flex gap-2 items-center"> <i class=" fa fa-clock"></i> {{item.time}} </span>
+                </div>
+
+                <div class="mt-4 flex gap-2">
+                    <button class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium py-2 rounded-xl">
+                        Accept
+                    </button>
+                    <button class="flex-1 bg-red-500   hover:bg-red-600 text-white text-sm font-medium py-2 rounded-xl">
+                        Decline
+                    </button>
+                </div>
+            </article>
+            }
+
+
+
+        </div>
+
+    </section>
+
+    <!-- Today Appointments -->
+    <section class="bg-white/70 border border-gray-100 rounded-2xl shadow-sm p-5 h-full">
+
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-5">
+            <div>
+                <h3 class="text-lg font-semibold text-gray-800">
+                    Today Queue
+                </h3>
+
+                <p class="text-sm text-gray-500">
+                    Current patient flow
+                </p>
+            </div>
+
+            <button class="text-sm font-semibold text-emerald-600 hover:text-emerald-700">
+                View all
+            </button>
+        </div>
+
+        <!-- Queue -->
+        <div class="space-y-3">
+
+            <!-- Item -->
+            <article class="flex items-center justify-between gap-4 rounded-2xl border border-gray-100 bg-gray-50 p-4">
+
+                <!-- Patient -->
+                <div class="flex items-center gap-3 min-w-[240px]">
+
+                    <img src="placeholder1.jpg" class="w-12 h-12 rounded-full object-cover" alt="Patient">
+
+                    <div>
+                        <h4 class="font-semibold text-gray-800">
+                            Ahmed Hassan
+                        </h4>
+
+                        <p class="text-sm text-gray-500">
+                            Follow-up consultation
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- Time -->
+                <div class="text-sm text-gray-600 whitespace-nowrap">
+                    09:30 AM
+                </div>
+
+                <!-- Room -->
+                <div class="text-sm text-gray-600 whitespace-nowrap">
+                    Room 204
+                </div>
+
+                <!-- Status -->
+                <span class="text-xs px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 font-medium whitespace-nowrap">
+                    In Progress
+                </span>
+
+            </article>
+
+            <!-- Item -->
+            <article class="flex items-center justify-between gap-4 rounded-2xl border border-gray-100 bg-gray-50 p-4">
+
+                <!-- Patient -->
+                <div class="flex items-center gap-3 min-w-[240px]">
+
+                    <img src="placeholder1.jpg" class="w-12 h-12 rounded-full object-cover" alt="Patient">
+
+                    <div>
+                        <h4 class="font-semibold text-gray-800">
+                            Mariam Ali
+                        </h4>
+
+                        <p class="text-sm text-gray-500">
+                            New patient assessment
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- Time -->
+                <div class="text-sm text-gray-600 whitespace-nowrap">
+                    10:15 AM
+                </div>
+
+                <!-- Room -->
+                <div class="text-sm text-gray-600 whitespace-nowrap">
+                    Room 204
+                </div>
+
+                <!-- Status -->
+                <span class="text-xs px-3 py-1 rounded-full bg-blue-100 text-blue-700 font-medium whitespace-nowrap">
+                    Waiting
+                </span>
+
+            </article>
+
+        </div>
+
+    </section>
+</div>

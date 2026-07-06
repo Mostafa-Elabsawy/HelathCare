@@ -1,0 +1,16 @@
+@reference "tailwindcss";
+.step{
+    @apply w-8 h-8 rounded-full  bg-(--p-surface-300) text-white ;
+    border-radius: 50%;
+    aspect-ratio: 1;
+    /* background-color: #0F4B80; */
+    /* color: white; */
+}
+.step.active{
+    @apply bg-blue-500 text-white;
+}
+.step.completed{
+    /* background-color: #ADCBF9; */
+    @apply bg-blue-400 text-white;
+}
+

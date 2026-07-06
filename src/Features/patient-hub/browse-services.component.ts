@@ -1,0 +1,107 @@
+import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
+
+@Component({
+  selector: 'app-browse-services',
+  imports: [RouterLink],
+  templateUrl: './browse-services.component.html',
+})
+export class BrowseServices {
+  topDoctors = [
+    {
+      firstName: 'Ahmed',
+      lastName: 'Mansour',
+      specialty: 'Cardiologist',
+      medicalLevel: 'Consultant',
+      rating: 4.9,
+      reviewsCount: 124,
+      workingHourStart: '05:00 PM',
+      workingHourEnd: '10:00 PM',
+      workingDays: ['Sun', 'Tue', 'Thu'],
+      governorate: 'Cairo',
+      city: 'Maadi',
+      price: 450,
+    },
+    {
+      firstName: 'Sarah',
+      lastName: 'El-Amin',
+      specialty: 'Dermatologist',
+      medicalLevel: 'Specialist',
+      rating: 4.8,
+      reviewsCount: 89,
+      workingHourStart: '02:00 PM',
+      workingHourEnd: '07:00 PM',
+      workingDays: ['Mon', 'Wed', 'Sat'],
+      governorate: 'Giza',
+      city: 'Dokki',
+      price: 350,
+    },
+    {
+      firstName: 'Tarek',
+      lastName: 'Hassan',
+      specialty: 'Pediatrician',
+      medicalLevel: 'Consultant',
+      rating: 4.7,
+      reviewsCount: 210,
+      workingHourStart: '04:00 PM',
+      workingHourEnd: '09:00 PM',
+      workingDays: ['Sun', 'Mon', 'Wed'],
+      governorate: 'Alexandria',
+      city: 'Smouha',
+      price: 400,
+    },
+    {
+      firstName: 'Nour',
+      lastName: 'Zaki',
+      specialty: 'Neurologist',
+      medicalLevel: 'Professor',
+      rating: 5.0,
+      reviewsCount: 56,
+      workingHourStart: '06:00 PM',
+      workingHourEnd: '11:00 PM',
+      workingDays: ['Tue', 'Thu'],
+      governorate: 'Cairo',
+      city: 'Heliopolis',
+      price: 600,
+    },
+  ];
+  // Array for the Top Labs loop
+  topLabs = [
+    {
+      name: 'Al-Borg Laboratories',
+      city: 'Maadi',
+      governorate: 'Cairo',
+      testsCount: 250,
+      openingTime: '08:00 AM',
+      closingTime: '11:00 PM',
+      basePrice: 180,
+    },
+    {
+      name: 'Alfa Laboratories',
+      city: 'Dokki',
+      governorate: 'Giza',
+      testsCount: 195,
+      openingTime: '09:00 AM',
+      closingTime: '10:00 PM',
+      basePrice: 150,
+    },
+    {
+      name: 'Al-Mokhtabar Labs',
+      city: 'Smouha',
+      governorate: 'Alexandria',
+      testsCount: 310,
+      openingTime: '08:00 AM',
+      closingTime: '11:00 PM',
+      basePrice: 200,
+    },
+    {
+      name: 'Speed Lab',
+      city: 'Nasr City',
+      governorate: 'Cairo',
+      testsCount: 140,
+      openingTime: '10:00 AM',
+      closingTime: '09:00 PM',
+      basePrice: 120,
+    },
+  ];
+}

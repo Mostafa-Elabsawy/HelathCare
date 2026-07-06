@@ -1,0 +1,272 @@
+<div class="space-y-5">
+
+    <!-- ==========================================================
+         Schedule Header + Actions
+         Shows total weekly slots and edit/save/cancel buttons
+    =========================================================== -->
+    <section class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white/70 backdrop-blur-xl border border-gray-100 rounded-2xl shadow-sm p-6">
+
+        <!-- Page title -->
+        <div>
+            <h2 class="text-2xl font-bold text-gray-800 tracking-tight">Schedule</h2>
+            <p class="text-gray-500 text-sm mt-1">
+                Preview your availability first, then edit and save schedule changes.
+            </p>
+        </div>
+
+        <!-- Schedule statistics + actions -->
+        <div class="flex flex-wrap items-center gap-3">
+
+            <!-- Weekly appointment slots -->
+            <div class="rounded-xl bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700">
+                80 weekly slots
+            </div>
+
+            <!-- Enter edit mode -->
+            <p-button label="Edit Schedule" icon="pi pi-pencil" severity="success"  (onClick)="editMode.set(true)">
+            </p-button>
+
+
+
+            
+        </div>
+    </section>
+
+    <!-- ==========================================================
+         Schedule Preview
+         Displays what patients will currently see
+    =========================================================== -->
+    <section class="grid gap-5">
+
+        <section class="bg-white/70 backdrop-blur-xl border border-gray-100 rounded-2xl shadow-sm p-5">
+
+            <!-- Preview section header -->
+            <div class="flex items-center justify-between gap-4">
+                <div>
+                    <h3 class="font-semibold text-gray-800">Schedule Preview</h3>
+                    <p class="text-sm text-gray-500">
+                        This is the schedule patients will see for booking.
+                    </p>
+                </div>
+
+            </div>
+
+            <!-- ======================================================
+                 Schedule Summary Cards
+            ======================================================= -->
+            <div class="mt-5 grid md:grid-cols-3 gap-4">
+
+                <!-- Working hours card -->
+                <div class="rounded-2xl bg-gray-50 border border-gray-100 p-4">
+                    <p class="text-xs font-semibold uppercase text-gray-400">
+                        Working hours
+                    </p>
+
+                    <p class="mt-1 text-lg font-bold text-gray-800">
+                        05:00 AM - 05:00 PM                        
+                    </p>
+
+                    <p class="text-sm text-gray-500">
+                        30 minutes per appointment
+                    </p>
+                </div>
+
+                <!-- Visit price card -->
+                <div class="rounded-2xl bg-gray-50 border border-gray-100 p-4">
+                    <p class="text-xs font-semibold uppercase text-gray-400">
+                        Visit price
+                    </p>
+
+                    <p class="mt-1 text-lg font-bold text-gray-800">
+                        700 EGP
+                    </p>
+
+                    <p class="text-sm text-gray-500">
+                        Shown before booking
+                    </p>
+                </div>
+
+                <!-- Availability statistics card -->
+                <div class="rounded-2xl bg-gray-50 border border-gray-100 p-4">
+                    <p class="text-xs font-semibold uppercase text-gray-400">
+                        Availability
+                    </p>
+
+                    <p class="mt-1 text-lg font-bold text-gray-800">
+                        {{ working_days().length }} worked days
+                    </p>
+
+                    <p class="text-sm text-gray-500">
+                        80 slots per week
+                    </p>
+                </div>
+            </div>
+
+            <!-- ======================================================
+                 Detailed Preview Information
+            ======================================================= -->
+            <div class="mt-5 grid lg:grid-cols-2 gap-4">
+
+                <!-- Selected working days -->
+                <div class="rounded-2xl bg-gray-50 border border-gray-100 p-4">
+
+                    <p class="text-xs font-semibold uppercase text-gray-400">
+                        Worked days
+                    </p>
+
+                    @if (working_days().length) {
+
+                    <!-- Render enabled days -->
+                    <div class="mt-3 flex flex-wrap gap-2">
+                        @for (day of working_days(); track day.value) {
+
+                        <span class="rounded-full bg-white border border-gray-200 px-3 py-1 text-xs font-semibold text-gray-600">
+                            {{ day.label }}
+                        </span>
+
+                        }
+                    </div>
+
+                    } @else {
+
+                    <!-- Empty state -->
+                    <p class="mt-2 text-sm text-gray-500">
+                        No working days selected.
+                    </p>
+
+                    }
+                </div>
+
+                <!-- Selected services -->
+                <div class="rounded-2xl bg-gray-50 border border-gray-100 p-4">
+
+                    <p class="text-xs font-semibold uppercase text-gray-400">
+                        Services provided
+                    </p>
+
+                    @if ([{name:'Consultation',price:700},{name:'Follow-up',price:600}].length) {
+
+                    <!-- Render enabled services -->
+                    <div class="mt-3 grid sm:grid-cols-2 gap-2">
+
+                        @for (service of [{name:'Consultation',price:700},{name:'Follow-up',price:600}]; track service.name) {
+
+                        <div class="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                            <i class="pi pi-check text-emerald-500 text-xs"></i>
+                            {{ service.name }}
+                        </div>
+
+                        }
+
+                    </div>
+
+                    } @else {
+
+                    <!-- Empty state -->
+                    <p class="mt-2 text-sm text-gray-500">
+                        No services selected.
+                    </p>
+
+                    }
+                </div>
+            </div>
+        </section>
+    </section>
+
+<!-- ==========================================================
+     Edit Schedule Form
+     Visible only while edit mode is enabled
+========================================================== -->
+<p-dialog
+    header="Edit Schedule" [visible]="editMode()"
+    (visibleChange)="editMode.set($event)"
+    [modal]="true" 
+    [draggable]="false"
+    [resizable]="false"
+    [style]="{ width: 'min(96vw, 980px)' }"
+    [contentStyle]="{ 'max-height': '72vh', overflow: 'auto' }" >
+<section class="bg-white/70 backdrop-blur-xl border border-gray-100 rounded-2xl shadow-sm p-5">
+
+
+    <!-- Schedule Configuration Form -->
+    <form [formGroup]="scheduleData">
+
+        <!-- Basic Schedule Settings -->
+        <div class="grid md:grid-cols-2 gap-4">
+
+            <!-- Start Hour Selection -->
+            <label class="space-y-2">
+                <span class="text-sm font-semibold text-gray-700">
+                    Starting hour
+                </span>
+
+                <p-select [options]="StartHourOptions()" optionLabel="label" optionValue="value" formControlName="startHour" placeholder="Start hour" class="w-full">
+                </p-select>
+            </label>
+
+            <!-- End Hour Selection -->
+            <label class="space-y-2">
+                <span class="text-sm font-semibold text-gray-700">
+                    End hour
+                </span>
+
+                <p-select [options]="EndHourOptions()" optionLabel="label" optionValue="value" formControlName="endHour" placeholder="End hour" class="w-full">
+                </p-select>
+            </label>
+
+            <!-- Appointment Duration Selection -->
+            <label class="space-y-2">
+                <span class="text-sm font-semibold text-gray-700">
+                    Duration
+                </span>
+
+                <p-select [options]="durationOptions" optionLabel="label" optionValue="value" formControlName="duration" placeholder="Duration" class="w-full">
+                </p-select>
+            </label>
+
+            <!-- Visit Price Input -->
+            <label class="space-y-2">
+                <span class="text-sm font-semibold text-gray-700">
+                    Visit price
+                </span>
+
+                <p-inputnumber inputId="visitPrice" formControlName="price" [min]="0" suffix=" EGP" class="w-full" inputStyleClass="w-full">
+                </p-inputnumber>
+            </label>
+
+        </div>
+
+        <!-- Working Days Selection -->
+        <div class="mt-5">
+
+            <p class="text-sm font-semibold text-gray-700 mb-2">
+                Worked days
+            </p>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+
+                @for (day of working_days(); track $index) {
+
+                <!-- Toggle Day Availability -->
+                <p-button [label]="day.value" [icon]="day.enabled ? 'pi pi-check-circle' : 'pi pi-circle'" [severity]="day.enabled ? 'success' : 'secondary'" [outlined]="!day.enabled" styleClass="w-full justify-between" (onClick)="doSomthing()">
+                </p-button>
+
+                }
+
+            </div>
+        </div>
+
+    </form>
+
+</section>
+<ng-template #footer>
+                <!-- Save draft changes -->
+                <p-button label="Save" icon="pi pi-check" severity="success"  (onClick)="doSomthing()">
+                </p-button>
+                
+                <!-- Cancel changes and restore saved values -->
+                <p-button label="Cancel" icon="pi pi-times" severity="secondary"  outlined (onClick)="doSomthing()">
+                </p-button>
+</ng-template>
+
+</p-dialog>

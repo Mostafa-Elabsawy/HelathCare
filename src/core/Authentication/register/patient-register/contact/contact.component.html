@@ -1,0 +1,42 @@
+<div class="flex-column space-y-4  py-4 " [formGroup]="contactData" >
+  <div class="grid grid-cols-1  md:grid-cols-2 x  gap-2 sm:gap-4 ">
+    <div>
+      <label class="input-label">Email *</label>
+      <input pInputText [invalid]="valid(email)" placeholder="john@example.com" class="w-full" formControlName="email"  />
+      @if (valid(email)) {
+        <p class="err"> <i class="pi pi-exclamation-circle"></i> Invalid Email</p>
+      }
+    </div>
+    <div>
+        <label for="" class="input-label">Phone *</label>
+        <p-inputgroup>
+            <p-inputgroup-addon><p-button severity="secondary">+20</p-button></p-inputgroup-addon>
+            <input pInputText [invalid]="valid(phone)" class="w-full" formControlName="phone" placeholder="Phone Number" [fluid]="true" />
+        </p-inputgroup>
+        @if (valid(phone)) {
+            <p class="err"> <i class="pi pi-exclamation-circle"></i> Invalid Phone Number</p>
+            }
+    </div>
+    <div>
+        <label for="" class="input-label">governorate *</label>
+        <p-select [invalid]="valid(governate)" [options]="GovernatesNames" placeholder="governorate" class="w-full" formControlName="governorate" ></p-select>
+        @if (valid(governate)) {
+            <p class="err"> <i class="pi pi-exclamation-circle"></i> Governorate is required</p>
+        }
+    </div>
+    <div>
+        <label for="" class="input-label">City *</label>
+        <p-select [invalid]="valid(city)" [options]="citiesName()" placeholder="cities" class="w-full" formControlName="city" ></p-select>
+        @if (valid(city)) {
+            <p class="err"> <i class="pi pi-exclamation-circle"></i> City is required</p>
+        }
+    </div>
+    <div class="col-span-full">
+        <label for="" class="input-label">Address *</label>
+        <input pInputText [invalid]="valid(address)" placeholder="Address" class="w-full" formControlName="address"  />
+        @if (address.invalid && (address.touched || address.dirty)) {
+            <p class="err"> <i class="pi pi-exclamation-circle"></i> Address is required</p>
+        }
+    </div>
+  </div>
+</div>

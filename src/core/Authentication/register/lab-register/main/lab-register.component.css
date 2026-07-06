@@ -1,0 +1,31 @@
+@reference "tailwindcss";
+.step{
+    @apply w-8 h-8 rounded-full  bg-(--p-surface-300) text-white ;
+    border-radius: 50%;
+    aspect-ratio: 1;
+    /* background-color: #0F4B80; */
+    /* color: white; */
+}
+.step.active{
+    @apply bg-violet-600 text-white;
+}
+.step.completed{
+    /* background-color: #ADCBF9; */
+    @apply bg-violet-400 text-white;
+}
+
+:host ::ng-deep .lab-action.p-button,
+:host ::ng-deep .lab-action .p-button {
+    @apply bg-violet-600 border-violet-600 text-white;
+}
+
+:host ::ng-deep .lab-action.p-button:not(:disabled):hover,
+:host ::ng-deep .lab-action .p-button:not(:disabled):hover {
+    @apply bg-violet-700 border-violet-700;
+}
+
+:host ::ng-deep .lab-action.p-button:disabled,
+:host ::ng-deep .lab-action .p-button:disabled {
+    @apply bg-violet-400 border-violet-400;
+}
+

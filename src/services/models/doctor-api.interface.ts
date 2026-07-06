@@ -1,0 +1,72 @@
+export interface RegisterDoctorAPI {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  phone: string;
+  gender: string;
+  nationalID: string;
+  governorate: string;
+  city: string;
+  address: string;
+  specialty: string;
+  medicalLevel: string;
+}
+export interface DoctorProfileResponseAPI { 
+  firstName: string;
+  lastName: string;
+  gender: string;
+  nationalID: number;
+
+  specialty: string;
+  medicalLevel: string | null;
+  price: number | null;
+  rate: number | null;
+  picture: string | null;
+
+  phone: string;
+  governorate: string;
+  city: string;
+  address: string;
+
+  workingDay: string[];
+  workingHourStart: string | null;
+  workingHourEnd: string | null;
+  duration: number | null;
+
+  appointments: Appointment[];
+
+  id: number;
+  email: string;
+  passwordHash: string;
+  role: string;
+}
+
+export interface Appointment {
+  // Add appointment properties here when you know them
+}
+export interface UpdateDoctorProfileAPI{ }
+export const defaultDoctorProfile: DoctorProfileResponseAPI = {
+  firstName: '',
+  lastName: '',
+  gender: '',
+  nationalID: 0,
+  specialty: '',
+  medicalLevel: '',
+  phone: '',
+  governorate: '',
+  city: '',
+  address: '',
+  workingDay: [],
+  workingHourStart: '',
+  workingHourEnd: '',
+  duration: 0,
+  appointments: [],
+  id: 0,
+  email: '',
+  passwordHash: '',
+  role: '',
+  price: null,
+  rate: null,
+  picture: null
+}

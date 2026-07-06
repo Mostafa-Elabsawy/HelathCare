@@ -1,0 +1,31 @@
+@reference "tailwindcss";
+.step{
+    @apply w-8 h-8 rounded-full  bg-(--p-surface-300) text-white ;
+    border-radius: 50%;
+    aspect-ratio: 1;
+    /* background-color: #0F4B80; */
+    /* color: white; */
+}
+.step.active{
+    @apply bg-emerald-500 text-white;
+}
+.step.completed{
+    /* background-color: #ADCBF9; */
+    @apply bg-emerald-400 text-white;
+}
+
+:host ::ng-deep .doctor-action.p-button,
+:host ::ng-deep .doctor-action .p-button {
+    @apply bg-emerald-500 border-emerald-500 text-white;
+}
+
+:host ::ng-deep .doctor-action.p-button:not(:disabled):hover,
+:host ::ng-deep .doctor-action .p-button:not(:disabled):hover {
+    @apply bg-emerald-600 border-emerald-600;
+}
+
+:host ::ng-deep .doctor-action.p-button:disabled,
+:host ::ng-deep .doctor-action .p-button:disabled {
+    @apply bg-emerald-400 border-emerald-400;
+}
+

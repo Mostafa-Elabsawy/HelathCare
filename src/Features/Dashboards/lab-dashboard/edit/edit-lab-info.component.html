@@ -1,0 +1,85 @@
+<p-dialog header="Edit Laboratory Profile" [visible]="editDialogVisible()" (visibleChange)="editDialogVisible.set($event)" [modal]="true" [draggable]="false" [resizable]="false" [style]="{ width: 'min(96vw, 600px)' }" [contentStyle]="{ 'max-height': '72vh', overflow: 'auto' }">
+
+    <form [formGroup]="labInfoForm" class="flex flex-col gap-5">
+
+        <div class="field">
+            <label>Laboratory Name</label>
+            <input pInputText [invalid]="valid(labInfoForm.controls.name)" formControlName="name" placeholder="Laboratory name" [fluid]="true">
+            @if (valid(labInfoForm.controls.name)) {
+                <p class="err">
+                    <i class="pi pi-exclamation-circle"></i>
+                    Name is required.
+                </p>
+            }
+        </div>
+
+        <div class="field">
+            <label>Email Address</label>
+            <input pInputText [invalid]="valid(labInfoForm.controls.email)" type="email" formControlName="email" placeholder="Email address" [fluid]="true">
+            @if (valid(labInfoForm.controls.email)) {
+                <p class="err">
+                    <i class="pi pi-exclamation-circle"></i>
+                    Enter a valid email.
+                </p>
+            }
+        </div>
+
+        <div class="field">
+            <label>Phone Number</label>
+            <p-inputgroup>
+                <p-inputgroup-addon>
+                    <p-button severity="secondary" label="+20" />
+                </p-inputgroup-addon>
+                <input pInputText [fluid]="true" [invalid]="valid(labInfoForm.controls.phone)" type="tel" formControlName="phone" placeholder="Phone number">
+            </p-inputgroup>
+            @if (valid(labInfoForm.controls.phone)) {
+                <p class="err">
+                    <i class="pi pi-exclamation-circle"></i>
+                    Enter a valid Egyptian phone number.
+                </p>
+            }
+        </div>
+
+        <div class="field">
+            <label>Governorate</label>
+            <p-select [fluid]="true" [options]="GovernatesNames" [invalid]="valid(labInfoForm.controls.governorate)" formControlName="governorate" placeholder="Select governorate"></p-select>
+            @if (valid(labInfoForm.controls.governorate)) {
+                <p class="err">
+                    <i class="pi pi-exclamation-circle"></i>
+                    Governorate is required.
+                </p>
+            }
+        </div>
+
+        <div class="field">
+            <label>City</label>
+            <p-select [fluid]="true" [options]="citiesName()" [invalid]="valid(labInfoForm.controls.city)" formControlName="city" placeholder="Select city"></p-select>
+            @if (valid(labInfoForm.controls.city)) {
+                <p class="err">
+                    <i class="pi pi-exclamation-circle"></i>
+                    City is required.
+                </p>
+            }
+        </div>
+
+        <div class="field">
+            <label>Address</label>
+            <input pInputText [invalid]="valid(labInfoForm.controls.address)" formControlName="address" placeholder="Detailed address" [fluid]="true">
+            @if (valid(labInfoForm.controls.address)) {
+                <p class="err">
+                    <i class="pi pi-exclamation-circle"></i>
+                    Address is required.
+                </p>
+            }
+        </div>
+
+    </form>
+
+    <ng-template #footer>
+        <div class="flex flex-col sm:flex-row justify-end gap-2 w-full">
+            <p-button label="Cancel" severity="secondary" icon="pi pi-times" (onClick)="closeEditDialog()" />
+            <p-button label="Save Changes" icon="pi pi-check" styleClass="save-action" (onClick)="saveChanges()" />
+        </div>
+    </ng-template>
+
+</p-dialog>

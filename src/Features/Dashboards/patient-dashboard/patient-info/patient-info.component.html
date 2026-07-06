@@ -1,0 +1,91 @@
+<section class=" ">
+    <div class="bg-white/70  rounded-2xl shadow-sm  border border-gray-100">
+        <app-edit-personal-info [patientData]="patient()"></app-edit-personal-info>
+        <div class="info-card flex flex-col md:flex-row gap-4 w-full  p-5">
+            <div class="image-conatiner w-24 h-24 md:w-30 md:h-30 border-2 border-primary-400 rounded-2xl overflow-hidden"><img src="placeholder1.jpg" class="w-full h-full object-cover"></div>
+            <div class="text-primary-100 font-semibold flex flex-col justify-evenly w-full gap-3">
+                <div>
+                    <h1 class="text-xl md:text-2xl text-black">{{patient().firstName+" "+patient().middleName +" "+patient().lastName}}</h1>
+                    <h3 class="text-gray-400">National Id: {{patient().nationalID}}</h3>
+                </div>
+                <ul class="flex flex-col md:flex-row flex-wrap gap-2 md:gap-6 w-full text-gray-500">
+                    <li><i class="icon fa fa-calendar text-primary-500"></i> {{formatDate(patient().dateOfBirth)}}</li>
+                    <li><i class="fa fa-user text-primary-500"></i>{{patient().gender}}</li>
+                    <li><i class="fa fa-location-dot text-primary-500"></i>{{ patient().governorate + ", " + "city"}}</li>
+                    <li><i class="fa fa-phone text-primary-500"></i> {{patient().phone}}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-5 mt-8">
+
+        <section class="w-full col-span-12 md:col-span-6 bg-white/70 backdrop-blur rounded-2xl shadow-sm   border border-gray-100 p-5">
+            <div class="flex gap-2 items-center mb-4 w-fit">
+                <div class="bg-primary-100 rounded-lg w-12 h-12 flex items-center justify-center"><i class="pi pi-user text-primary-500 text-xl!"></i></div>
+                <h2 class="font-semibold">Personal Information</h2>
+            </div>
+            <div class="grid grid-cols-1">
+                <div class="grid grid-cols-1 md:grid-cols-10 py-1.5 gap-1 md:gap-0"><span class="text-gray-500 md:col-span-3">Full Name</span><span class="text-gray-800 font-medium md:col-span-7">{{patient().firstName+" "+patient().middleName +" "+patient().lastName}}</span></div>
+                <div class="grid grid-cols-1 md:grid-cols-10 py-1.5 gap-1 md:gap-0"><span class="text-gray-500 md:col-span-3">Date of Birth</span><span class="text-gray-800 font-medium md:col-span-7">{{formatDate(patient().dateOfBirth)}}</span></div>
+                <div class="grid grid-cols-1 md:grid-cols-10 py-1.5 gap-1 md:gap-0"><span class="text-gray-500 md:col-span-3">National ID</span><span class="text-gray-800 font-medium md:col-span-7">{{patient().nationalID}}</span></div>
+                <div class="grid grid-cols-1 md:grid-cols-10 py-1.5 gap-1 md:gap-0"><span class="text-gray-500 md:col-span-3">Gender</span><span class="text-gray-800 font-medium md:col-span-7">{{patient().gender}}</span></div>
+            </div>
+        </section>
+
+        <section class="w-full col-span-12 md:col-span-6 bg-white/70 backdrop-blur rounded-2xl shadow-sm   border border-gray-100 p-5">
+            <div class="flex gap-2 items-center mb-4 w-fit">
+                <div class="bg-emerald-100 rounded-lg w-12 h-12 flex items-center justify-center"><i class="pi pi-phone text-emerald-500 text-xl!"></i></div>
+                <h2 class="font-semibold">Contact Information</h2>
+            </div>
+            <div class="grid grid-cols-1">
+                <div class="grid grid-cols-1 md:grid-cols-10 py-1.5 gap-1 md:gap-0"><span class="text-gray-500 md:col-span-3">Phone Number</span><span class="text-gray-800 font-medium md:col-span-7">{{patient().phone}}</span></div>
+                <div class="grid grid-cols-1 md:grid-cols-10 py-1.5 gap-1 md:gap-0"><span class="text-gray-500 md:col-span-3">Email Address</span><span class="text-gray-800 font-medium md:col-span-7">{{patient().email}}</span></div>
+                <div class="grid grid-cols-1 md:grid-cols-10 py-1.5 gap-1 md:gap-0"><span class="text-gray-500 md:col-span-3">City</span><span class="text-gray-800 font-medium md:col-span-7">city</span></div>
+                <div class="grid grid-cols-1 md:grid-cols-10 py-1.5 gap-1 md:gap-0"><span class="text-gray-500 md:col-span-3">Governate</span><span class="text-gray-800 font-medium md:col-span-7">{{patient().governorate}}</span></div>
+                <div class="grid grid-cols-1 md:grid-cols-10 py-1.5 gap-1 md:gap-0"><span class="text-gray-500 md:col-span-3">Address</span><span class="text-gray-800 font-medium md:col-span-7">{{patient().address}}</span></div>
+            </div>
+        </section>
+
+        <section class="w-full col-span-12 bg-white/70 backdrop-blur rounded-2xl shadow-sm   border border-gray-100 p-5">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5">
+
+                <section class="bg-gray-50 w-full rounded-2xl p-4">
+                    <div class="flex gap-2 items-center mb-4 w-fit"><i class="fa-solid fa-pills text-red-500 text-2xl"></i>
+                        <h2 class="font-semibold">Allergies</h2>
+                    </div>
+                    <div class="flex gap-2 flex-wrap">
+                        @for (item of patient().allergies; track $index) {
+                        <p-chip class="red sm">{{item}}</p-chip>
+                        }
+                    </div>
+                </section>
+
+                <section class="bg-gray-50 w-full rounded-2xl p-4">
+                    <div class="flex gap-2 items-center mb-4 w-fit"><i class="far fa-heart text-red-500 text-2xl"></i>
+                        <h2 class="font-semibold">Chronic Diseases</h2>
+                    </div>
+                    <div class="flex gap-2 flex-wrap">
+                        @for (item of patient().chronic; track $index) {
+                        <p-chip class="red sm">{{item}}</p-chip>
+                        }
+                    </div>
+                </section>
+
+                <section class="bg-gray-50 w-full rounded-2xl p-4">
+                    <div class="flex gap-2 items-center mb-4 w-fit"><i class="fa fa-bandage text-red-500 text-2xl"></i>
+                        <h2 class="font-semibold">Previous Surgeries</h2>
+                    </div>
+                    <div class="flex gap-2 flex-wrap">
+                        @for (item of patient().previousSurgery; track $index) {
+                        <p-chip class="red sm">{{item}}</p-chip>
+                        }
+                    </div>
+                </section>
+
+            </div>
+        </section>
+
+    </div>
+
+</section>

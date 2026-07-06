@@ -1,0 +1,18 @@
+@reference "tailwindcss";
+.nav-link{
+    @apply  text-base relative cursor-pointer text-slate-400 font-medium transition-colors;
+}
+.nav-link:hover,
+.nav-link.active,
+.nav-link:active,
+.nav-link:focus {
+  @apply text-blue-500;
+}
+.nav-link::after {
+  content: '';
+  @apply absolute left-1/2 bottom-0 w-0 h-0.5 bg-blue-500 transition-all duration-300 ease-in-out;
+}
+:is(.nav-link:hover, .nav-link:active, .nav-link:focus, .nav-link.active)::after {
+  width: 100%;
+  left: 0;
+}

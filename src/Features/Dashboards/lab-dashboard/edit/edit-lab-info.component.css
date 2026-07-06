@@ -1,0 +1,19 @@
+@reference "tailwindcss";
+
+.field {
+    @apply flex flex-col gap-1.5;
+}
+
+.field label {
+    @apply text-sm font-medium text-gray-600;
+}
+
+:host ::ng-deep .save-action.p-button,
+:host ::ng-deep .save-action .p-button {
+    @apply bg-violet-500 border-violet-500 text-white px-5 py-2.5 rounded-xl text-sm font-medium shadow;
+}
+
+:host ::ng-deep .save-action.p-button:not(:disabled):hover,
+:host ::ng-deep .save-action .p-button:not(:disabled):hover {
+    @apply bg-violet-600 border-violet-600;
+}

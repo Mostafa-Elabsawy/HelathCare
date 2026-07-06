@@ -1,0 +1,218 @@
+<section>
+
+    <div class="bg-white/70 rounded-2xl shadow-sm border border-gray-100">
+        <app-edit-doctor-info [doctorData]="doctorData()"></app-edit-doctor-info>
+
+        <div class="info-card flex flex-col md:flex-row gap-4 w-full p-5">
+
+            <div class="w-24 h-24 md:w-30 md:h-30 border-2 border-emerald-400 rounded-2xl overflow-hidden">
+                <img [src]="doctorData().picture ?? 'placeholder1.jpg'" class="w-full h-full object-cover">
+            </div>
+
+            <div class="text-emerald-100 font-semibold flex flex-col justify-evenly w-full gap-3">
+                <div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <h1 class="text-xl md:text-2xl text-black">
+                            Dr. {{doctorData().firstName}}
+                            {{doctorData().lastName}}
+                        </h1>
+                        <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-semibold">
+                            {{doctorData().medicalLevel}}
+                        </span>
+                    </div>
+
+                    <h3 class="text-gray-400">
+                        National ID: {{doctorData().nationalID}}
+                    </h3>
+                </div>
+
+                <ul class="flex flex-col md:flex-row flex-wrap gap-2 md:gap-6 w-full text-gray-500">
+
+                    <li>
+                        <i class="fa-solid fa-stethoscope text-emerald-500"></i>
+                        {{doctorData().specialty}}
+                    </li>
+
+                    <li>
+                        <i class="fa fa-user text-emerald-500"></i>
+                        {{doctorData().gender}}
+                    </li>
+
+                    <li>
+                        <i class="fa fa-location-dot text-emerald-500"></i>
+                        {{doctorData().governorate}},
+                        {{doctorData().city}}
+                    </li>
+
+                    <li>
+                        <i class="fa fa-phone text-emerald-500"></i>
+                        {{doctorData().phone}}
+                    </li>
+
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-5 mt-8">
+
+        <!-- Personal Information -->
+        <section class="w-full col-span-12 md:col-span-6 bg-white/70 backdrop-blur rounded-2xl shadow-sm border border-gray-100 p-5">
+
+            <div class="flex gap-2 items-center mb-4 w-fit">
+                <div class="bg-emerald-100 rounded-lg w-12 h-12 flex items-center justify-center">
+                    <i class="pi pi-user text-emerald-500 text-xl!"></i>
+                </div>
+
+                <h2 class="font-semibold">
+                    Personal Credentials
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1">
+
+                <div class="grid grid-cols-1 md:grid-cols-10 py-1.5">
+                    <span class="text-gray-500 md:col-span-3">First Name</span>
+                    <span class="text-gray-800 font-medium md:col-span-7">
+                        {{doctorData().firstName}}
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-10 py-1.5">
+                    <span class="text-gray-500 md:col-span-3">Last Name</span>
+                    <span class="text-gray-800 font-medium md:col-span-7">
+                        {{doctorData().lastName}}
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-10 py-1.5">
+                    <span class="text-gray-500 md:col-span-3">National ID</span>
+                    <span class="text-gray-800 font-medium md:col-span-7">
+                        {{doctorData().nationalID}}
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-10 py-1.5">
+                    <span class="text-gray-500 md:col-span-3">Gender</span>
+                    <span class="text-gray-800 font-medium md:col-span-7">
+                        {{doctorData().gender}}
+                    </span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Contact Information -->
+        <section class="w-full col-span-12 md:col-span-6 bg-white/70 backdrop-blur rounded-2xl shadow-sm border border-gray-100 p-5">
+
+            <div class="flex gap-2 items-center mb-4 w-fit">
+
+                <div class="bg-emerald-100 rounded-lg w-12 h-12 flex items-center justify-center">
+                    <i class="pi pi-phone text-emerald-500 text-xl!"></i>
+                </div>
+
+                <h2 class="font-semibold">
+                    Contact Information
+                </h2>
+
+            </div>
+
+            <div class="grid grid-cols-1">
+
+                <div class="grid grid-cols-1 md:grid-cols-10 py-1.5">
+                    <span class="text-gray-500 md:col-span-3">Phone Number</span>
+                    <span class="text-gray-800 font-medium md:col-span-7">
+                        {{doctorData().phone}}
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-10 py-1.5">
+                    <span class="text-gray-500 md:col-span-3">Email Address</span>
+                    <span class="text-gray-800 font-medium md:col-span-7">
+                        {{doctorData().email}}
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-10 py-1.5">
+                    <span class="text-gray-500 md:col-span-3">City</span>
+                    <span class="text-gray-800 font-medium md:col-span-7">
+                        {{doctorData().city}}
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-10 py-1.5">
+                    <span class="text-gray-500 md:col-span-3">Governorate</span>
+                    <span class="text-gray-800 font-medium md:col-span-7">
+                        {{doctorData().governorate}}
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-10 py-1.5">
+                    <span class="text-gray-500 md:col-span-3">Address</span>
+                    <span class="text-gray-800 font-medium md:col-span-7">
+                        {{doctorData().address}}
+                    </span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Doctor Specific Cards -->
+        <section class="w-full col-span-12 bg-white/70 backdrop-blur rounded-2xl shadow-sm border border-gray-100 p-5">
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5">
+
+                <section class="bg-gray-50 w-full rounded-2xl p-4">
+
+                    <div class="flex gap-2 items-center mb-4 w-fit">
+                        <i class="fa-solid fa-user-doctor text-emerald-500 text-2xl"></i>
+                        <h2 class="font-semibold">Specialty</h2>
+                    </div>
+
+                    <span class="inline-flex px-3 py-2 rounded-xl bg-emerald-100 text-emerald-700 font-medium">
+                        {{doctorData().specialty}}
+                    </span>
+
+                </section>
+
+
+                <section class="bg-gray-50 w-full rounded-2xl p-4">
+
+                    <div class="flex gap-2 items-center mb-4 w-fit">
+                        <i class="fa-solid fa-award text-emerald-500 text-2xl"></i>
+                        <h2 class="font-semibold">Medical Level</h2>
+                    </div>
+
+                    <span class="inline-flex px-3 py-2 rounded-xl bg-emerald-100 text-emerald-700 font-medium">
+                        {{doctorData().medicalLevel}}
+                    </span>
+
+                </section>
+
+
+                <section class="bg-gray-50 w-full rounded-2xl p-4">
+
+                    <div class="flex gap-2 items-center mb-4 w-fit">
+                        <i class="fa-solid fa-circle-check text-emerald-500 text-2xl"></i>
+                        <h2 class="font-semibold">Account Status</h2>
+                    </div>
+
+                    <span class="inline-flex px-3 py-2 rounded-xl bg-emerald-100 text-emerald-700 font-medium">
+                        Authorized Practitioner
+                    </span>
+
+                </section>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</section>

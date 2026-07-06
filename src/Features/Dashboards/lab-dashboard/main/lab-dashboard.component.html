@@ -1,0 +1,84 @@
+<section class="flex h-screen overflow-hidden bg-gray-50">
+
+    <aside class="fixed lg:sticky top-0 left-0 z-20 h-full w-64 bg-white/70 backdrop-blur-xl border-r border-gray-200 px-4 py-4 transform transition-all duration-300 lg:translate-x-0 shadow-sm" [class.-translate-x-full]="!menu()" [class.translate-x-0]="menu()">
+        <section class="flex flex-col h-full">
+            <a routerLink="/home" class="flex items-center gap-3 mb-6 px-2 cursor-pointer">
+                <div class="bg-violet-500 p-2 rounded-xl shadow">
+                    <i class="fa-solid fa-flask text-white text-lg"></i>
+                </div>
+
+                <div>
+                    <p class="font-bold text-lg text-gray-800 leading-tight">Medical Pulse</p>
+                    <p class="text-xs text-gray-500">Laboratory Portal</p>
+                </div>
+            </a>
+
+            <nav class="flex flex-col gap-2 mt-5">
+                <a routerLink="Dashboard" [replaceUrl]="true" routerLinkActive="bg-violet-500 text-white hover:bg-violet-500 hover:text-white" class="flex items-center gap-3 px-3 py-3.5 rounded-xl cursor-pointer text-gray-500 transition-all duration-200 select-none hover:text-gray-700 hover:bg-violet-50">
+                    <i class="fa-solid fa-chart-line text-sm"></i>
+                    <span class="text-sm font-medium">Dashboard</span>
+                </a>
+
+                <a routerLink="Tests" [replaceUrl]="true" routerLinkActive="bg-violet-500 text-white hover:bg-violet-500 hover:text-white" class="flex items-center gap-3 px-3 py-3.5 rounded-xl cursor-pointer text-gray-500 transition-all duration-200 select-none hover:text-gray-700 hover:bg-violet-50">
+                    <i class="fa-solid fa-vial text-sm"></i>
+                    <span class="text-sm font-medium">Tests</span>
+                </a>
+
+                <a routerLink="Upload" [replaceUrl]="true" routerLinkActive="bg-violet-500 text-white hover:bg-violet-500 hover:text-white" class="flex items-center gap-3 px-3 py-3.5 rounded-xl cursor-pointer text-gray-500 transition-all duration-200 select-none hover:text-gray-700 hover:bg-violet-50">
+                    <i class="fa-solid fa-upload text-sm"></i>
+                    <span class="text-sm font-medium">Upload Results</span>
+                </a>
+
+                <a routerLink="Results" [replaceUrl]="true" routerLinkActive="bg-violet-500 text-white hover:bg-violet-500 hover:text-white" class="flex items-center gap-3 px-3 py-3.5 rounded-xl cursor-pointer text-gray-500 transition-all duration-200 select-none hover:text-gray-700 hover:bg-violet-50">
+                    <i class="fa-solid fa-file-circle-check text-sm"></i>
+                    <span class="text-sm font-medium">Results</span>
+                </a>
+
+                <a routerLink="Profile" [replaceUrl]="true" routerLinkActive="bg-violet-500 text-white hover:bg-violet-500 hover:text-white" class="flex items-center gap-3 px-3 py-3.5 rounded-xl cursor-pointer text-gray-500 transition-all duration-200 select-none hover:text-gray-700 hover:bg-violet-50">
+                    <i class="fa-solid fa-user text-sm"></i>
+                    <span class="text-sm font-medium">Profile</span>
+                </a>
+            </nav>
+
+            <div class="mt-auto pt-4 border-t border-gray-200 space-y-3 flex flex-col-reverse">
+                <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-100 transition">
+                    <img src="placeholder1.jpg" class="w-10 h-10 rounded-full object-cover border border-gray-200" alt="Lab profile">
+
+                    <div class="overflow-hidden flex-1">
+                        <p class="text-sm font-semibold text-gray-800 truncate">Lab Name</p>
+                        <p class="text-xs text-gray-500 truncate">Laboratory</p>
+                    </div>
+
+                    <button class="text-gray-400 hover:text-gray-600">
+                        <i class="pi pi-ellipsis-v text-sm"></i>
+                    </button>
+                </div>
+
+                <button (click)="logout()" class="w-full flex items-center justify-center gap-2 bg-red-50 text-red-600 hover:bg-red-100 py-2.5 rounded-xl text-sm font-medium transition-all border border-red-100">
+                    <i class="pi pi-sign-out text-sm"></i>
+                    Logout
+                </button>
+            </div>
+        </section>
+    </aside>
+
+    <main class="flex-1 overflow-auto">
+        <header class="sticky top-0 z-10 bg-white/70 backdrop-blur-xl border-b border-gray-200 px-6 py-4 flex items-center justify-between gap-3 shadow-sm">
+            <div class="flex items-center gap-3">
+                <button (click)="toggle()" class="lg:hidden">
+                    <i class="fa fa-bars text-xl text-gray-600"></i>
+                </button>
+
+                <div>
+                    <h1 class="text-lg font-semibold text-gray-700">Laboratory Portal</h1>
+                    <p class="text-xs text-gray-400">Manage tests, upload results, and track patient reports</p>
+                </div>
+            </div>
+
+        </header>
+
+        <div class="p-4 md:p-6 2xl:container mx-auto">
+            <router-outlet></router-outlet>
+        </div>
+    </main>
+</section>

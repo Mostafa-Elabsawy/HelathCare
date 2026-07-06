@@ -1,0 +1,73 @@
+<div class=" bg-gray-50 min-h-screen space-y-6">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between bg-white/70 backdrop-blur px-6 py-5 rounded-2xl border border-gray-100 shadow-sm">
+
+        <div>
+            <h2 class="text-2xl font-bold text-gray-800 tracking-tight">
+                Lab Results
+            </h2>
+
+            <p class="text-gray-500 text-sm mt-1">
+                Download or view your laboratory reports
+            </p>
+        </div>
+
+        <div class="flex items-center gap-2 text-sm text-gray-600 bg-gray-100 px-4 py-2 rounded-xl font-medium">
+            <i class="pi pi-file text-xs"></i>
+            {{ labReports.length }} reports
+        </div>
+
+    </div>
+
+    <!-- Grid -->
+    <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-6">
+
+        @for (item of labReports; track $index) {
+        <div>
+
+            <div class="flex flex-col h-full bg-white/70 backdrop-blur rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-5 border border-gray-100">
+
+                <!-- Icon / Preview -->
+                <div class="w-full h-32 rounded-xl bg-red-100 from-red-50 to-red-100 flex items-center justify-center mb-4 relative overflow-hidden">
+
+                    <i class="fa fa-file-lines text-red-400 text-5xl"></i>
+
+                    <!-- subtle overlay -->
+                    <div class="absolute inset-0 bg-white/10"></div>
+                </div>
+
+                <!-- Content -->
+                <div class="flex-1">
+                    <h3 class="font-semibold text-lg text-gray-800 mb-2 line-clamp-2">
+                        {{ item.title }}
+                    </h3>
+
+                    <div class="flex items-center gap-2 text-sm text-gray-500 mb-3">
+                        <i class="pi pi-calendar text-xs"></i>
+                        <span>{{ item.date }}</span>
+                    </div>
+                </div>
+
+                <!-- Divider -->
+                <div class="border-t my-3"></div>
+
+                <!-- Actions -->
+                <div class="flex flex-col gap-2">
+
+                    <p-button type="button" severity="secondary" label="AI Scan" icon="pi pi-eye" styleClass="w-full !rounded-xl !text-sm">
+                    </p-button>
+
+                    <p-button type="button" severity="primary" label="Download" icon="pi pi-download" styleClass="w-full !rounded-xl !text-sm">
+                    </p-button>
+
+                </div>
+
+            </div>
+
+        </div>
+        }
+
+    </div>
+
+</div>

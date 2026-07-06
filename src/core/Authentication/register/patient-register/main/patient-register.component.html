@@ -1,0 +1,84 @@
+<div class="min-h-screen flex items-center bg-slate-50 text-slate-800 py-8 sm:px-4">
+    <div class="sm:container w-full mx-auto px-4">
+        <div class="bg-white/70 backdrop-blur-xl border-2 border-gray-300 lg:w-[60%] w-full mx-auto p-6 rounded-2xl shadow-lg">
+            <div class="flex flex-col items-center gap-3 text-center">
+                <div class="bg-blue-500 p-3 rounded-xl shadow">
+                    <i class="fas fa-heart-pulse text-white text-xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800">Medical Pulse</h3>
+            </div>
+            <h1 class="text-2xl text-blue-500 font-semibold text-center mb-4 mt-6">Patient Registration </h1>
+            <p-stepper [(value)]="activeStep">
+                <p-step-list class=" ">
+                    @for (item of [1,2,3,4]; track $index) {
+                    <p-step [value]="item" class="flex flex-row flex-auto gap-2">
+                        <ng-template #content let-activateCallback="activateCallback" let-value="value">
+                            <button class="step" [ngClass]="{active: value == activeStep ,completed: value < activeStep}">
+                                @if(value < activeStep) { <i class="pi pi-check  font-semibold!"></i>
+                                    }
+                                    @else {<h1 class="text-xl font-semibold">{{item}}</h1>}
+                            </button>
+                        </ng-template>
+                    </p-step>
+                    }
+                </p-step-list>
+                <p-step-panels class="">
+                    <p-step-panel [value]="1">
+                        <ng-template #content let-activateCallback="activateCallback">
+                            <div class="flex justify-center items-center gap-4">
+                                <div class="bg-blue-100 flex items-center justify-center rounded-xl w-10 h-10"><i class="pi pi-user text-blue-500! text-2xl!"></i> </div>
+                                <h2 class="text-xl text-gray-800 font-semibold block text-center">Personal Information </h2>
+                            </div>
+                            <patient-personal-info (output)="UpdateData($event,personaldata,'personal')"></patient-personal-info>
+                            <div class="flex max-sm:flex-col max-sm:gap-4 pt-6 justify-end">
+                                <p-button (onClick)="activateCallback(2)" label="Next" [disabled]="validation() && !personaldata().valid" label="Next" icon="pi pi-arrow-right" iconPos="right" [fluid]="fluidCheck()" />
+                            </div>
+                        </ng-template>
+                    </p-step-panel>
+
+                    <p-step-panel [value]="2">
+                        <ng-template #content let-activateCallback="activateCallback">
+                            <div class="flex justify-center items-center gap-4">
+                                <div class="bg-blue-100 flex items-center justify-center rounded-xl w-10 h-10"><i class="pi pi-phone text-blue-500! text-2xl!"></i> </div>
+                                <h2 class="text-xl text-gray-800 font-semibold block text-center">Contact Information </h2>
+                            </div>
+                            <patient-contact-info (output)="UpdateData($event,contactdata,'contact')"></patient-contact-info>
+                            <div class="flex max-sm:flex-col max-sm:gap-4 pt-6 justify-between">
+                                <p-button (onClick)="activateCallback(1)" label="Back" severity="secondary" icon="pi pi-arrow-left" [fluid]="fluidCheck()" />
+                                <p-button (onClick)="activateCallback(3)" label="Next" [disabled]="validation() && !contactdata().valid" icon="pi pi-arrow-right" iconPos="right" [fluid]="fluidCheck()" />
+                            </div>
+                        </ng-template>
+                    </p-step-panel>
+
+                    <p-step-panel [value]="3">
+                        <ng-template #content let-activateCallback="activateCallback">
+                            <div class="flex justify-center items-center gap-4">
+                                <div class="bg-blue-100 flex items-center justify-center rounded-xl w-12 h-12"><i class="fas fa-heart-pulse text-blue-500! text-2xl!"></i> </div>
+                                <h2 class="text-xl text-gray-800 font-semibold block text-center">Medical Information </h2>
+                            </div>
+                            <patient-medical-info (output)="UpdateData($event,medicaldata,'medical')"></patient-medical-info>
+                            <div class="flex max-sm:flex-col max-sm:gap-4 pt-6 justify-between">
+                                <p-button (onClick)="activateCallback(2)" label="Back" severity="secondary" icon="pi pi-arrow-left" [fluid]="fluidCheck()" />
+                                <p-button (onClick)="activateCallback(4)" label="Next" [disabled]="validation() && !medicaldata().valid" icon="pi pi-arrow-right" iconPos="right" [fluid]="fluidCheck()" />
+                            </div>
+                        </ng-template>
+                    </p-step-panel>
+                    <p-step-panel [value]="4">
+                        <ng-template #content let-activateCallback="activateCallback">
+                            <div class="flex justify-center items-center gap-4">
+                                <div class="bg-blue-100 flex items-center justify-center rounded-xl w-12 h-12"><i class="pi pi-lock text-blue-500! text-2xl!"></i> </div>
+                                <h2 class="text-xl text-gray-800 font-semibold block text-center">Confirmation & Security </h2>
+                            </div>
+                            <patient-security-info (output)="UpdateData($event,securitydata,'security')"></patient-security-info>
+
+                            <div class="flex max-sm:flex-col max-sm:gap-4 pt-6 justify-between">
+                                <p-button (onClick)="activateCallback(3)" label="Back" severity="secondary" icon="pi pi-arrow-left" [fluid]="fluidCheck()" />
+                                <p-button (onClick)="submitForm()" label="Complete Regsistration" [disabled]="validation() && !(personaldata().valid && contactdata().valid && medicaldata().valid && securitydata().valid)" severity="primary" icon="pi pi-check" iconPos="right" [fluid]="fluidCheck()" />
+                            </div>
+                        </ng-template>
+                    </p-step-panel>
+                </p-step-panels>
+            </p-stepper>
+        </div>
+    </div>
+</div>

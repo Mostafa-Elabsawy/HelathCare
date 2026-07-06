@@ -1,0 +1,245 @@
+<div class="p-5">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+            <h2 class="text-xl font-semibold text-gray-800">
+                Professional Information
+            </h2>
+            <p class="text-sm text-gray-500">
+                Update your profile details and professional information.
+            </p>
+        </div>
+
+        <p-button label="Edit Profile" icon="fa-solid fa-pen-to-square" styleClass="!bg-emerald-500 !bg-emerald-500 hover:!bg-emerald-600 !border-emerald-500 hover:!border-emerald-600" (onClick)="openEditDialog()" />
+    </div>
+</div>
+
+<p-dialog header="Edit Doctor Profile" [visible]="editDialogVisible()" (visibleChange)="editDialogVisible.set($event)" [modal]="true" [draggable]="false" [resizable]="false" [style]="{ width: 'min(96vw, 980px)' }" [contentStyle]="{ 'max-height': '72vh', overflow: 'auto' }" styleClass="edit-profile-dialog">
+
+    <form [formGroup]="doctorInfoForm" enctype="multipart/form-data" class="grid grid-cols-1 xl:grid-cols-12 gap-5 overflow-visible">
+
+        <!-- Profile Picture -->
+        <section class="xl:col-span-4 bg-white/70 backdrop-blur rounded-2xl shadow-sm border border-gray-100 p-5">
+
+            <h3 class="font-semibold text-gray-800 mb-4">
+                Profile Picture
+            </h3>
+
+            <div class="flex flex-col items-center text-center gap-4">
+
+                <div class="w-36 h-36 rounded-2xl overflow-hidden bg-gray-50 flex justify-center items-center">
+
+                    <p-image [src]="imagePreview()" alt="Doctor profile" imageStyleClass="w-full h-full object-cover">
+                    </p-image>
+
+                </div>
+
+                <p-fileupload mode="basic" name="profileImage" [customUpload]="true" [auto]="true" chooseLabel="Change Profile Picture" chooseIcon="pi pi-camera" (uploadHandler)="updateProfilePicture($event)" chooseStyleClass="bg-emerald-500! hover:bg-emerald-600! border-emerald-500! hover:border-emerald-600!">
+                </p-fileupload>
+
+            </div>
+        </section>
+
+        <!-- Personal Details -->
+        <section class="xl:col-span-8 bg-white/70 backdrop-blur rounded-2xl shadow-sm border border-gray-100 p-5">
+
+            <div class="flex gap-2 items-center mb-5">
+
+                <div class="bg-emerald-100 rounded-lg w-10 h-10 flex items-center justify-center">
+
+                    <i class="pi pi-user text-emerald-500 text-lg!"></i>
+
+                </div>
+
+                <h3 class="font-semibold text-gray-800">
+                    Personal Details
+                </h3>
+
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                <div class="field">
+                    <label>First Name</label>
+
+                    <input pInputText [invalid]="valid(doctorInfoForm.controls.firstName)" formControlName="firstName" placeholder="First name" [fluid]="true">
+
+                    @if (valid(doctorInfoForm.controls.firstName)) {
+                    <p class="err">
+                        <i class="pi pi-exclamation-circle"></i>
+                        First name is required.
+                    </p>
+                    }
+                </div>
+
+                <div class="field">
+                    <label>Last Name</label>
+
+                    <input pInputText [invalid]="valid(doctorInfoForm.controls.lastName)" formControlName="lastName" placeholder="Last name" [fluid]="true">
+
+                    @if (valid(doctorInfoForm.controls.lastName)) {
+                    <p class="err">
+                        <i class="pi pi-exclamation-circle"></i>
+                        Last name is required.
+                    </p>
+                    }
+                </div>
+
+                <div class="field">
+                    <label>National ID</label>
+
+                    <input pInputText [invalid]="valid(doctorInfoForm.controls.nationalId)" formControlName="nationalId" placeholder="14-digit national ID" [fluid]="true">
+
+                    @if (valid(doctorInfoForm.controls.nationalId)) {
+                    <p class="err">
+                        <i class="pi pi-exclamation-circle"></i>
+                        Enter a valid 14-digit ID.
+                    </p>
+                    }
+                </div>
+
+                <div class="field">
+                    <label>Gender</label>
+
+                    <p-select appendTo="body" [invalid]="valid(doctorInfoForm.controls.gender)" [options]="genders" formControlName="gender"   placeholder="Select gender"  [fluid]="true" />
+
+                    @if (valid(doctorInfoForm.controls.gender)) {
+                    <p class="err">
+                        <i class="pi pi-exclamation-circle"></i>
+                        Gender is required.
+                    </p>
+                    }
+                </div>
+                <div class="field">
+                    <label>Medical Specialty</label>
+
+                    <p-select  appendTo="body" [fluid]="true" [options]="specialties"   placeholder="Select specialty"  formControlName="specialty" ></p-select>
+
+                    @if (valid(doctorInfoForm.controls.specialty)) {
+                    <p class="err">
+                        <i class="pi pi-exclamation-circle"></i>
+                        Specialty is required.
+                    </p>
+                    }
+                </div>
+
+                <div class="field">
+                    <label>Medical Level</label>
+
+                    <p-select appendTo="body" [fluid]="true" [options]="medicalLevels"     placeholder="Select level"   formControlName="medicalLevel" ></p-select>
+
+                    @if (valid(doctorInfoForm.controls.medicalLevel)) {
+                    <p class="err">
+                        <i class="pi pi-exclamation-circle"></i>
+                        Medical level is required.
+                    </p>
+                    }
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Contact Details -->
+        <section class="xl:col-span-12 bg-white/70 backdrop-blur rounded-2xl shadow-sm border border-gray-100 p-5">
+
+            <div class="flex gap-2 items-center mb-5">
+
+                <div class="bg-emerald-100 rounded-lg w-10 h-10 flex items-center justify-center">
+
+                    <i class="pi pi-phone text-emerald-500 text-lg!"></i>
+
+                </div>
+
+                <h3 class="font-semibold text-gray-800">
+                    Contact Details
+                </h3>
+
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2  gap-4">
+
+                <div class="field col-span-2 md:col-span-1">
+                    <label>Email Address</label>
+
+                    <input [fluid]="true" pInputText [invalid]="valid(doctorInfoForm.controls.email)" type="email" formControlName="email" placeholder="Email address">
+
+                    @if (valid(doctorInfoForm.controls.email)) {
+                    <p class="err">
+                        <i class="pi pi-exclamation-circle"></i>
+                        Enter a valid email.
+                    </p>
+                    }
+                </div>
+
+                <div class="field col-span-2 md:col-span-1">
+                    <label>Phone Number</label>
+
+                    <p-inputgroup>
+                        <p-inputgroup-addon>
+                            <p-button severity="secondary" label="+20" />
+                        </p-inputgroup-addon>
+
+                        <input pInputText [fluid]="true" [invalid]="valid(doctorInfoForm.controls.phone)" type="tel" formControlName="phone" placeholder="Phone number">
+                    </p-inputgroup>
+
+                    @if (valid(doctorInfoForm.controls.phone)) {
+                    <p class="err">
+                        <i class="pi pi-exclamation-circle"></i>
+                        Enter a valid Egyptian phone number.
+                    </p>
+                    }
+                </div>
+
+                <div class="field col-span-2 md:col-span-1">
+                    <label>Governorate</label>
+
+                    <p-select [fluid]="true" [options]="GovernatesNames" [invalid]="valid(doctorInfoForm.controls.governorate)" formControlName="governorate" placeholder="Governorate"></p-select>
+
+                    @if (valid(doctorInfoForm.controls.governorate)) {
+                    <p class="err">
+                        <i class="pi pi-exclamation-circle"></i>
+                        Governorate is required.
+                    </p>
+                    }
+                </div>
+
+                <div class="field col-span-2 md:col-span-1">
+                    <label>City</label>
+
+                    <p-select [fluid]="true" [options]="citiesName()" [invalid]="valid(doctorInfoForm.controls.city)" formControlName="city" placeholder="City"></p-select>
+
+                    @if (valid(doctorInfoForm.controls.city)) {
+                    <p class="err">
+                        <i class="pi pi-exclamation-circle"></i>
+                        City is required.
+                    </p>
+                    }
+                </div>
+
+                <div class="field col-span-2">
+                    <label>Address</label>
+
+                    <input [fluid]="true" pInputText [invalid]="valid(doctorInfoForm.controls.address)" formControlName="address" placeholder="Address">
+
+                    @if (valid(doctorInfoForm.controls.address)) {
+                    <p class="err">
+                        <i class="pi pi-exclamation-circle"></i>
+                        Address is required.
+                    </p>
+                    }
+                </div>
+
+            </div>
+        </section>
+    </form>
+
+    <ng-template #footer>
+        <div class="flex flex-col sm:flex-row justify-end gap-2 w-full">
+
+            <p-button label="Cancel" severity="secondary" icon="pi pi-times" (onClick)="closeEditDialog()" />
+
+            <p-button label="Save Changes" icon="pi pi-check" styleClass="save-action"  (onClick)="saveChanges()" />
+
+        </div>
+    </ng-template>
+
+</p-dialog>

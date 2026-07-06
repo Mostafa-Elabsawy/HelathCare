@@ -1,0 +1,335 @@
+<section class="min-h-screen bg-slate-50 text-slate-900">
+
+
+    <main class="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-10">
+        <header class="w-full mb-8">
+            <div class="w-full bg-white/70 backdrop-blur-xl border border-slate-100 rounded-3xl shadow-sm p-6 md:p-8">
+
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-50 text-primary-600 text-sm md:text-base font-medium border border-primary-100 mb-5">
+                    <span class="w-2 h-2 rounded-full bg-primary-500 animate-pulse"></span>
+                    Welcome back
+                </div>
+
+                <h1 class="text-3xl md:text-5xl font-semibold leading-tight text-slate-900">
+                    Good morning, Mostafa
+                    <span class="block text-primary-600 mt-2">
+                        Ready to take care of your health today?
+                    </span>
+                </h1>
+
+                <p class="mt-4 text-slate-500 max-w-3xl leading-relaxed">
+                    Access appointments, medical records, lab results, and stay connected with your healthcare journey in one place.
+                </p>
+
+
+            </div>
+        </header>
+
+        <section class="grid md:grid-cols-3 gap-5 md:gap-6 mb-8">
+
+            <!-- ================= BOOK DOCTOR ================= -->
+            <article class="group bg-white/70 backdrop-blur-xl border border-slate-100 rounded-3xl overflow-hidden shadow-sm hover:-translate-y-1 hover:shadow-lg transition">
+
+                <!-- IMAGE HEADER -->
+                <div class="relative h-60 overflow-hidden">
+                    <img src="all-doctors.jpg" class="w-full h-full object-cover" alt="Book Doctor" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+
+                    <p class="absolute bottom-3 left-4 text-white font-semibold text-sm">
+                        Doctor Consultation
+                    </p>
+                </div>
+
+                <!-- CONTENT -->
+                <div class="p-6">
+                    <div class="w-12 h-12 rounded-2xl flex items-center justify-center bg-primary-50 text-primary-600 mb-4">
+                        <i class="fa-solid fa-user-doctor"></i>
+                    </div>
+
+                    <h3 class="text-lg font-semibold text-slate-900 mb-2">Book a Doctor</h3>
+
+                    <p class="text-sm text-slate-500 leading-relaxed min-h-16">
+                        Find specialists, clinics, and follow-up visits connected to your patient profile.
+                    </p>
+
+                    <a routerLink="/doctor-appointment" class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary-600">
+                        Schedule visit
+                        <i class="pi pi-arrow-right"></i>
+                    </a>
+                </div>
+
+            </article>
+
+            <!-- ================= LABS ================= -->
+            <article class="group bg-white/70 backdrop-blur-xl border border-slate-100 rounded-3xl overflow-hidden shadow-sm hover:-translate-y-1 hover:shadow-lg transition">
+
+                <!-- IMAGE HEADER -->
+                <div class="relative h-60 overflow-hidden">
+                    <img src="all-labs.jpg" class="w-full h-full object-cover" alt="Lab Tests" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+
+                    <p class="absolute bottom-3 left-4 text-white font-semibold text-sm">
+                        Lab & Diagnostics
+                    </p>
+                </div>
+
+                <!-- CONTENT -->
+                <div class="p-6">
+                    <div class="w-12 h-12 rounded-2xl flex items-center justify-center bg-emerald-50 text-emerald-600 mb-4">
+                        <i class="fa-solid fa-flask-vial"></i>
+                    </div>
+
+                    <h3 class="text-lg font-semibold text-slate-900 mb-2">Lab & Tests</h3>
+
+                    <p class="text-sm text-slate-500 leading-relaxed min-h-16">
+                        Reserve lab slots for blood tests, reports, and diagnostics from nearby providers.
+                    </p>
+
+                    <a routerLink="/patient-dashboard/Lab-Results" class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-emerald-600">
+                        Browse labs
+                        <i class="pi pi-arrow-right"></i>
+                    </a>
+                </div>
+
+            </article>
+
+            <!-- ================= HEALTH RECORD ================= -->
+            <article class="group bg-white/70 backdrop-blur-xl border border-slate-100 rounded-3xl overflow-hidden shadow-sm hover:-translate-y-1 hover:shadow-lg transition">
+                <div class="relative h-60 overflow-hidden">
+                    <img src="medical-record.jpg" class="w-full h-full object-cover" alt="Medical Records" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                    <p class="absolute bottom-3 left-4 text-white font-semibold text-sm">
+                        Health Records
+                    </p>
+                </div>
+
+                <!-- CONTENT -->
+                <div class="p-6">
+                    <div class="w-12 h-12 rounded-2xl flex items-center justify-center bg-violet-50 text-violet-600 mb-4">
+                        <i class="fa-solid fa-notes-medical"></i>
+                    </div>
+
+                    <h3 class="text-lg font-semibold text-slate-900 mb-2">Health Record</h3>
+
+                    <p class="text-sm text-slate-500 leading-relaxed min-h-16">
+                        Review medical history, radiology reports, visits, and upcoming reminders.
+                    </p>
+
+                    <a routerLink="/patient-dashboard" class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-violet-600">
+                        Open dashboard
+                        <i class="pi pi-arrow-right"></i>
+                    </a>
+                </div>
+            </article>
+
+        </section>
+
+        <section class="bg-white/70 backdrop-blur-xl border border-slate-100 rounded-3xl shadow-sm p-5 md:p-6 space-y-12">
+
+            <!-- ================= TOP DOCTORS ================= -->
+            <div>
+                <div class="flex items-end justify-between mb-5">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800">Top Doctors</h2>
+                        <p class="text-sm text-slate-500">Highly rated specialists for you</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-5">
+
+                    @for (doctor of topDoctors.slice(0,3); track doctor) {
+
+                    <article class="group bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm hover:-translate-y-1 hover:shadow-xl transition  flex flex-col">
+
+                        <!-- IMAGE HEADER (TALLER) -->
+                        <div class="relative h-60 overflow-hidden">
+
+                            <img src="doctor.webp" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" alt="Doctor" />
+
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+
+                            <!-- rating -->
+                            <div class="absolute top-3 right-3 bg-white/90 px-2.5 py-1 rounded-xl text-xs font-bold text-amber-600 flex items-center gap-1">
+                                <i class="pi pi-star-fill text-[10px]"></i>
+                                {{ doctor.rating }}
+                            </div>
+
+                            <!-- availability badge -->
+                            <div class="absolute bottom-3 left-4 text-white text-sm font-semibold">
+                                {{ doctor.specialty }}
+                            </div>
+
+                        </div>
+
+                        <!-- CONTENT -->
+                        <div class="p-5 flex-1 flex flex-col justify-between">
+
+                            <div>
+
+                                <!-- NAME -->
+                                <h3 class="text-lg font-bold text-slate-800">
+                                    Dr. {{ doctor.firstName }} {{ doctor.lastName }}
+                                </h3>
+
+                                <!-- SPECIALTY + LEVEL -->
+                                <p class="text-xs text-slate-500 mt-1">
+                                    {{ doctor.medicalLevel }} • {{ doctor.city }}
+                                </p>
+
+                                <!-- EXTRA DETAILS -->
+                                <div class="mt-4 space-y-2 text-xs text-slate-500">
+
+                                    <div class="flex items-center gap-2">
+                                        <i class="pi pi-clock text-primary-500"></i>
+                                        {{ doctor.workingHourStart }} - {{ doctor.workingHourEnd }}
+                                    </div>
+
+                                    <div class="flex items-center gap-2">
+                                        <i class="pi pi-calendar text-primary-500"></i>
+                                        {{ doctor.workingDays.join(', ') }}
+                                    </div>
+
+                                    <div class="flex items-center gap-2">
+                                        <i class="pi pi-map-marker text-primary-500"></i>
+                                        {{ doctor.governorate }}, {{ doctor.city }}
+                                    </div>
+
+                                    <div class="flex items-center gap-2">
+                                        <i class="pi pi-users text-primary-500"></i>
+                                        {{ doctor.reviewsCount }} patient reviews
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <!-- FOOTER -->
+                            <div class="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between">
+
+                                <div>
+                                    <p class="text-[10px] uppercase text-slate-400 font-bold">Consultation</p>
+                                    <p class="text-lg font-extrabold text-slate-800">
+                                        {{ doctor.price }} <span class="text-xs text-slate-400">EGP</span>
+                                    </p>
+                                </div>
+
+                                <button class="px-4 py-2 rounded-2xl bg-primary-600 text-white text-xs font-semibold hover:bg-primary-700 transition">
+                                    Book
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                    }
+
+
+                </div>
+            </div>
+
+            <!-- ================= TOP LABS ================= -->
+            <div>
+                <div class="flex items-end justify-between mb-5">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800">Top Laboratories</h2>
+                        <p class="text-sm text-slate-500">Trusted diagnostic centers near you</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-5">
+
+                    @for (lab of topLabs.slice(0,3); track lab) {
+
+                    <article class="group bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm hover:-translate-y-1 hover:shadow-xl transition  flex flex-col">
+
+                        <!-- IMAGE HEADER -->
+                        <div class="relative h-60 overflow-hidden">
+
+                            <img src="lab.webp" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" alt="Laboratory" />
+
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+
+                            <!-- badge -->
+                            <div class="absolute top-3 right-3 bg-white/90 px-2.5 py-1 rounded-xl text-xs font-bold text-violet-600 flex items-center gap-1">
+                                <i class="pi pi-flask"></i>
+                                {{ lab.testsCount }} Tests
+                            </div>
+
+                            <!-- title overlay -->
+                            <div class="absolute bottom-3 left-4 text-white font-semibold text-sm">
+                                Diagnostic Center
+                            </div>
+
+                        </div>
+
+                        <!-- CONTENT -->
+                        <div class="p-5 flex-1 flex flex-col justify-between">
+
+                            <div>
+
+                                <!-- NAME -->
+                                <h3 class="text-lg font-bold text-slate-800">
+                                    {{ lab.name }}
+                                </h3>
+
+                                <!-- LOCATION -->
+                                <p class="text-xs text-slate-500 mt-1">
+                                    {{ lab.city }} • {{ lab.governorate || 'Egypt' }}
+                                </p>
+
+                                <!-- DETAILS -->
+                                <div class="mt-4 space-y-2 text-xs text-slate-500">
+
+                                    <div class="flex items-center gap-2">
+                                        <i class="pi pi-clock text-violet-500"></i>
+                                        Open: {{ lab.openingTime || '8:00 AM' }} - {{ lab.closingTime || '10:00 PM' }}
+                                    </div>
+
+                                    <div class="flex items-center gap-2">
+                                        <i class="pi pi-check-circle text-violet-500"></i>
+                                        Home sample collection available
+                                    </div>
+
+                                    <div class="flex items-center gap-2">
+                                        <i class="pi pi-send text-violet-500"></i>
+                                        Fast digital report delivery
+                                    </div>
+
+                                    <div class="flex items-center gap-2">
+                                        <i class="pi pi-shield text-violet-500"></i>
+                                        Certified & verified lab
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <!-- FOOTER -->
+                            <div class="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between">
+
+                                <div>
+                                    <p class="text-[10px] uppercase text-slate-400 font-bold">Starting From</p>
+                                    <p class="text-lg font-extrabold text-slate-800">
+                                        {{ lab.basePrice || 150 }} <span class="text-xs text-slate-400">EGP</span>
+                                    </p>
+                                </div>
+
+                                <button class="px-4 py-2 rounded-2xl bg-violet-600 text-white text-xs font-semibold hover:bg-violet-700 transition">
+                                    View
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                    }
+
+                </div>
+            </div>
+        </section>
+    </main>
+</section>

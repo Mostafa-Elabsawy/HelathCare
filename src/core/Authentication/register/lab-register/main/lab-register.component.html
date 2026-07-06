@@ -1,0 +1,57 @@
+<div class="min-h-screen flex items-center bg-slate-50 text-slate-800 py-8 sm:px-4">
+    <div class="sm:container w-full mx-auto px-4">
+        <div class="bg-white/70 backdrop-blur-xl border-2 border-gray-300 lg:w-[60%] w-full mx-auto p-6 rounded-2xl shadow-lg">
+            <div class="flex flex-col items-center gap-3 text-center">
+                <div class="bg-violet-600 p-3 rounded-xl shadow">
+                    <i class="fa fa-heart-pulse text-white text-xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800">Medical Pulse</h3>
+            </div>
+            <h1 class="text-2xl text-violet-600 font-semibold text-center mb-4 mt-6">Laboratory Registration </h1>
+            <p-stepper [(value)]="activeStep" class="lab">
+                <p-step-list class=" ">
+                    @for (item of [1,2]; track $index) {
+                    <p-step [value]="item" class="flex flex-row flex-auto gap-2">
+                        <ng-template #content let-activateCallback="activateCallback" let-value="value">
+                            <button class="step" [ngClass]="{active: value == activeStep ,completed: value < activeStep}">
+                                @if(value < activeStep) { <i class="pi pi-check font-semibold!"></i>
+                                    }
+                                    @else {<h1 class="text-xl font-semibold">{{item}}</h1>}
+                            </button>
+                        </ng-template>
+                    </p-step>
+                    }
+                </p-step-list>
+                <p-step-panels class="">
+                    <p-step-panel [value]="1">
+                        <ng-template #content let-activateCallback="activateCallback">
+                            <div class="flex justify-center items-center gap-4">
+                                <div class="bg-violet-200 flex items-center justify-center  rounded-xl w-10 h-10"><i class="fa fa-flask-vial text-violet-600! text-xl!"></i> </div>
+                                <h2 class="text-xl text-black font-semibold block text-center">Laboratory Information </h2>
+                            </div>
+                            <app-lab-informations (output)="UpdateData($event,labData,'lab')"></app-lab-informations>
+                            <div class="flex max-sm:flex-col max-sm:gap-4 pt-6 justify-end" >
+                                <p-button styleClass="lab-action" (onClick)="activateCallback(2)" label="Next" [disabled]="validation() && !labData().valid" icon="pi pi-arrow-right" iconPos="right" [fluid]="fluidCheck()"/>
+                            </div>
+                        </ng-template>
+                    </p-step-panel>
+
+                    <p-step-panel [value]="2">
+                        <ng-template #content let-activateCallback="activateCallback">
+                            <div class="flex justify-center items-center gap-4">
+                                <div class="bg-violet-200 flex items-center justify-center  rounded-xl w-12 h-12"><i class="pi pi-lock text-violet-600! text-2xl!"></i> </div>
+                                <h2 class="text-xl text-black font-semibold block text-center">Confirmation & Security </h2>
+                            </div>
+                            <app-lab-security-info (output)="UpdateData($event,securitydata,'security')"></app-lab-security-info>
+
+                            <div class="flex max-sm:flex-col max-sm:gap-4 pt-6 justify-between">
+                                <p-button (onClick)="activateCallback(1)" label="Back" severity="secondary" icon="pi pi-arrow-left" [fluid]="fluidCheck()" />
+                                <p-button styleClass="lab-action" (onClick)="submitForm()" label="Complete Registration" [disabled]="validation() && !(labData().valid && securitydata().valid)" icon="pi pi-check" iconPos="right" [fluid]="fluidCheck()" />
+                            </div>
+                        </ng-template>
+                    </p-step-panel>
+                </p-step-panels>
+            </p-stepper>
+        </div>
+    </div>
+</div>
