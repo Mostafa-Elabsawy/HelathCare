@@ -6,7 +6,7 @@ import { DoctorService } from '../../../../services/doctor.service';
 import {DoctorProfileResponseAPI} from '../../../../services/models/doctor-api.interface';
 @Component({
   selector: 'app-doctor-settings',
-  imports: [RouterLink, ImageModule, EditDoctorInfoComponent],
+  imports: [ ImageModule, EditDoctorInfoComponent],
   templateUrl: './settings.component.html',
 })
 export class DoctorSettings {
