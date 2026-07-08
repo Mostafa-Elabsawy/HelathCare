@@ -19,7 +19,7 @@ export interface DoctorProfileResponseAPI {
   nationalID: number;
 
   specialty: string;
-  medicalLevel: string 
+  medicalLevel: string | null;
   price: number | null;
   rate: number | null;
   picture: string | null;
@@ -29,12 +29,12 @@ export interface DoctorProfileResponseAPI {
   city: string;
   address: string;
 
-  workingDay: string[] ;
+  workingDay: string[];
   workingHourStart: string | null;
   workingHourEnd: string | null;
   duration: number | null;
 
-  appointments: AppointmentAPI[];
+  appointments: Appointment[];
 
   id: number;
   email: string;
@@ -42,60 +42,31 @@ export interface DoctorProfileResponseAPI {
   role: string;
 }
 
-export interface AppointmentAPI {
-  id: number;
-  patientName: string;
-  patientAge: number;
-  patientGender: string;
-  patientPhone: string;
-  patientEmail: string;
-  date: string;
-  day: string;
-  month: string;
-  time: string;
-  reason: string;
-  status: 'Confirmed' | 'Completed' | 'Canceled';
-  period: 'today' | 'upcoming';
+export interface Appointment {
+  // Add appointment properties here when you know them
 }
-
-export interface UpdateDoctorProfileAPI {
-  phone: string;
-  specialty: string;
-  medicalLevel: string;
-  governorate: string;
-  city: string;
-  address: string;
-}
-
-export interface UpdateScheduleAPI {
-  workingDay: string[];
-  workingHourStart: string;
-  workingHourEnd: string;
-  duration: number;
-  price: number;
-}
-
+export interface UpdateDoctorProfileAPI{ }
 export const defaultDoctorProfile: DoctorProfileResponseAPI = {
-  firstName: '----',
-  lastName: '----',
-  gender: '----',
+  firstName: '',
+  lastName: '',
+  gender: '',
   nationalID: 0,
-  specialty: '----',
-  medicalLevel: '----',
-  phone: '----',
-  governorate: '----',
-  city: '------',
-  address: '----',
+  specialty: '',
+  medicalLevel: '',
+  phone: '',
+  governorate: '',
+  city: '',
+  address: '',
   workingDay: [],
-  workingHourStart: '----',
-  workingHourEnd: '----',
+  workingHourStart: '',
+  workingHourEnd: '',
   duration: 0,
   appointments: [],
   id: 0,
-  email: '------',
+  email: '',
   passwordHash: '',
   role: '',
   price: null,
   rate: null,
-  picture: null,
+  picture: null
 }
