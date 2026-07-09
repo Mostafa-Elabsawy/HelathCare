@@ -12,12 +12,12 @@ import { LabRegister } from '../core/Authentication/register/lab-register/main/l
 import { BrowseServices } from '../Features/patient-hub/browse-services.component';
 import { DoctorAppointmentComponent } from '../Features/patient-hub/doctor-appointment/doctor-appointment.component';
 import { DoctorDashboard } from '../Features/Dashboards/doctor-dashboard/main/doctor-dashboard.component';
-import { DoctorDashboardOverview } from '../Features/Dashboards/doctor-dashboard/dashboard/dashboard.component';
+import { DoctorOverview } from '../Features/Dashboards/doctor-dashboard/over-view/over-view.component';
 import { DoctorAppointments } from '../Features/Dashboards/doctor-dashboard/appointments/appointments.component';
 import { DoctorSchedule } from '../Features/Dashboards/doctor-dashboard/schedule/schedule.component';
 import { DoctorNotifications } from '../Features/Dashboards/doctor-dashboard/notifications/notifications.component';
 import { DoctorReports } from '../Features/Dashboards/doctor-dashboard/reports/reports.component';
-import { DoctorSettings } from '../Features/Dashboards/doctor-dashboard/settings/settings.component';
+import { DoctorProfileComponent } from '../Features/Dashboards/doctor-dashboard/profile/profile.component';
 import { RegisterType } from '../Features/home/register-type/register-type.component';
 import { DashboardsComponent } from '../Features/Dashboards/main/dashboards.component';
 import { NotFoundComponent } from '../Features/not-found/not-found.component';
@@ -91,12 +91,12 @@ export const routes: Routes = [
         component: DoctorDashboard,
         children: [
           { path: '', redirectTo: 'Dashboard', pathMatch: 'full' },
-          { path: 'Dashboard', component: DoctorDashboardOverview },
+          { path: 'Dashboard', component: DoctorOverview },
           { path: 'Appointments', component: DoctorAppointments },
           { path: 'Schedule', component: DoctorSchedule },
           { path: 'Notifications', component: DoctorNotifications },
           { path: 'Reports', component: DoctorReports },
-          { path: 'Profile', component: DoctorSettings },
+          { path: 'Profile', component: DoctorProfileComponent },
         ],
       },
       {

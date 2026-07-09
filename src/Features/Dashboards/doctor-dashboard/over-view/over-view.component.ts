@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-doctor-dashboard-overview',
   imports: [CommonModule],
-  templateUrl: './dashboard.component.html',
+  templateUrl: './over-view.component.html',
 })
-export class DoctorDashboardOverview {
+export class DoctorOverview {
   phone = '+20 0123456789';
   patientRequests = [
     {

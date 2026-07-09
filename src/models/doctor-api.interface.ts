@@ -19,7 +19,7 @@ export interface DoctorProfileResponseAPI {
   nationalID: number;
 
   specialty: string;
-  medicalLevel: string | null;
+  medicalLevel: string ;
   price: number | null;
   rate: number | null;
   picture: string | null;
@@ -45,27 +45,34 @@ export interface DoctorProfileResponseAPI {
 export interface Appointment {
   // Add appointment properties here when you know them
 }
-export interface UpdateDoctorProfileAPI{ }
+export interface UpdateDoctorProfileAPI{
+   phone: string;
+  specialty: string;
+  medicalLevel: string;
+  governorate: string;
+  city: string;
+  address: string;
+ }
 export const defaultDoctorProfile: DoctorProfileResponseAPI = {
-  firstName: '',
-  lastName: '',
-  gender: '',
+  firstName: '-------',
+  lastName: '-------',
+  gender: '----',
   nationalID: 0,
-  specialty: '',
-  medicalLevel: '',
-  phone: '',
-  governorate: '',
-  city: '',
-  address: '',
+  specialty: '----',
+  medicalLevel: '-----',
+  phone: '-----',
+  governorate: '-----',
+  city: '-----',
+  address: '-----',
   workingDay: [],
-  workingHourStart: '',
-  workingHourEnd: '',
+  workingHourStart: '-----',
+  workingHourEnd: '-----',
   duration: 0,
   appointments: [],
   id: 0,
-  email: '',
-  passwordHash: '',
-  role: '',
+  email: '-----',
+  passwordHash: '-----',
+  role: '-----',
   price: null,
   rate: null,
   picture: null

@@ -1,4 +1,4 @@
-import { Component, inject, input, signal, SimpleChanges } from '@angular/core';
+import { Component, effect, inject, signal, untracked } from '@angular/core';
 import {
     AbstractControl,
     FormControl,
@@ -18,13 +18,8 @@ import { FileUploadHandlerEvent } from 'primeng/fileupload';
 import { ImageModule } from 'primeng/image';
 import { DoctorSpecialties } from '../../../../core/Authentication/register/doctor-register/doctor-register.interface';
 
-import {
-    DoctorProfileResponseAPI,
-    UpdateDoctorProfileAPI,
-    defaultDoctorProfile,
-} from '../../../../models/doctor-api.interface';
-import { governorates, cities } from 'egydata';
-
+import { UpdateDoctorProfileAPI } from '../../../../models/doctor-api.interface';
+import { EgyDataService } from '../../../../services/egy-data.service';
 import { DoctorService } from '../../../../services/doctor.service';
 
 @Component({
@@ -44,13 +39,12 @@ import { DoctorService } from '../../../../services/doctor.service';
     styleUrl: './edit-doctor-info.component.css',
 })
 export class EditDoctorInfoComponent {
-    doctorData = input<DoctorProfileResponseAPI>(defaultDoctorProfile);
-
     editDialogVisible = signal(false);
     imagePreview = signal<string>('placeholder1.jpg');
     profileFileName = signal<File | null>(null);
 
     doctorService = inject(DoctorService);
+    egyDataService = inject(EgyDataService);
 
     genders = [
         { label: 'Male', value: 'male' },
@@ -59,76 +53,88 @@ export class EditDoctorInfoComponent {
 
     specialties = DoctorSpecialties;
     medicalLevels = ['General Practitioner (GP)', 'Specialist', 'Consultant'];
+    firstNameControl = new FormControl<string>(
+        { value: '', disabled: true },
+        {
+            nonNullable: true,
+            validators: [Validators.required],
+        },
+    );
+
+    lastNameControl = new FormControl<string>(
+        { value: '', disabled: true },
+        {
+            nonNullable: true,
+            validators: [Validators.required],
+        },
+    );
+
+    nationalIdControl = new FormControl<string>(
+        { value: '', disabled: true },
+        {
+            nonNullable: true,
+            validators: [Validators.required, Validators.pattern('^[0-9]{14}$')],
+        },
+    );
+
+    genderControl = new FormControl<string>(
+        { value: '', disabled: true },
+        {
+            nonNullable: true,
+            validators: [Validators.required],
+        },
+    );
+
+    emailControl = new FormControl<string>(
+        { value: '', disabled: true },
+        {
+            nonNullable: true,
+            validators: [Validators.required, Validators.email],
+        },
+    );
+
+    phoneControl = new FormControl<string>('', {
+        nonNullable: true,
+        validators: [Validators.required, Validators.pattern('^0?1[0125][0-9]{8}$')],
+    });
+
+    governorateControl = new FormControl<string>('', {
+        nonNullable: true,
+        validators: [Validators.required],
+    });
+
+    cityControl = new FormControl<string>('', {
+        nonNullable: true,
+        validators: [Validators.required],
+    });
+
+    addressControl = new FormControl<string>('', {
+        nonNullable: true,
+        validators: [Validators.required],
+    });
+
+    specialtyControl = new FormControl<string>('', {
+        nonNullable: true,
+        validators: [Validators.required],
+    });
+
+    medicalLevelControl = new FormControl<string>('', {
+        nonNullable: true,
+        validators: [Validators.required],
+    });
+
     doctorInfoForm = new FormGroup({
-        firstName: new FormControl<string>(
-            { value: '', disabled: true },
-            {
-                nonNullable: true,
-                validators: [Validators.required],
-            },
-        ),
-
-        lastName: new FormControl<string>(
-            { value: '', disabled: true },
-            {
-                nonNullable: true,
-                validators: [Validators.required],
-            },
-        ),
-
-        nationalId: new FormControl<string>(
-            { value: '', disabled: true },
-            {
-                nonNullable: true,
-                validators: [Validators.required, Validators.pattern('^[0-9]{14}$')],
-            },
-        ),
-
-        gender: new FormControl<string>(
-            { value: '', disabled: true },
-            {
-                nonNullable: true,
-                validators: [Validators.required],
-            },
-        ),
-
-        email: new FormControl<string>(
-            { value: '', disabled: true },
-            {
-                nonNullable: true,
-                validators: [Validators.required, Validators.email],
-            },
-        ),
-
-        phone: new FormControl<string>('', {
-            nonNullable: true,
-            validators: [Validators.required, Validators.pattern('^0?1[0125][0-9]{8}$')],
-        }),
-
-        governorate: new FormControl<string>('', {
-            nonNullable: true,
-            validators: [Validators.required],
-        }),
-
-        city: new FormControl<string>('', {
-            nonNullable: true,
-            validators: [Validators.required],
-        }),
-
-        address: new FormControl<string>('', {
-            nonNullable: true,
-            validators: [Validators.required],
-        }),
-
-        specialty: new FormControl<string>('', {
-            nonNullable: true,
-            validators: [Validators.required],
-        }),
-
-        medicalLevel: new FormControl<string | null>('', {
-            nonNullable: true,
-            validators: [Validators.required],
-        }),
+        firstName: this.firstNameControl,
+        lastName: this.lastNameControl,
+        nationalId: this.nationalIdControl,
+        gender: this.genderControl,
+        email: this.emailControl,
+        phone: this.phoneControl,
+        governorate: this.governorateControl,
+        city: this.cityControl,
+        address: this.addressControl,
+        specialty: this.specialtyControl,
+        medicalLevel: this.medicalLevelControl,
     });
 
     valid(control: AbstractControl): boolean {
@@ -164,9 +170,9 @@ export class EditDoctorInfoComponent {
             phone: this.doctorInfoForm.getRawValue().phone,
             governorate: this.doctorInfoForm.getRawValue().governorate,
             address: this.doctorInfoForm.getRawValue().address,
-            gender: this.doctorInfoForm.getRawValue().gender,
             specialty: this.doctorInfoForm.getRawValue().specialty,
             medicalLevel: this.doctorInfoForm.getRawValue().medicalLevel,
+            city: this.doctorInfoForm.getRawValue().city,
         };
 
         console.log(data);
@@ -183,47 +189,31 @@ export class EditDoctorInfoComponent {
         });
     }
 
-    ngOnChanges(changes: SimpleChanges): void {
-        this.doctorInfoForm.patchValue({
-            firstName: this.doctorData().firstName,
-            lastName: this.doctorData().lastName,
-
-            nationalId: this.doctorData().nationalID.toString(),
-
-            gender: this.doctorData().gender,
-
-            email: this.doctorData().email,
-            phone: this.doctorData().phone,
-
-            governorate: this.doctorData().governorate,
-            city: this.doctorData().city,
-            address: this.doctorData().address,
-
-            specialty: this.doctorData().specialty,
-
-            medicalLevel: this.doctorData().medicalLevel,
-        });
-
-        // if (this.doctorData().picture) {
-        //   this.imagePreview.set(this.doctorData().picture);
-        // }
-    }
-    GovernatesNames: string[] = [];
+    GovernatesNames = this.egyDataService.GovernatesNames;
     citiesName = signal<string[]>([]);
 
     constructor() {
-        let AllGovernatesData = governorates.getAll();
-        const default_GOV = { id: 0, code: '', name: '', nameEn: '' };
-        this.GovernatesNames = AllGovernatesData.map((element: any) => element.nameEn);
         this.doctorInfoForm.controls.governorate.valueChanges.subscribe((value) => {
             this.doctorInfoForm.controls.city.setValue('');
-            let selectedGovernateData =
-                AllGovernatesData.find((element: any) => element.nameEn == value) ?? default_GOV;
-            let citiesData = cities.getByGovernorate(selectedGovernateData.code);
-            let allnames: string[] = citiesData.map((element: any) => element.nameEn);
-            this.citiesName.set(allnames);
+            this.citiesName.set(this.egyDataService.getCities(value) ?? []);
             // console.log(selectedGovernateData, allnames);
         });
         // console.log(selectedGovernateData, allnames);
+        effect(() => {
+            const profile = this.doctorService.doctor();
+            console.log(profile);
+
+            untracked(() => {
+                this.doctorInfoForm.patchValue({
+                    phone: profile.phone,
+                    governorate: profile.governorate,
+                    city: profile.city,
+                    address: profile.address,
+                    specialty: profile.specialty,
+                    medicalLevel: profile.medicalLevel,
+                });
+                console.log(profile.governorate, this.doctorInfoForm.controls.governorate.value);
+            });
+        });
     }
 }

@@ -17,27 +17,15 @@ import { DoctorAppointments } from '../models/appointment-interface';
 })
 export class DoctorService {
     private readonly http = inject(HttpClient);
-
     private readonly apiUrl = `${environment.apiUrl}/Doctors`;
     private readonly appointmentsUrl = `${environment.apiUrl}/Appointments`;
-
-    // ========================
-    // State
-    // ========================
 
     readonly doctor = signal<DoctorProfileResponseAPI>(defaultDoctorProfile);
     readonly appointments = signal<DoctorAppointments[]>([]);
     readonly loading = signal(false);
     readonly error = signal<string | null>(null);
-
-    // Optional computed signals
-
     readonly appointmentCount = computed(() => this.appointments().length);
-
-    // ========================
-    // API
-    // ========================
-
+    
     registerDoctor(data: RegisterDoctorAPI) {
         return this.http.post<RegisterDoctorAPI>(this.apiUrl, data, {
             headers: { skipAuth: 'true' },

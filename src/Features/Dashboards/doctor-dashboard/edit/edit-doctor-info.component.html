@@ -100,7 +100,7 @@
                 <div class="field">
                     <label>Gender</label>
 
-                    <p-select appendTo="body" [invalid]="valid(doctorInfoForm.controls.gender)" [options]="genders" formControlName="gender"   placeholder="Select gender"  [fluid]="true" />
+                    <p-select appendTo="body" [invalid]="valid(doctorInfoForm.controls.gender)" [options]="genders" formControlName="gender" placeholder="Select gender" [fluid]="true" />
 
                     @if (valid(doctorInfoForm.controls.gender)) {
                     <p class="err">
@@ -112,7 +112,7 @@
                 <div class="field">
                     <label>Medical Specialty</label>
 
-                    <p-select  appendTo="body" [fluid]="true" [options]="specialties"   placeholder="Select specialty"  formControlName="specialty" ></p-select>
+                    <p-select appendTo="body" [fluid]="true" [options]="specialties" placeholder="Select specialty" formControlName="specialty"></p-select>
 
                     @if (valid(doctorInfoForm.controls.specialty)) {
                     <p class="err">
@@ -125,7 +125,7 @@
                 <div class="field">
                     <label>Medical Level</label>
 
-                    <p-select appendTo="body" [fluid]="true" [options]="medicalLevels"     placeholder="Select level"   formControlName="medicalLevel" ></p-select>
+                    <p-select appendTo="body" [fluid]="true" [options]="medicalLevels" placeholder="Select level" formControlName="medicalLevel"></p-select>
 
                     @if (valid(doctorInfoForm.controls.medicalLevel)) {
                     <p class="err">
@@ -237,8 +237,7 @@
 
             <p-button label="Cancel" severity="secondary" icon="pi pi-times" (onClick)="closeEditDialog()" />
 
-            <p-button label="Save Changes" icon="pi pi-check" styleClass="save-action"  (onClick)="saveChanges()" />
-
+            <p-button label="Save Changes" icon="pi pi-check" (onClick)="saveChanges()" styleClass="bg-emerald-500! hover:bg-emerald-600! border-emerald-500! hover:border-emerald-600!" />
         </div>
     </ng-template>
 
