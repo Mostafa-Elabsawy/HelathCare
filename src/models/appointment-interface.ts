@@ -6,6 +6,26 @@ export interface PostNewDoctorAppointment  {
 }
 
 export interface PatientAppointments {
+  appointmentId: number;
+  date: string;
+  time: string;
+  state: string;
+  price: number;
+  doctorId: number;
+  doctorName: string;
+  duration: number;
+  governorate: string;
+  city: string;
+  address: string;
+  phone: string;
+}
+
+export type getAppointmentState =
+  | 'Pending'
+  | 'Confirmed'
+  | 'Completed'
+  | 'Cancelled';
+export interface DoctorAppointmentsAPI {
     appointmentId: number;
     date: string;
     time: string;
@@ -19,22 +39,4 @@ export interface PatientAppointments {
     chronic: string[];
     previousSurgery: string[];
     gender: string;
-}
-export interface DoctorAppointments {
-  appoinmentId: number;
-  date: string; // yyyy/mm/dd
-  time: string; // hh:mm
-  state: string;
-
-  patient: {
-    PatientId: number;
-    name: string;
-    phone: string;
-    dateBirth: string;
-    bloodGroup: string;
-    allergies: string[];
-    chronic: string[];
-    previousSurgery: string[];
-    gender: string;
-  };
 }

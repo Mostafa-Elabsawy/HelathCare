@@ -1,9 +1,5 @@
 <div class="space-y-5">
 
-    <!-- ==========================================================
-         Schedule Header + Actions
-         Shows total weekly slots and edit/save/cancel buttons
-    =========================================================== -->
     <section class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white/70 backdrop-blur-xl border border-gray-100 rounded-2xl shadow-sm p-6">
 
         <!-- Page title -->
@@ -16,26 +12,12 @@
 
         <!-- Schedule statistics + actions -->
         <div class="flex flex-wrap items-center gap-3">
-
-            <!-- Weekly appointment slots -->
-            <div class="rounded-xl bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700">
-                {{ weeklySlots() }} weekly slots
-            </div>
-
             <!-- Enter edit mode -->
-            <p-button label="Edit Schedule" icon="pi pi-pencil" severity="success"  (onClick)="editMode.set(true)">
+            <p-button label="Edit Schedule" icon="fa fa-pen-to-square" styleClass="bg-emerald-500! hover:bg-emerald-600! border-emerald-500! hover:border-emerald-600!" severity="success"  (onClick)="editMode.set(true)">
             </p-button>
-
-
-
-            
         </div>
     </section>
 
-    <!-- ==========================================================
-         Schedule Preview
-         Displays what patients will currently see
-    =========================================================== -->
     <section class="grid gap-5">
 
         <section class="bg-white/70 backdrop-blur-xl border border-gray-100 rounded-2xl shadow-sm p-5">
@@ -139,38 +121,6 @@
                     }
                 </div>
 
-                <!-- Selected services -->
-                <div class="rounded-2xl bg-gray-50 border border-gray-100 p-4">
-
-                    <p class="text-xs font-semibold uppercase text-gray-400">
-                        Services provided
-                    </p>
-
-                    @if ([{name:'Consultation',price:700},{name:'Follow-up',price:600}].length) {
-
-                    <!-- Render enabled services -->
-                    <div class="mt-3 grid sm:grid-cols-2 gap-2">
-
-                        @for (service of [{name:'Consultation',price:700},{name:'Follow-up',price:600}]; track service.name) {
-
-                        <div class="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                            <i class="pi pi-check text-emerald-500 text-xs"></i>
-                            {{ service.name }}
-                        </div>
-
-                        }
-
-                    </div>
-
-                    } @else {
-
-                    <!-- Empty state -->
-                    <p class="mt-2 text-sm text-gray-500">
-                        No services selected.
-                    </p>
-
-                    }
-                </div>
             </div>
         </section>
     </section>
@@ -224,6 +174,7 @@
 
                 <p-select [options]="durationOptions" optionLabel="label" optionValue="value" formControlName="duration" placeholder="Duration" class="w-full">
                 </p-select>
+
             </label>
 
             <!-- Visit Price Input -->

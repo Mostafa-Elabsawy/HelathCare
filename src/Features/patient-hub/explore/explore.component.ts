@@ -2,12 +2,13 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-browse-services',
-  imports: [RouterLink],
-  templateUrl: './browse-services.component.html',
+    selector: 'app-explore',
+    imports: [RouterLink],
+    templateUrl: './explore.component.html',
+    styleUrl: './explore.component.css',
 })
-export class BrowseServices {
-  topDoctors = [
+export class ExploreComponent {
+      topDoctors = [
     {
       firstName: 'Ahmed',
       lastName: 'Mansour',

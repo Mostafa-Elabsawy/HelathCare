@@ -25,7 +25,8 @@ export class DoctorSchedule {
     private doctorService = inject(DoctorService);
 
     StartHourOptions = signal<SelectOption<string>[]>(Hours);
-    EndHourOptions = computed<SelectOption<string>[]>(() => this.StartHourOptions());
+    EndHourOptions = signal<SelectOption<string>[]>(Hours);
+
     readonly durationOptions: SelectOption<number>[] = [
         { label: '15 minutes', value: 15 },
         { label: '30 minutes', value: 30 },
@@ -65,7 +66,9 @@ export class DoctorSchedule {
     });
     editMode = signal(false);
 
-    weeklySlots = computed(() => {
+    weeklySlots = signal<number>(0);
+
+    computeWorkingSlots() {
         const start = this.startHour.value;
         const end = this.endHour.value;
         const dur = this.duration.value;
@@ -75,7 +78,13 @@ export class DoctorSchedule {
         const [eh, em] = end.split(':').map(Number);
         const totalMinutes = eh * 60 + em - (sh * 60 + sm);
         return Math.floor(totalMinutes / dur) * days;
-    });
+    }
+
+    computeEndHoursOptions() {
+        let currStart = this.startHour.value;
+        let startIndex = Hours.findIndex((hour) => hour.value == currStart);
+        return Hours.slice(startIndex + 1);
+    }
 
     constructor() {
         effect(() => {
@@ -83,14 +92,6 @@ export class DoctorSchedule {
 
             untracked(() => {
                 if (!profile) return;
-
-                this.working_days.set(
-                    this.working_days().map((day) => ({
-                        ...day,
-                        enabled: profile.workingDay.includes(day.value),
-                    })),
-                );
-
                 this.scheduleData.patchValue({
                     startHour: profile.workingHourStart ?? '',
                     endHour: profile.workingHourEnd ?? '',
@@ -98,7 +99,28 @@ export class DoctorSchedule {
                     price: profile.price ?? 600,
                     workingDays: profile.workingDay ?? [],
                 });
+                console.log(profile);
+
+                this.working_days.set(
+                    this.working_days().map((day) => ({
+                        ...day,
+                        enabled: profile.workingDay.includes(day.value),
+                    })),
+                );
             });
+        });
+        this.startHour.valueChanges.subscribe((value) => {
+            this.EndHourOptions.set(this.computeEndHoursOptions());
+            this.weeklySlots.set(this.computeWorkingSlots());
+        });
+        this.endHour.valueChanges.subscribe((value) => {
+            this.weeklySlots.set(this.computeWorkingSlots());
+        });
+        this.duration.valueChanges.subscribe((value) => {
+            this.weeklySlots.set(this.computeWorkingSlots());
+        });
+        this.workingDays.valueChanges.subscribe((value) => {
+            this.weeklySlots.set(this.computeWorkingSlots());
         });
     }
 

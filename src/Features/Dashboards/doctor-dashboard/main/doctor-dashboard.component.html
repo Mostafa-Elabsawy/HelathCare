@@ -1,3 +1,4 @@
+
 <section class="flex h-screen overflow-hidden bg-gray-50">
 
     <aside class="fixed lg:sticky top-0 left-0 z-20 h-full w-64 bg-white/70 backdrop-blur-xl border-r border-gray-200 px-4 py-4 transform transition-all duration-300 lg:translate-x-0 shadow-sm" [class.-translate-x-full]="!menu()" [class.translate-x-0]="menu()">
@@ -14,32 +15,22 @@
             </a>
 
             <nav class="flex flex-col gap-2 mt-5">
-                <a routerLink="Dashboard" [replaceUrl]="true" routerLinkActive="bg-emerald-500 text-white hover:bg-emerald-500 hover:text-white" class="flex items-center gap-3 px-3 py-3.5 rounded-xl cursor-pointer text-gray-500 transition-all duration-200 select-none hover:text-gray-700 hover:bg-emerald-50">
+                <a routerLink="overview" [replaceUrl]="true" routerLinkActive="bg-emerald-500 text-white hover:bg-emerald-500 hover:text-white" class="flex items-center gap-3 px-3 py-3.5 rounded-xl cursor-pointer text-gray-500 transition-all duration-200 select-none hover:text-gray-700 hover:bg-emerald-50">
                     <i class="fa-solid fa-chart-line text-sm"></i>
-                    <span class="text-sm font-medium">Dashboard</span>
+                    <span class="text-sm font-medium">Overview</span>
                 </a>
 
-                <a routerLink="Appointments" [replaceUrl]="true" routerLinkActive="bg-emerald-500 text-white hover:bg-emerald-500 hover:text-white" class="flex items-center gap-3 px-3 py-3.5 rounded-xl cursor-pointer text-gray-500 transition-all duration-200 select-none hover:text-gray-700 hover:bg-emerald-50">
+                <a routerLink="appointments" [replaceUrl]="true" routerLinkActive="bg-emerald-500 text-white hover:bg-emerald-500 hover:text-white" class="flex items-center gap-3 px-3 py-3.5 rounded-xl cursor-pointer text-gray-500 transition-all duration-200 select-none hover:text-gray-700 hover:bg-emerald-50">
                     <i class="fa-solid fa-calendar-check text-sm"></i>
                     <span class="text-sm font-medium">Appointments</span>
                 </a>
 
-                <a routerLink="Schedule" [replaceUrl]="true" routerLinkActive="bg-emerald-500 text-white hover:bg-emerald-500 hover:text-white" class="flex items-center gap-3 px-3 py-3.5 rounded-xl cursor-pointer text-gray-500 transition-all duration-200 select-none hover:text-gray-700 hover:bg-emerald-50">
+                <a routerLink="schedule" [replaceUrl]="true" routerLinkActive="bg-emerald-500 text-white hover:bg-emerald-500 hover:text-white" class="flex items-center gap-3 px-3 py-3.5 rounded-xl cursor-pointer text-gray-500 transition-all duration-200 select-none hover:text-gray-700 hover:bg-emerald-50">
                     <i class="fa-solid fa-clock text-sm"></i>
                     <span class="text-sm font-medium">Schedule</span>
                 </a>
 
-                <!-- <a routerLink="Notifications" [replaceUrl]="true" routerLinkActive="bg-emerald-500 text-white" class="flex items-center gap-3 px-3 py-3.5 rounded-xl cursor-pointer text-gray-500 transition-all duration-200 select-none hover:text-gray-700 hover:bg-emerald-50">
-                    <i class="fa-solid fa-bell text-sm"></i>
-                    <span class="text-sm font-medium">Notifications</span>
-                </a>
-
-                <a routerLink="Reports" [replaceUrl]="true" routerLinkActive="bg-emerald-500 text-white" class="flex items-center gap-3 px-3 py-3.5 rounded-xl cursor-pointer text-gray-500 transition-all duration-200 select-none hover:text-gray-700 hover:bg-emerald-50">
-                    <i class="fa-solid fa-file-medical text-sm"></i>
-                    <span class="text-sm font-medium">Reports</span>
-                </a> -->
-
-                <a routerLink="Profile" [replaceUrl]="true" routerLinkActive="bg-emerald-500 text-white hover:bg-emerald-500 hover:text-white" class="flex items-center gap-3 px-3 py-3.5 rounded-xl cursor-pointer text-gray-500 transition-all duration-200 select-none hover:text-gray-700 hover:bg-emerald-50">
+                <a routerLink="profile" [replaceUrl]="true" routerLinkActive="bg-emerald-500 text-white hover:bg-emerald-500 hover:text-white" class="flex items-center gap-3 px-3 py-3.5 rounded-xl cursor-pointer text-gray-500 transition-all duration-200 select-none hover:text-gray-700 hover:bg-emerald-50">
                     <i class="fa-solid fa-user text-sm"></i>
                     <span class="text-sm font-medium">Profile</span>
                 </a>
@@ -51,11 +42,11 @@
 
             <div class="mt-auto pt-4 border-t border-gray-200 space-y-3 flex flex-col-reverse">
                 <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-100 transition">
-                    <img src="placeholder1.jpg" class="w-10 h-10 rounded-full object-cover border border-gray-200" alt="Doctor profile">
+                    <img [src]="doctorService.doctor().picture || 'placeholder1.jpg'" class="w-10 h-10 rounded-full object-cover border border-gray-200" alt="Doctor profile">
 
                     <div class="overflow-hidden flex-1">
-                        <p class="text-sm font-semibold text-gray-800 truncate">Dr. Mostafa Ehab</p>
-                        <p class="text-xs text-gray-500 truncate">Cardiology Consultant</p>
+                        <p class="text-sm font-semibold text-gray-800 truncate">{{ doctorName() }}</p>
+                        <p class="text-xs text-gray-500 truncate">{{ doctorSpecialty() }}</p>
                     </div>
 
                     <button class="text-gray-400 hover:text-gray-600">
@@ -91,3 +82,4 @@
         </div>
     </main>
 </section>
+

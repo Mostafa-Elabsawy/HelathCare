@@ -10,7 +10,7 @@ import {
     defaultDoctorProfile,
 } from '../models/doctor-api.interface';
 
-import { DoctorAppointments } from '../models/appointment-interface';
+import { DoctorAppointmentsAPI } from '../models/appointment-interface';
 
 @Injectable({
     providedIn: 'root',
@@ -21,7 +21,7 @@ export class DoctorService {
     private readonly appointmentsUrl = `${environment.apiUrl}/Appointments`;
 
     readonly doctor = signal<DoctorProfileResponseAPI>(defaultDoctorProfile);
-    readonly appointments = signal<DoctorAppointments[]>([]);
+    readonly appointments = signal<DoctorAppointmentsAPI[]>([]);
     readonly loading = signal(false);
     readonly error = signal<string | null>(null);
     readonly appointmentCount = computed(() => this.appointments().length);
@@ -66,7 +66,7 @@ export class DoctorService {
         this.error.set(null);
 
         this.http
-            .get<DoctorAppointments[]>(`${this.appointmentsUrl}/doctor/MyAppointments`)
+            .get<DoctorAppointmentsAPI[]>(`${this.appointmentsUrl}/doctor/MyAppointments`)
             .subscribe({
                 next: (appointments) => {
                     console.log('Loaded appointments:', appointments);
@@ -100,7 +100,7 @@ export class DoctorService {
                 tap(() => {
                     this.appointments.update((list) =>
                         list.map((a) =>
-                            a.appoinmentId === appointmentId ? { ...a, state: 'Accepted' } : a,
+                            a.appointmentId === appointmentId ? { ...a, state: 'Accepted' } : a,
                         ),
                     );
                 }),
@@ -111,7 +111,7 @@ export class DoctorService {
             tap(() => {
                 this.appointments.update((list) =>
                     list.map((a) =>
-                        a.appoinmentId === appointmentId ? { ...a, state: 'Rejected' } : a,
+                        a.appointmentId === appointmentId ? { ...a, state: 'Rejected' } : a,
                     ),
                 );
             }),

@@ -2,7 +2,7 @@
     <section class="bg-white/70  border border-gray-100 rounded-2xl shadow-sm p-6">
         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
             <div>
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 tracking-tight">Good morning, Dr. Mostafa</h2>
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 tracking-tight">Good morning, {{ doctorName() }}</h2>
                 <p class="text-gray-500 text-sm mt-2">Overview of your Reports</p>
             </div>
 
@@ -16,8 +16,8 @@
                 <i class="fa-solid text-4xl fa-user-injured"></i>
             </div>
             <div class="flex flex-col items-end gap-2">
-                <h3 class="text-3xl font-bold text-gray-800">24</h3>
-                <p class="text-sm font-semibold text-gray-500">Total Patients</p>
+                <h3 class="text-3xl font-bold text-gray-800">{{ totalAppointments() }}</h3>
+                <p class="text-sm font-semibold text-gray-500">Total Appointments</p>
             </div>
         </article>
 
@@ -27,7 +27,7 @@
             </div>
 
             <div class="flex flex-col items-end gap-2">
-                <h3 class="text-3xl font-bold text-gray-800">18</h3>
+                <h3 class="text-3xl font-bold text-gray-800">{{ todayAppointments() }}</h3>
                 <p class="text-sm font-semibold text-gray-500">Appointments Today</p>
             </div>
         </article>
@@ -38,7 +38,7 @@
             </div>
 
             <div class="flex flex-col items-end gap-2">
-                <h3 class="text-3xl font-bold text-gray-800">4.25/5</h3>
+                <h3 class="text-3xl font-bold text-gray-800">{{ avgRating() }}</h3>
                 <p class="text-sm font-semibold text-gray-500">Average rating</p>
             </div>
         </article>
@@ -49,7 +49,7 @@
             </div>
 
             <div class="flex flex-col items-end gap-2">
-                <h3 class="text-3xl font-bold text-gray-800">$12,500</h3>
+                <h3 class="text-3xl font-bold text-gray-800">{{ revenue() }} EGP</h3>
                 <p class="text-sm font-semibold text-gray-500">Revenue this month</p>
             </div>
         </article>
@@ -71,19 +71,19 @@
             </div>
 
             <span class="px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-xs font-semibold">
-                5 New
+                {{ pendingCount() }} New
             </span>
         </div>
 
         <!-- Requests -->
         <div class="grid xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
             <!-- Request 1 -->
-            @for (item of patientRequests; track $index) {
+            @for (item of patientRequests(); track item.id) {
             <article class="col-span-1 bg-emerald-50 border border-gray-100 rounded-2xl p-4 hover:bg-gray-100 transition">
 
                 <div class="flex items-center gap-3">
                     <div class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold">
-                        {{item.avatar}}
+                        {{item.name.charAt(0)}}
                     </div>
 
                     <div>
@@ -98,14 +98,18 @@
                 </div>
 
                 <div class="mt-4 flex gap-2">
-                    <button class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium py-2 rounded-xl">
+                    <button (click)="acceptRequest(item.id)" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium py-2 rounded-xl">
                         Accept
                     </button>
-                    <button class="flex-1 bg-red-500   hover:bg-red-600 text-white text-sm font-medium py-2 rounded-xl">
+                    <button (click)="declineRequest(item.id)" class="flex-1 bg-red-500   hover:bg-red-600 text-white text-sm font-medium py-2 rounded-xl">
                         Decline
                     </button>
                 </div>
             </article>
+            } @empty {
+            <div class="col-span-full text-center py-8 text-gray-400">
+                No pending requests
+            </div>
             }
 
 
@@ -129,89 +133,51 @@
                 </p>
             </div>
 
-            <button class="text-sm font-semibold text-emerald-600 hover:text-emerald-700">
+            <button routerLink="/dashboard/doctor/appointments" queryParamsHandling="merge" fragment="Appointments"  class="cursor-pointer text-sm font-semibold text-emerald-600 hover:text-emerald-700">
                 View all
             </button>
         </div>
 
         <!-- Queue -->
-        <div class="space-y-3">
-
-            <!-- Item -->
-            <article class="flex items-center justify-between gap-4 rounded-2xl border border-gray-100 bg-gray-50 p-4">
-
-                <!-- Patient -->
-                <div class="flex items-center gap-3 min-w-[240px]">
-
-                    <img src="placeholder1.jpg" class="w-12 h-12 rounded-full object-cover" alt="Patient">
-
-                    <div>
-                        <h4 class="font-semibold text-gray-800">
-                            Ahmed Hassan
-                        </h4>
-
-                        <p class="text-sm text-gray-500">
-                            Follow-up consultation
-                        </p>
+        @if (todayAppointmentList().length) {
+        <div class="space-y-4">
+            @for (appointment of todayAppointmentList(); track appointment.id) {
+            <article class="bg-white/70 backdrop-blur-xl border border-gray-100 rounded-2xl p-4 shadow-sm hover:shadow-lg transition-all duration-300">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+                    <div class="md:col-span-4 flex items-center gap-3">
+                        <div class="w-14 h-14 rounded-xl bg-emerald-50 flex flex-col items-center justify-center">
+                            <span class="text-sm font-bold text-emerald-600">{{ appointment.day }}</span>
+                            <span class="text-[10px] text-emerald-500">{{ appointment.month }}</span>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800">{{ appointment.name }}</h4>
+                        </div>
                     </div>
 
-                </div>
-
-                <!-- Time -->
-                <div class="text-sm text-gray-600 whitespace-nowrap">
-                    09:30 AM
-                </div>
-
-                <!-- Room -->
-                <div class="text-sm text-gray-600 whitespace-nowrap">
-                    Room 204
-                </div>
-
-                <!-- Status -->
-                <span class="text-xs px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 font-medium whitespace-nowrap">
-                    In Progress
-                </span>
-
-            </article>
-
-            <!-- Item -->
-            <article class="flex items-center justify-between gap-4 rounded-2xl border border-gray-100 bg-gray-50 p-4">
-
-                <!-- Patient -->
-                <div class="flex items-center gap-3 min-w-[240px]">
-
-                    <img src="placeholder1.jpg" class="w-12 h-12 rounded-full object-cover" alt="Patient">
-
-                    <div>
-                        <h4 class="font-semibold text-gray-800">
-                            Mariam Ali
-                        </h4>
-
-                        <p class="text-sm text-gray-500">
-                            New patient assessment
-                        </p>
+                    <div class="bg-gray-50 p-3 rounded-xl md:col-span-2">
+                        <p class="text-xs text-gray-400">Date</p>
+                        <p class="font-medium text-gray-700">{{ appointment.date }}</p>
                     </div>
 
+                    <div class="bg-gray-50 p-3 rounded-xl md:col-span-2">
+                        <p class="text-xs text-gray-400">Time</p>
+                        <p class="font-medium text-gray-700">{{ appointment.time }}</p>
+                    </div>
+
+                    <div class="md:col-span-4 flex md:justify-center">
+                        <span [class]="'text-xs px-3 py-1 rounded-full font-medium ' + statusClass(appointment.state)">
+                            {{ appointment.state }}
+                        </span>
+                    </div>
                 </div>
-
-                <!-- Time -->
-                <div class="text-sm text-gray-600 whitespace-nowrap">
-                    10:15 AM
-                </div>
-
-                <!-- Room -->
-                <div class="text-sm text-gray-600 whitespace-nowrap">
-                    Room 204
-                </div>
-
-                <!-- Status -->
-                <span class="text-xs px-3 py-1 rounded-full bg-blue-100 text-blue-700 font-medium whitespace-nowrap">
-                    Waiting
-                </span>
-
             </article>
-
+            }
         </div>
+        } @else {
+        <div class="rounded-2xl border border-dashed border-gray-200 bg-white/60 p-6 text-sm text-gray-500">
+            No appointments scheduled for today.
+        </div>
+        }
 
     </section>
 </div>

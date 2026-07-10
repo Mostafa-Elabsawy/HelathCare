@@ -34,6 +34,7 @@ export class AuthService {
 
                     this.storeToken(res.token);
                     this.storeUserRole(res.role);
+                    this.storeUserEmail(res.email);
                 }),
             );
     }
@@ -47,6 +48,12 @@ export class AuthService {
     }
     private storeLoginState(logedIn: boolean) {
         localStorage.setItem('logedIn', logedIn.toString());
+    }
+    private storeUserEmail(email: string) {
+        localStorage.setItem('email', email);
+    }
+    getUserEmail(): string | null {
+        return localStorage.getItem('email');
     }
 
     getToken(): string | null {
@@ -64,6 +71,7 @@ export class AuthService {
         localStorage.removeItem('token');
         localStorage.removeItem('role');
         localStorage.removeItem('logedIn');
+        localStorage.removeItem('email');
         this.user.set(null);
         this.router.navigate(['/login']);
     }

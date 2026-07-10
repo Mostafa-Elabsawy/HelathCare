@@ -27,7 +27,7 @@ export interface Doctor {
 }
 
 @Component({
-  selector: 'app-doctor-appointment',
+  selector: 'app-book-appointment',
   standalone: true,
   imports: [
     CommonModule,
@@ -40,10 +40,10 @@ export interface Doctor {
     DatePickerModule,
     RouterLink
   ],
-  templateUrl: './doctor-appointment.component.html',
-  styleUrl: './doctor-appointment.component.css',
+  templateUrl: './book-appointment.component.html',
+  styleUrl: './book-appointment.component.css',
 })
-export class DoctorAppointmentComponent implements OnInit {
+export class BookAppointmentComponent implements OnInit {
   // State Signals
   doctors = signal<Doctor[]>([]);
   searchQuery = signal<string>('');

@@ -9,8 +9,8 @@ import { Home } from '../Features/home/main/home.component';
 import { Appointments } from '../Features/Dashboards/patient-dashboard/appointments/appointments.component';
 import { DoctorRegister } from '../core/Authentication/register/doctor-register/main/doctor-register.component';
 import { LabRegister } from '../core/Authentication/register/lab-register/main/lab-register.component';
-import { BrowseServices } from '../Features/patient-hub/browse-services.component';
-import { DoctorAppointmentComponent } from '../Features/patient-hub/doctor-appointment/doctor-appointment.component';
+import { ExploreComponent } from '../Features/patient-hub/explore/explore.component';
+import { BookAppointmentComponent } from '../Features/patient-hub/book-appointment/book-appointment.component';
 import { DoctorDashboard } from '../Features/Dashboards/doctor-dashboard/main/doctor-dashboard.component';
 import { DoctorOverview } from '../Features/Dashboards/doctor-dashboard/over-view/over-view.component';
 import { DoctorAppointments } from '../Features/Dashboards/doctor-dashboard/appointments/appointments.component';
@@ -29,130 +29,147 @@ import { LabTests } from '../Features/Dashboards/lab-dashboard/tests/tests.compo
 import { LabUpload } from '../Features/Dashboards/lab-dashboard/upload/upload.component';
 import { LabResultsView } from '../Features/Dashboards/lab-dashboard/results/results.component';
 import { LabProfile } from '../Features/Dashboards/lab-dashboard/profile/profile.component';
+import { PatientHubComponent } from '../Features/patient-hub/main/patient-hub.component';
+import { BookLabTestComponent } from '../Features/patient-hub/book-lab-test/book-lab-test.component';
 export const routes: Routes = [
-  //redirect to home if path is empty
-  {
-    path: '',
-    redirectTo: '/dashboard/patient',
-    pathMatch: 'full',
-  },
-
-  //home page
-  {
-    path: 'home',
-    component: Home,
-  },
-
-  //register page
-  {
-    path: 'register',
-    children: [
-      {
-        path: '',
-        redirectTo: 'roles',
-        pathMatch: 'full',
-      },
-      {
-        path: 'roles',
-        component: RegisterType,
-      },
-      {
-        path: 'patient',
-        component: PatientRegister,
-      },
-      {
-        path: 'doctor',
-        component: DoctorRegister,
-      },
-      {
-        path: 'laboratory',
-        component: LabRegister,
-      },
-      {
-        path: 'lab',
-        component: LabRegister,
-      },
-    ],
-  },
-
-  //login page
-  {
-    path: 'login',
-    component: Login,
-  },
-
-  //dashboard page
-  {
-    path: 'dashboard',
-    component: DashboardsComponent,
-    children: [
-      {
-        path: 'doctor',
-        component: DoctorDashboard,
-        children: [
-          { path: '', redirectTo: 'Dashboard', pathMatch: 'full' },
-          { path: 'Dashboard', component: DoctorOverview },
-          { path: 'Appointments', component: DoctorAppointments },
-          { path: 'Schedule', component: DoctorSchedule },
-          { path: 'Notifications', component: DoctorNotifications },
-          { path: 'Reports', component: DoctorReports },
-          { path: 'Profile', component: DoctorProfileComponent },
-        ],
-      },
-      {
-        path: 'patient',
-        component: PatientDashboard,
-        children: [
-          { path: '', redirectTo: 'Patient-Info', pathMatch: 'full' },
-          {
-            path: 'Patient-Info',
-            component: PatientInfo,
-          },
-          {
-            path: 'Lab-Results',
-            component: LabResults,
-          },
-          {
-            path: 'Visits',
-            component: Visitis,
-          },
-          {
-            path: 'Appointments',
-            component: Appointments,
-          },
-        ],
-      },
-      {
-        path: 'lab',
-        component: LabDashboard,
-        children: [
-          { path: '', redirectTo: 'Dashboard', pathMatch: 'full' },
-          { path: 'Dashboard', component: LabDashboardOverview },
-          { path: 'Tests', component: LabTests },
-          { path: 'Upload', component: LabUpload },
-          { path: 'Results', component: LabResultsView },
-          { path: 'Profile', component: LabProfile },
-        ],
-      }
-    ],
-  },
-
-  // browse services page
-  {
-    path: 'BrowseServices',
-    component: BrowseServices,
-  },
-  {
-    path: 'doctor-appointment',
-    component: DoctorAppointmentComponent,
-  },
+    //redirect to home if path is empty
     {
-    path:'unauthorized',
-    component:UnauthorizedComponent
-  },
-  {
-    path: '**',
-    component: NotFoundComponent,
-  },
+        path: '',
+        redirectTo: '/dashboard/patient',
+        pathMatch: 'full',
+    },
 
+    //home page
+    {
+        path: 'home',
+        component: Home,
+    },
+
+    //register page
+    {
+        path: 'register',
+        children: [
+            {
+                path: '',
+                redirectTo: 'roles',
+                pathMatch: 'full',
+            },
+            {
+                path: 'roles',
+                component: RegisterType,
+            },
+            {
+                path: 'patient',
+                component: PatientRegister,
+            },
+            {
+                path: 'doctor',
+                component: DoctorRegister,
+            },
+            {
+                path: 'laboratory',
+                component: LabRegister,
+            },
+            {
+                path: 'lab',
+                component: LabRegister,
+            },
+        ],
+    },
+
+    //login page
+    {
+        path: 'login',
+        component: Login,
+    },
+
+    //dashboard page
+    {
+        path: 'dashboard',
+        component: DashboardsComponent,
+        children: [
+            {
+                path: 'doctor',
+                component: DoctorDashboard,
+                children: [
+                    { path: '', redirectTo: 'Dashboard', pathMatch: 'full' },
+                    { path: 'overview', component: DoctorOverview },
+                    { path: 'appointments', component: DoctorAppointments },
+                    { path: 'schedule', component: DoctorSchedule },
+                    { path: 'Notifications', component: DoctorNotifications },
+                    { path: 'Reports', component: DoctorReports },
+                    { path: 'profile', component: DoctorProfileComponent },
+                ],
+            },
+            {
+                path: 'patient',
+                component: PatientDashboard,
+                children: [
+                    { path: '', redirectTo: 'Patient-Info', pathMatch: 'full' },
+                    {
+                        path: 'Patient-Info',
+                        component: PatientInfo,
+                    },
+                    {
+                        path: 'Lab-Results',
+                        component: LabResults,
+                    },
+                    {
+                        path: 'Visits',
+                        component: Visitis,
+                    },
+                    {
+                        path: 'Appointments',
+                        component: Appointments,
+                    },
+                ],
+            },
+            {
+                path: 'lab',
+                component: LabDashboard,
+                children: [
+                    { path: '', redirectTo: 'Dashboard', pathMatch: 'full' },
+                    { path: 'Dashboard', component: LabDashboardOverview },
+                    { path: 'Tests', component: LabTests },
+                    { path: 'Upload', component: LabUpload },
+                    { path: 'Results', component: LabResultsView },
+                    { path: 'Profile', component: LabProfile },
+                ],
+            },
+        ],
+    },
+
+    // browse services page
+    {
+        path: 'patient-hub',
+        component: PatientHubComponent,
+        children: [
+            {
+                path: '',
+                redirectTo: 'explore',
+                pathMatch: 'full',
+            },
+            {
+                path: 'explore',
+                component: ExploreComponent,
+            },
+            {
+                path: 'book-appointment',
+                component: BookAppointmentComponent,
+            },
+            {
+                path: 'book-lab-test',
+                component: BookLabTestComponent,
+            },
+        ],
+    },
+
+    {
+        path: 'unauthorized',
+        component: UnauthorizedComponent,
+    },
+    {
+        path: '**',
+        component: NotFoundComponent,
+    },
 ];

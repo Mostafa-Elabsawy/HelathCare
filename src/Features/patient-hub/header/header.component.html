@@ -1,0 +1,36 @@
+<header class="sticky top-0 z-50 bg-white/70 backdrop-blur-xl border-b border-gray-200 shadow-sm py-2">
+    <div class="max-w-7xl mx-auto px-4 md:px-6">
+        <div class="flex items-center justify-between h-16">
+
+            <a routerLink="/home" class="flex items-center gap-3 cursor-pointer">
+                <div class="bg-primary p-2 rounded-xl shadow">
+                    <i class="fa-solid fa-heart-pulse text-white text-lg"></i>
+                </div>
+                <div class="leading-tight">
+                    <p class="font-bold text-lg text-gray-800">Medical Pulse</p>
+                    <p class="text-xs text-gray-500">Patient Health Platform</p>
+                </div>
+            </a>
+
+            <div class="flex items-center gap-4">
+                <a routerLink="/dashboard" class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition">
+                    <i class="fa-solid fa-border-all text-sm"></i>
+                </a>
+
+                <button class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition relative">
+                    <i class="fa-regular fa-bell text-sm"></i>
+                </button>
+
+                <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
+                    <div class="w-9 h-9 rounded-full bg-primary-100 flex items-center justify-center font-semibold text-primary text-sm">
+                        {{ userEmail.charAt(0).toUpperCase() }}
+                    </div>
+                    <div class="hidden sm:block leading-tight">
+                        <p class="text-sm font-medium text-gray-800 truncate max-w-[160px]">{{ userEmail }}</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</header>
