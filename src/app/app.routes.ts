@@ -29,8 +29,10 @@ import { LabTests } from '../Features/Dashboards/lab-dashboard/tests/tests.compo
 import { LabUpload } from '../Features/Dashboards/lab-dashboard/upload/upload.component';
 import { LabResultsView } from '../Features/Dashboards/lab-dashboard/results/results.component';
 import { LabProfile } from '../Features/Dashboards/lab-dashboard/profile/profile.component';
+import { LabSchedule } from '../Features/Dashboards/lab-dashboard/schedule/schedule.component';
 import { PatientHubComponent } from '../Features/patient-hub/main/patient-hub.component';
 import { BookLabTestComponent } from '../Features/patient-hub/book-lab-test/book-lab-test.component';
+import { AiLabAnalysisComponent } from '../Features/patient-hub/ai-lab-analysis/ai-lab-analysis.component';
 export const routes: Routes = [
     //redirect to home if path is empty
     {
@@ -92,7 +94,7 @@ export const routes: Routes = [
                 path: 'doctor',
                 component: DoctorDashboard,
                 children: [
-                    { path: '', redirectTo: 'Dashboard', pathMatch: 'full' },
+                    { path: '', redirectTo: 'overview', pathMatch: 'full' },
                     { path: 'overview', component: DoctorOverview },
                     { path: 'appointments', component: DoctorAppointments },
                     { path: 'schedule', component: DoctorSchedule },
@@ -131,6 +133,7 @@ export const routes: Routes = [
                     { path: '', redirectTo: 'Dashboard', pathMatch: 'full' },
                     { path: 'Dashboard', component: LabDashboardOverview },
                     { path: 'Tests', component: LabTests },
+                    { path: 'Schedule', component: LabSchedule },
                     { path: 'Upload', component: LabUpload },
                     { path: 'Results', component: LabResultsView },
                     { path: 'Profile', component: LabProfile },
@@ -160,6 +163,10 @@ export const routes: Routes = [
             {
                 path: 'book-lab-test',
                 component: BookLabTestComponent,
+            },
+            {
+                path: 'ai-lab-analysis',
+                component: AiLabAnalysisComponent,
             },
         ],
     },

@@ -20,9 +20,9 @@ export const authErrorInterceptor: HttpInterceptorFn =(req, next) => {
 
         // 🔴 401 - Unauthorized (no token / login required)
         case 401:
-          console.error('🔐 Unauthorized: Please login again');
+          console.log( '🔐 Unauthorized: Please login again');
           localStorage.removeItem('token');
-          router.navigate(['/unauthorized']);
+          // router.navigate(['/unauthorized']);
           break;
 
         // 🔴 403 - Forbidden (no permission)

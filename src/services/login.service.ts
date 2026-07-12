@@ -13,7 +13,7 @@ export class AuthService {
     private readonly authUrl = `${environment.apiUrl}/Auth/login`;
     router = inject(Router);
 
-    user = signal<{ role: string; token: string; logedIn: boolean } | null>(null);
+    user = signal<{ role: string; token: string; logedIn: boolean; email: string } | null>(null);
 
     token = computed(() => this.user()?.token ?? '');
     role = computed(() => this.user()?.role ?? '');
@@ -30,11 +30,13 @@ export class AuthService {
                         role: res.role,
                         token: res.token,
                         logedIn: true,
+                        email: res.email,
                     });
 
                     this.storeToken(res.token);
                     this.storeUserRole(res.role);
                     this.storeUserEmail(res.email);
+                    this.storeLoginState(true);
                 }),
             );
     }
@@ -59,14 +61,12 @@ export class AuthService {
     getToken(): string | null {
         return localStorage.getItem('token');
     }
-
     getUserRole(): string | null {
         return localStorage.getItem('role');
     }
     getLoginState(): boolean {
         return localStorage.getItem('logedIn') === 'true';
     }
-
     logout() {
         localStorage.removeItem('token');
         localStorage.removeItem('role');
@@ -80,6 +80,7 @@ export class AuthService {
             role: this.getUserRole() ?? '',
             token: this.getToken() ?? '',
             logedIn: this.getLoginState() ?? '',
+            email: this.getUserEmail() ?? '',
         });
     }
 }

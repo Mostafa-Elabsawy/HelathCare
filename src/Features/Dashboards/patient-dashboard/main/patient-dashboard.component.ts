@@ -1,9 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
-import { PatientInfo } from '../patient-info/patient-info.component';
 import { ButtonModule } from 'primeng/button';
-import { LabResults } from '../lab-results/lab-results.component';
 import { AuthService } from '../../../../services/login.service';
+import { PatientService } from '../../../../services/patient.service';
 
 @Component({
     selector: 'app-patient-dashboard',
@@ -13,11 +12,19 @@ import { AuthService } from '../../../../services/login.service';
 })
 export class PatientDashboard {
     menu = signal<boolean>(false);
+    authService = inject(AuthService);
+    patientService = inject(PatientService);
+
     toggle() {
         this.menu.set(!this.menu());
     }
-    authService = inject(AuthService);
+
     logout() {
         this.authService.logout();
+    }
+
+    constructor() {
+        this.patientService.loadPatientProfile();
+        this.patientService.loadPatientAppointments();
     }
 }

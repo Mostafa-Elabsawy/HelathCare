@@ -1,0 +1,18 @@
+@reference "tailwindcss";
+
+.drop-zone {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.drop-zone:hover {
+    border-color: var(--p-primary-300, #93c5fd);
+    background-color: color-mix(in srgb, var(--p-primary-50, #eff6ff) 50%, transparent);
+}
+
+.drop-zone.drag-over {
+    border-color: var(--p-primary-500, #3b82f6);
+    background-color: color-mix(in srgb, var(--p-primary-50, #eff6ff) 50%, transparent);
+    scale: 1.01;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}

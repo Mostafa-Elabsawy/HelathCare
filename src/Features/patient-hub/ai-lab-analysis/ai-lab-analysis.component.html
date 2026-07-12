@@ -1,0 +1,225 @@
+<section class="min-h-screen bg-slate-50 text-slate-900">
+    <main class="max-w-5xl mx-auto px-4 md:px-6 py-8 md:py-10">
+
+        <header class="w-full mb-8">
+            <div class="w-full text-center p-6 md:p-8">
+                <h1 class="text-3xl md:text-5xl font-semibold leading-tight text-slate-800">
+                    AI Lab Analysis
+                    <span class="block text-primary-600 mt-2 text-2xl md:text-3xl">
+                        Understand your lab results instantly
+                    </span>
+                </h1>
+
+                <p class="mt-4 text-slate-500 max-w-3xl leading-relaxed mx-auto">
+                    Upload your laboratory report and receive an AI-powered explanation of your results in simple, easy-to-understand language.
+                </p>
+            </div>
+        </header>
+                <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+            <article class="group bg-white/70 backdrop-blur-xl border border-slate-100 rounded-2xl p-6 shadow-sm hover:-translate-y-1 hover:shadow-lg transition">
+                <div class="w-14 h-14 rounded-2xl bg-primary-50 flex items-center justify-center mb-4">
+                    <i class="pi pi-upload text-2xl text-primary-600"></i>
+                </div>
+
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-50 text-primary-600 text-sm font-medium border border-primary-100">
+                    Step 1
+                </span>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-3">Upload Report</h3>
+                <p class="text-slate-500 mt-2 leading-relaxed">
+                    Upload your laboratory report in PDF or image format.
+                </p>
+            </article>
+
+            <article class="group bg-white/70 backdrop-blur-xl border border-slate-100 rounded-2xl p-6 shadow-sm hover:-translate-y-1 hover:shadow-lg transition">
+                <div class="w-14 h-14 rounded-2xl bg-primary-50 flex items-center justify-center mb-4">
+                    <i class="pi pi-chart-scatter text-2xl text-primary-600"></i>
+                </div>
+
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-50 text-primary-600 text-sm font-medium border border-primary-100">
+                    Step 2
+                </span>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-3">AI Analysis</h3>
+                <p class="text-slate-500 mt-2 leading-relaxed">
+                    AI extracts laboratory values and interprets abnormal findings.
+                </p>
+            </article>
+
+            <article class="group bg-white/70 backdrop-blur-xl border border-slate-100 rounded-2xl p-6 shadow-sm hover:-translate-y-1 hover:shadow-lg transition">
+                <div class="w-14 h-14 rounded-2xl bg-primary-50 flex items-center justify-center mb-4">
+                    <i class="pi pi-check-circle text-2xl text-primary-600"></i>
+                </div>
+
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-50 text-primary-600 text-sm font-medium border border-primary-100">
+                    Step 3
+                </span>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-3">View Results</h3>
+                <p class="text-slate-500 mt-2 leading-relaxed">
+                    Receive a clear summary and educational explanations of your report.
+                </p>
+            </article>
+
+        </section>
+
+        @if (isAnalyzing()) {
+            <div class="mb-10">
+                <div class="w-full bg-white/70 backdrop-blur-xl border border-slate-100 rounded-3xl shadow-sm p-10 md:p-16 text-center">
+                    <div class="w-20 h-20 rounded-full bg-primary-50 flex items-center justify-center mx-auto mb-6 animate-pulse">
+                        <i class="pi pi-cog text-4xl text-primary-600 animate-spin"></i>
+                    </div>
+                    <h2 class="text-2xl md:text-3xl font-semibold text-slate-700">
+                        Analyzing your report...
+                    </h2>
+                    <p class="text-slate-400 mt-2">
+                        Our AI is reviewing your laboratory values
+                    </p>
+                </div>
+            </div>
+        } @else if (result(); as res) {
+            <div class="mb-10">
+                <div
+                    class="w-full bg-white/70 backdrop-blur-xl border rounded-3xl shadow-sm p-8 md:p-12 text-center"
+                    [ngClass]="{'border-emerald-100': res.status === 'healthy', 'border-red-100': res.status === 'unhealthy'}"
+                >
+                    <div
+                        class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
+                        [ngClass]="{'bg-emerald-50': res.status === 'healthy', 'bg-red-50': res.status === 'unhealthy'}"
+                    >
+                        <i
+                            class="text-4xl"
+                            [ngClass]="{
+                                'pi pi-check-circle text-emerald-600': res.status === 'healthy',
+                                'pi pi-times-circle text-red-500': res.status === 'unhealthy'
+                            }"
+                        ></i>
+                    </div>
+
+                    <span
+                        class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-semibold border mb-4"
+                        [ngClass]="{
+                            'bg-emerald-50 text-emerald-700 border-emerald-200': res.status === 'healthy',
+                            'bg-red-50 text-red-600 border-red-200': res.status === 'unhealthy'
+                        }"
+                    >
+                        <i
+                            class="text-xs"
+                            [ngClass]="{
+                                'pi pi-check': res.status === 'healthy',
+                                'pi pi-exclamation-triangle': res.status === 'unhealthy'
+                            }"
+                        ></i>
+                        {{ res.status === 'healthy' ? 'Healthy' : 'Needs Attention' }}
+                    </span>
+
+                    <h2 class="text-xl md:text-2xl font-semibold text-slate-800">
+                        Analysis Complete
+                    </h2>
+
+                    <p class="text-sm text-slate-400 mt-2">
+                        Report: <span class="font-medium text-slate-600">{{ res.fileName }}</span>
+                    </p>
+
+                    <div
+                        class="mt-6 max-w-2xl mx-auto p-5 rounded-2xl text-left leading-relaxed text-slate-700"
+                        [ngClass]="{
+                            'bg-emerald-50/60': res.status === 'healthy',
+                            'bg-red-50/60': res.status === 'unhealthy'
+                        }"
+                    >
+                        <div class="flex items-start gap-3">
+                            <i
+                                class="mt-0.5 text-base"
+                                [ngClass]="{
+                                    'pi pi-info-circle text-emerald-600': res.status === 'healthy',
+                                    'pi pi-exclamation-circle text-red-500': res.status === 'unhealthy'
+                                }"
+                            ></i>
+                            <p class="text-sm md:text-base">{{ res.comment }}</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-8">
+                        <p-button
+                            label="Analyze Another Report"
+                            icon="pi pi-upload"
+                            severity="secondary"
+                            (click)="resetAnalysis()"
+                            styleClass="px-6 py-3 rounded-2xl"
+                        ></p-button>
+                    </div>
+                </div>
+            </div>
+        } @else {
+            <div class="mb-10">
+                <div
+                    role="button"
+                    tabindex="0"
+                    aria-label="Upload your lab report"
+                    (click)="triggerFileInput(fileInput)"
+                    (keydown.enter)="triggerFileInput(fileInput)"
+                    (dragover)="onDragOver($event)"
+                    (dragleave)="onDragLeave($event)"
+                    (drop)="onDrop($event)"
+                    [ngClass]="{'drag-over': isDragOver()}"
+                    class="drop-zone w-full bg-white/70 backdrop-blur-xl border border-slate-100 rounded-3xl shadow-sm p-10 md:p-16 text-center"
+                >
+
+                    <div class="w-20 h-20 rounded-3xl bg-primary-50 flex items-center justify-center mx-auto mb-6">
+                        <i class="pi pi-file-pdf text-4xl text-primary-600"></i>
+                    </div>
+
+                    <h2 class="text-2xl md:text-3xl font-semibold text-slate-700">
+                        Drag & Drop your report here
+                    </h2>
+
+                    <p class="text-slate-400 mt-2 mb-6">
+                        or browse files from your device
+                    </p>
+
+                    <input
+                        #fileInput
+                        type="file"
+                        accept=".pdf,.jpg,.jpeg,.png"
+                        (change)="onFileSelected($event)"
+                        class="hidden"
+                        id="fileInput"
+                    />
+
+                    <p-button
+                        label="Choose File"
+                        icon="pi pi-upload"
+                        (click)="triggerFileInput(fileInput)"
+                        styleClass="px-6 py-3 rounded-2xl"
+                    ></p-button>
+
+                    <div class="flex items-center justify-center gap-4 mt-8 text-sm text-slate-400">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-50 text-primary-600 font-medium">
+                            <i class="pi pi-file text-xs"></i>
+                            PDF
+                        </span>
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-50 text-primary-600 font-medium">
+                            <i class="pi pi-image text-xs"></i>
+                            JPG
+                        </span>
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-50 text-primary-600 font-medium">
+                            <i class="pi pi-image text-xs"></i>
+                            PNG
+                        </span>
+                        <span class="text-slate-300 hidden sm:inline">|</span>
+                        <span class="text-slate-400 text-xs sm:text-sm">
+                            <i class="pi pi-info-circle mr-1"></i>
+                            Maximum size: 10 MB
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+        }
+
+
+
+    </main>
+</section>

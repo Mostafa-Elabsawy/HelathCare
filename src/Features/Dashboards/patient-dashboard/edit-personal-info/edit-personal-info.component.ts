@@ -1,4 +1,4 @@
-import { Component, SimpleChange, effect, inject, input, signal } from '@angular/core';
+import { Component, SimpleChange, effect, inject, input, signal, untracked } from '@angular/core';
 import {
     AbstractControl,
     FormControl,
@@ -183,9 +183,7 @@ export class EditPersonalInfo {
             this.personalInfoForm.markAllAsTouched();
             return;
         }
-
         const formValue = this.personalInfoForm.getRawValue();
-
         const data: UpdatePatientProfileAPI = {
             phone: formValue.phone,
             governorate: formValue.governorate,
@@ -205,34 +203,44 @@ export class EditPersonalInfo {
             next: (res) => console.log(res),
             error: (err) => console.log(err),
         });
+        if (this.profileFileName() != null) {
+            this.patientService.uploadProfileImage(this.profileFileName() as File).subscribe({
+                next:(res)=>{
+                    console.log(res);
+                },
+                error: (err) => console.log(err)
+            });
+        }
         this.closeEditDialog();
+        this.patientService.loadPatientProfile();
     }
 
-    ngOnChanges(changes: SimpleChange): void {
-        const patient = this.patientData();
-
-        this.personalInfoForm.patchValue({
-            firstName: patient.firstName,
-            middleName: patient.middleName,
-            lastName: patient.lastName,
-            dateOfBirth: patient.dateOfBirth,
-            gender: patient.gender,
-            nationalId: patient.nationalID.toString(),
-            email: patient.email,
-            phone: patient.phone,
-            governorate: patient.governorate,
-            address: patient.address,
-            bloodGroup: patient.bloodGroup,
-            hasInsurance: patient.hasInsurance,
-            allergies: patient.allergies,
-            chronic: patient.chronic,
-            previousSurgery: patient.previousSurgery,
-        });
-        console.log('input changes', patient);
-    }
     GovernatesNames: string[] = [];
     citiesName = signal<string[]>([]);
     constructor() {
+        effect(() => {
+            const patient = this.patientService.patient();
+            untracked(() => {
+                this.personalInfoForm.patchValue({
+                    firstName: patient.firstName,
+                    middleName: patient.middleName,
+                    lastName: patient.lastName,
+                    dateOfBirth: patient.dateOfBirth,
+                    gender: patient.gender,
+                    nationalId: patient.nationalID.toString(),
+                    email: patient.email,
+                    phone: patient.phone,
+                    governorate: patient.governorate,
+                    address: patient.address,
+                    bloodGroup: patient.bloodGroup,
+                    hasInsurance: patient.hasInsurance,
+                    allergies: patient.allergies,
+                    chronic: patient.chronic,
+                    previousSurgery: patient.previousSurgery,
+                });
+                this.imagePreview.set(patient.picture ?? 'placeholder1.jpg');
+            });
+        });
         let AllGovernatesData = governorates.getAll();
         const default_GOV = { id: 0, code: '', name: '', nameEn: '' };
         this.GovernatesNames = AllGovernatesData.map((element: any) => element.nameEn);

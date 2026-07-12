@@ -201,7 +201,7 @@ export class EditDoctorInfoComponent {
         // console.log(selectedGovernateData, allnames);
         effect(() => {
             const profile = this.doctorService.doctor();
-            console.log(profile);
+            // console.log(profile);
 
             untracked(() => {
                 this.doctorInfoForm.patchValue({
@@ -212,7 +212,7 @@ export class EditDoctorInfoComponent {
                     specialty: profile.specialty,
                     medicalLevel: profile.medicalLevel,
                 });
-                console.log(profile.governorate, this.doctorInfoForm.controls.governorate.value);
+                // console.log(profile.governorate, this.doctorInfoForm.controls.governorate.value);
             });
         });
     }

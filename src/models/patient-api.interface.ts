@@ -43,7 +43,7 @@ export interface PatientProfileResponseAPI {
 
   dateOfBirth: string; 
 
-  bloodGroup: string;
+  bloodGroup: string ;
 
   chronic: string[];
   previousSurgery: string[];
@@ -64,32 +64,31 @@ export interface PatientProfileResponseAPI {
   role: 'Patient' | 'Doctor' | 'Admin'; // extend if needed
 }
 export const defaultPatientProfil: PatientProfileResponseAPI = {
-  id: 1,
-  nationalID: 29801011501234,
+  id: 0,
+  nationalID: 0,
 
-  firstName: 'Ahmed',
-  middleName: 'Mohamed',
-  lastName: 'Hassan',
+  firstName: '-----',
+  middleName: '-----',
+  lastName: '-----',
 
-  phone: '+201001234567',
-  email: 'ahmed.hassan@example.com',
+  phone: '---------',
+  email: '-----@-----.----',
 
-  gender: 'male' as const,
+  gender: 'male' ,
 
-  dateOfBirth: '1998-01-15',
+  dateOfBirth: '',
 
-  bloodGroup: 'A+',
+  bloodGroup: '----',
 
-  chronic: ['Diabetes', 'Hypertension'],
-  previousSurgery: ['Appendectomy', 'Knee Arthroscopy'],
-  allergies: ['Penicillin', 'Peanuts'],
+  chronic: ['-----'],
+  previousSurgery: [ '------'],
+  allergies: ['-------'],
+  picture: ' placeholder1.jpg',
 
-  picture: 'https://randomuser.me/api/portraits/men/1.jpg',
+  governorate: '-----',
+  address: '--------',
 
-  governorate: 'Menoufia',
-  address: '24 Maki St., Shebin El-Kom, Menoufia, Egypt',
-
-  hasInsurance: 'HIO',
+  hasInsurance: '------',
 
   appointments: [],
   hospitalBookings: [],

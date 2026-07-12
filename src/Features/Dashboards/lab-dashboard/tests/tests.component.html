@@ -5,23 +5,10 @@
             <p class="text-gray-500 text-sm mt-1">Manage patient test orders by status.</p>
         </div>
 
-        <div class="flex flex-wrap gap-2" aria-label="Test status filters">
-            @for (item of statusCounts(); track item.status) {
-                <button
-                    type="button"
-                    (click)="setStatus(item.status)"
-                    class="min-w-32 rounded-xl border px-4 py-3 text-sm font-semibold transition"
-                    [class.bg-violet-500]="selectedStatus() === item.status"
-                    [class.text-white]="selectedStatus() === item.status"
-                    [class.border-violet-500]="selectedStatus() === item.status"
-                    [class.bg-white]="selectedStatus() !== item.status"
-                    [class.text-gray-600]="selectedStatus() !== item.status"
-                    [class.border-gray-200]="selectedStatus() !== item.status"
-                    [attr.aria-pressed]="selectedStatus() === item.status">
-                    {{ item.status }}
-                    <span class="ml-2 rounded-full bg-black/5 px-2 py-0.5 text-xs">{{ item.count }}</span>
-                </button>
-            }
+        <div class="flex items-center gap-3">
+            <p-select appendTo="body" [options]="statuses" placeholder="Filter by status" class="w-45" [ngModel]="selectedStatus()" (ngModelChange)="selectedStatus.set($event)"></p-select>
+
+            <p-button label="New Test" icon="pi pi-plus" styleClass="bg-violet-500! hover:bg-violet-600! border-violet-500! hover:border-violet-600!" severity="success" (onClick)="openNewTestDialog()"></p-button>
         </div>
     </section>
 
@@ -37,48 +24,48 @@
         </div>
 
         @if (todayTests().length) {
-            <div class="space-y-4">
-                @for (test of todayTests(); track test.id) {
-                    <article class="bg-white/70 backdrop-blur-xl border border-gray-100 rounded-2xl p-4 shadow-sm hover:shadow-lg transition-all duration-300">
-                        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-                            <div class="md:col-span-4 flex items-center gap-3">
-                                <div class="w-14 h-14 rounded-xl bg-violet-50 flex flex-col items-center justify-center">
-                                    <span class="text-sm font-bold text-violet-600">{{ test.day }}</span>
-                                    <span class="text-[10px] text-violet-500">{{ test.month }}</span>
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-gray-800">{{ test.patientName }}</h4>
-                                    <p class="text-xs text-gray-500">{{ test.testName }}</p>
-                                </div>
-                            </div>
-
-                            <div class="bg-gray-50 p-3 rounded-xl md:col-span-2">
-                                <p class="text-xs text-gray-400">Date</p>
-                                <p class="font-medium text-gray-700">{{ test.date }}</p>
-                            </div>
-
-                            <div class="bg-gray-50 p-3 rounded-xl md:col-span-2">
-                                <p class="text-xs text-gray-400">Time</p>
-                                <p class="font-medium text-gray-700">{{ test.time }}</p>
-                            </div>
-
-                            <div class="md:col-span-2 flex md:justify-center">
-                                <span [class]="'text-xs px-3 py-1 rounded-full font-medium ' + statusClass(test.status)">
-                                    {{ test.status }}
-                                </span>
-                            </div>
-
-                            <div class="md:col-span-2 flex justify-end">
-                                <p-splitbutton label="Details" rounded size="small" severity="secondary" dropdownIcon="pi pi-ellipsis-h" [model]="testActions(test)" (onClick)="openDetails(test)"></p-splitbutton>
-                            </div>
+        <div class="space-y-4">
+            @for (test of todayTests(); track test.id) {
+            <article class="bg-white/70 backdrop-blur-xl border border-gray-100 rounded-2xl p-4 shadow-sm hover:shadow-lg transition-all duration-300">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+                    <div class="md:col-span-4 flex items-center gap-3">
+                        <div class="w-14 h-14 rounded-xl bg-violet-50 flex flex-col items-center justify-center">
+                            <span class="text-sm font-bold text-violet-600">{{ test.day }}</span>
+                            <span class="text-[10px] text-violet-500">{{ test.month }}</span>
                         </div>
-                    </article>
-                }
-            </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800">{{ test.patientName }}</h4>
+                            <p class="text-xs text-gray-500">{{ test.testName }}</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 p-3 rounded-xl md:col-span-2">
+                        <p class="text-xs text-gray-400">Date</p>
+                        <p class="font-medium text-gray-700">{{ test.date }}</p>
+                    </div>
+
+                    <div class="bg-gray-50 p-3 rounded-xl md:col-span-2">
+                        <p class="text-xs text-gray-400">Time</p>
+                        <p class="font-medium text-gray-700">{{ test.time }}</p>
+                    </div>
+
+                    <div class="md:col-span-2 flex md:justify-center">
+                        <span [class]="'text-xs px-3 py-1 rounded-full font-medium ' + statusClass(test.status)">
+                            {{ test.status }}
+                        </span>
+                    </div>
+
+                    <div class="md:col-span-2 flex justify-end">
+                        <p-button label="Details" size="small" severity="secondary" (onClick)="openDetails(test)"></p-button>
+                    </div>
+                </div>
+            </article>
+            }
+        </div>
         } @else {
-            <div class="rounded-2xl border border-dashed border-gray-200 bg-white/60 p-6 text-sm text-gray-500">
-                No {{ selectedStatus().toLowerCase() }} tests today.
-            </div>
+        <div class="rounded-2xl border border-dashed border-gray-200 bg-white/60 p-6 text-sm text-gray-500">
+            No {{ selectedStatus() === 'All' ? '' : selectedStatus().toLowerCase() + ' ' }}tests today.
+        </div>
         }
     </section>
 
@@ -94,119 +81,172 @@
         </div>
 
         @if (upcomingTests().length) {
-            <div class="space-y-4">
-                @for (test of upcomingTests(); track test.id) {
-                    <article class="bg-white/70 backdrop-blur-xl border border-gray-100 rounded-2xl p-4 shadow-sm hover:shadow-lg transition-all duration-300">
-                        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-                            <div class="md:col-span-4 flex items-center gap-3">
-                                <div class="w-14 h-14 rounded-xl bg-violet-50 flex flex-col items-center justify-center">
-                                    <span class="text-sm font-bold text-violet-600">{{ test.day }}</span>
-                                    <span class="text-[10px] text-violet-500">{{ test.month }}</span>
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-gray-800">{{ test.patientName }}</h4>
-                                    <p class="text-xs text-gray-500">{{ test.testName }}</p>
-                                </div>
-                            </div>
-
-                            <div class="bg-gray-50 p-3 rounded-xl md:col-span-2">
-                                <p class="text-xs text-gray-400">Date</p>
-                                <p class="font-medium text-gray-700">{{ test.date }}</p>
-                            </div>
-
-                            <div class="bg-gray-50 p-3 rounded-xl md:col-span-2">
-                                <p class="text-xs text-gray-400">Time</p>
-                                <p class="font-medium text-gray-700">{{ test.time }}</p>
-                            </div>
-
-                            <div class="md:col-span-2 flex md:justify-center">
-                                <span [class]="'text-xs px-3 py-1 rounded-full font-medium ' + statusClass(test.status)">
-                                    {{ test.status }}
-                                </span>
-                            </div>
-
-                            <div class="md:col-span-2 flex justify-end">
-                                <p-splitbutton label="Details" rounded size="small" severity="secondary" dropdownIcon="pi pi-ellipsis-h" [model]="testActions(test)" (onClick)="openDetails(test)"></p-splitbutton>
-                            </div>
+        <div class="space-y-4">
+            @for (test of upcomingTests(); track test.id) {
+            <article class="bg-white/70 backdrop-blur-xl border border-gray-100 rounded-2xl p-4 shadow-sm hover:shadow-lg transition-all duration-300">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+                    <div class="md:col-span-4 flex items-center gap-3">
+                        <div class="w-14 h-14 rounded-xl bg-violet-50 flex flex-col items-center justify-center">
+                            <span class="text-sm font-bold text-violet-600">{{ test.day }}</span>
+                            <span class="text-[10px] text-violet-500">{{ test.month }}</span>
                         </div>
-                    </article>
-                }
-            </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800">{{ test.patientName }}</h4>
+                            <p class="text-xs text-gray-500">{{ test.testName }}</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 p-3 rounded-xl md:col-span-2">
+                        <p class="text-xs text-gray-400">Date</p>
+                        <p class="font-medium text-gray-700">{{ test.date }}</p>
+                    </div>
+
+                    <div class="bg-gray-50 p-3 rounded-xl md:col-span-2">
+                        <p class="text-xs text-gray-400">Time</p>
+                        <p class="font-medium text-gray-700">{{ test.time }}</p>
+                    </div>
+
+                    <div class="md:col-span-2 flex md:justify-center">
+                        <span [class]="'text-xs px-3 py-1 rounded-full font-medium ' + statusClass(test.status)">
+                            {{ test.status }}
+                        </span>
+                    </div>
+
+                    <div class="md:col-span-2 flex justify-end">
+                        <p-button label="Details" size="small" severity="secondary" (onClick)="openDetails(test)"></p-button>
+                    </div>
+                </div>
+            </article>
+            }
+        </div>
         } @else {
-            <div class="rounded-2xl border border-dashed border-gray-200 bg-white/60 p-6 text-sm text-gray-500">
-                No upcoming {{ selectedStatus().toLowerCase() }} tests.
-            </div>
+        <div class="rounded-2xl border border-dashed border-gray-200 bg-white/60 p-6 text-sm text-gray-500">
+            No upcoming {{ selectedStatus() === 'All' ? '' : selectedStatus().toLowerCase() + ' ' }}tests.
+        </div>
         }
     </section>
 
-    <p-dialog
-        header="Test Details"
-        [modal]="true"
-        [visible]="detailsVisible()"
-        [style]="{ width: 'min(92vw, 720px)' }"
-        [breakpoints]="{ '640px': '94vw' }"
-        (onHide)="closeDetails()">
+    <!-- Details Dialog -->
+    <p-dialog header="Test Details" [modal]="true" [visible]="detailsVisible()" [style]="{ width: 'min(92vw, 720px)' }" [breakpoints]="{ '640px': '94vw' }" (onHide)="closeDetails()">
         @if (selectedTest(); as test) {
-            <div class="space-y-5">
-                <div class="flex items-start justify-between gap-4 rounded-2xl bg-violet-50 p-4">
-                    <div>
-                        <p class="text-xs font-semibold uppercase text-violet-600">Patient</p>
-                        <h3 class="mt-1 text-xl font-bold text-gray-800">{{ test.patientName }}</h3>
-                        <p class="mt-1 text-sm text-gray-500">{{ test.testName }}</p>
-                    </div>
-                    <span [class]="'shrink-0 text-xs px-3 py-1 rounded-full font-medium ' + statusClass(test.status)">
-                        {{ test.status }}
-                    </span>
+        <div class="space-y-5">
+            <div class="flex items-start justify-between gap-4 rounded-2xl bg-violet-50 p-4">
+                <div>
+                    <p class="text-xs font-semibold uppercase text-violet-600">Patient</p>
+                    <h3 class="mt-1 text-xl font-bold text-gray-800">{{ test.patientName }}</h3>
+                    <p class="mt-1 text-sm text-gray-500">{{ test.testName }}</p>
                 </div>
-
-                <section>
-                    <h4 class="text-sm font-semibold text-gray-800">Patient Information</h4>
-                    <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div class="rounded-xl bg-gray-50 p-3">
-                            <p class="text-xs text-gray-400">Full Name</p>
-                            <p class="font-medium text-gray-700">{{ test.patientName }}</p>
-                        </div>
-                        <div class="rounded-xl bg-gray-50 p-3">
-                            <p class="text-xs text-gray-400">Age</p>
-                            <p class="font-medium text-gray-700">{{ test.patientAge }} years</p>
-                        </div>
-                        <div class="rounded-xl bg-gray-50 p-3">
-                            <p class="text-xs text-gray-400">Gender</p>
-                            <p class="font-medium text-gray-700">{{ test.patientGender }}</p>
-                        </div>
-                        <div class="rounded-xl bg-gray-50 p-3">
-                            <p class="text-xs text-gray-400">Phone Number</p>
-                            <p class="font-medium text-gray-700">{{ test.patientPhone }}</p>
-                        </div>
-                        <div class="rounded-xl bg-gray-50 p-3 sm:col-span-2">
-                            <p class="text-xs text-gray-400">Email</p>
-                            <p class="font-medium text-gray-700">{{ test.patientEmail }}</p>
-                        </div>
-                    </div>
-                </section>
-
-                <section>
-                    <h4 class="text-sm font-semibold text-gray-800">Test Information</h4>
-                    <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div class="rounded-xl bg-gray-50 p-3">
-                            <p class="text-xs text-gray-400">Test Name</p>
-                            <p class="font-medium text-gray-700">{{ test.testName }}</p>
-                        </div>
-                        <div class="rounded-xl bg-gray-50 p-3">
-                            <p class="text-xs text-gray-400">Ordered By</p>
-                            <p class="font-medium text-gray-700">{{ test.orderedBy }}</p>
-                        </div>
-                        <div class="rounded-xl bg-gray-50 p-3">
-                            <p class="text-xs text-gray-400">Date</p>
-                            <p class="font-medium text-gray-700">{{ test.date }}</p>
-                        </div>
-                        <div class="rounded-xl bg-gray-50 p-3">
-                            <p class="text-xs text-gray-400">Time</p>
-                            <p class="font-medium text-gray-700">{{ test.time }}</p>
-                        </div>
-                    </div>
-                </section>
+                <span [class]="'shrink-0 text-xs px-3 py-1 rounded-full font-medium ' + statusClass(test.status)">
+                    {{ test.status }}
+                </span>
             </div>
+
+            <section>
+                <h4 class="text-sm font-semibold text-gray-800">Patient Information</h4>
+                <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="rounded-xl bg-gray-50 p-3">
+                        <p class="text-xs text-gray-400">Full Name</p>
+                        <p class="font-medium text-gray-700">{{ test.patientName }}</p>
+                    </div>
+                    <div class="rounded-xl bg-gray-50 p-3">
+                        <p class="text-xs text-gray-400">Age</p>
+                        <p class="font-medium text-gray-700">{{ test.patientAge }} years</p>
+                    </div>
+                    <div class="rounded-xl bg-gray-50 p-3">
+                        <p class="text-xs text-gray-400">Gender</p>
+                        <p class="font-medium text-gray-700">{{ test.patientGender }}</p>
+                    </div>
+                    <div class="rounded-xl bg-gray-50 p-3">
+                        <p class="text-xs text-gray-400">Phone Number</p>
+                        <p class="font-medium text-gray-700">{{ test.patientPhone }}</p>
+                    </div>
+                    <div class="rounded-xl bg-gray-50 p-3 sm:col-span-2">
+                        <p class="text-xs text-gray-400">Email</p>
+                        <p class="font-medium text-gray-700">{{ test.patientEmail }}</p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h4 class="text-sm font-semibold text-gray-800">Test Information</h4>
+                <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="rounded-xl bg-gray-50 p-3">
+                        <p class="text-xs text-gray-400">Test Name</p>
+                        <p class="font-medium text-gray-700">{{ test.testName }}</p>
+                    </div>
+                    <div class="rounded-xl bg-gray-50 p-3">
+                        <p class="text-xs text-gray-400">Ordered By</p>
+                        <p class="font-medium text-gray-700">{{ test.orderedBy }}</p>
+                    </div>
+                    <div class="rounded-xl bg-gray-50 p-3">
+                        <p class="text-xs text-gray-400">Date</p>
+                        <p class="font-medium text-gray-700">{{ test.date }}</p>
+                    </div>
+                    <div class="rounded-xl bg-gray-50 p-3">
+                        <p class="text-xs text-gray-400">Time</p>
+                        <p class="font-medium text-gray-700">{{ test.time }}</p>
+                    </div>
+                </div>
+            </section>
+        </div>
         }
+    </p-dialog>
+
+    <!-- New Test Dialog -->
+    <p-dialog header="New Test Order" [modal]="true" [visible]="newTestDialogVisible()" [style]="{ width: 'min(92vw, 640px)' }" [breakpoints]="{ '640px': '94vw' }" (onHide)="newTestDialogVisible.set(false)">
+        <div class="space-y-5">
+            <section>
+                <h4 class="text-sm font-semibold text-gray-800 mb-3">Patient Information</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <label class="space-y-1">
+                        <span class="text-xs font-medium text-gray-600">Patient Name *</span>
+                        <input pInputText class="w-full" [(ngModel)]="newTest.patientName" placeholder="e.g. Ahmed Hassan" />
+                    </label>
+                    <label class="space-y-1">
+                        <span class="text-xs font-medium text-gray-600">Age</span>
+                        <p-inputNumber class="w-full" [(ngModel)]="newTest.patientAge" [min]="0" [max]="150" inputStyleClass="w-full"></p-inputNumber>
+                    </label>
+                    <label class="space-y-1">
+                        <span class="text-xs font-medium text-gray-600">Gender</span>
+                        <p-select appendTo="body" [options]="['Male', 'Female']" [(ngModel)]="newTest.patientGender" class="w-full"></p-select>
+                    </label>
+                    <label class="space-y-1">
+                        <span class="text-xs font-medium text-gray-600">Phone</span>
+                        <input pInputText class="w-full" [(ngModel)]="newTest.patientPhone" placeholder="+20 100 000 0000" />
+                    </label>
+                    <label class="space-y-1 sm:col-span-2">
+                        <span class="text-xs font-medium text-gray-600">Email</span>
+                        <input pInputText class="w-full" [(ngModel)]="newTest.patientEmail" placeholder="patient@example.com" />
+                    </label>
+                </div>
+            </section>
+
+            <section>
+                <h4 class="text-sm font-semibold text-gray-800 mb-3">Test Details</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <label class="space-y-1 sm:col-span-2">
+                        <span class="text-xs font-medium text-gray-600">Test Type *</span>
+                        <p-select appendTo="body" [options]="testTypes" optionLabel="label" optionValue="value" [(ngModel)]="newTest.testName" placeholder="Select test type" class="w-full"></p-select>
+                    </label>
+                    <label class="space-y-1">
+                        <span class="text-xs font-medium text-gray-600">Ordered By</span>
+                        <input pInputText class="w-full" [(ngModel)]="newTest.orderedBy" placeholder="Dr. Name or Walk-in" />
+                    </label>
+                    <label class="space-y-1">
+                        <span class="text-xs font-medium text-gray-600">Date *</span>
+                        <input pInputText type="date" class="w-full" [(ngModel)]="newTest.date" />
+                    </label>
+                    <label class="space-y-1">
+                        <span class="text-xs font-medium text-gray-600">Time *</span>
+                        <input pInputText type="time" class="w-full" [(ngModel)]="newTest.time" />
+                    </label>
+                </div>
+            </section>
+
+            <div class="flex justify-end gap-3 pt-2 border-t border-gray-100">
+                <p-button label="Cancel" severity="secondary" outlined (onClick)="newTestDialogVisible.set(false)"></p-button>
+                <p-button label="Add Test" icon="pi pi-plus" styleClass="bg-violet-500! hover:bg-violet-600! border-violet-500! hover:border-violet-600!" (onClick)="addTest()"></p-button>
+            </div>
+        </div>
     </p-dialog>
 </div>

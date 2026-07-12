@@ -5,7 +5,7 @@ export interface PostNewDoctorAppointment  {
     
 }
 
-export interface PatientAppointments {
+export interface PatientAppointmentsAPI {
   appointmentId: number;
   date: string;
   time: string;
