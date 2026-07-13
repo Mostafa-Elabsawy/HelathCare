@@ -9,22 +9,22 @@
     <section class="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
         <article class="bg-white/70 backdrop-blur-xl border border-gray-100 rounded-2xl shadow-sm p-5">
             <p class="text-sm text-gray-400">Total Results</p>
-            <h3 class="text-3xl font-bold text-gray-800 mt-2">156</h3>
+            <h3 class="text-3xl font-bold text-gray-800 mt-2">{{ results().length }}</h3>
             <p class="text-xs text-violet-600 font-medium mt-2">All time</p>
         </article>
         <article class="bg-white/70 backdrop-blur-xl border border-gray-100 rounded-2xl shadow-sm p-5">
             <p class="text-sm text-gray-400">Reviewed</p>
-            <h3 class="text-3xl font-bold text-gray-800 mt-2">142</h3>
+            <h3 class="text-3xl font-bold text-gray-800 mt-2">{{ totalReviewed() }}</h3>
             <p class="text-xs text-emerald-600 font-medium mt-2">Approved by doctors</p>
         </article>
         <article class="bg-white/70 backdrop-blur-xl border border-gray-100 rounded-2xl shadow-sm p-5">
             <p class="text-sm text-gray-400">Pending Review</p>
-            <h3 class="text-3xl font-bold text-gray-800 mt-2">14</h3>
+            <h3 class="text-3xl font-bold text-gray-800 mt-2">{{ totalPendingReview() }}</h3>
             <p class="text-xs text-yellow-600 font-medium mt-2">Awaiting verification</p>
         </article>
         <article class="bg-white/70 backdrop-blur-xl border border-gray-100 rounded-2xl shadow-sm p-5">
             <p class="text-sm text-gray-400">Abnormal Results</p>
-            <h3 class="text-3xl font-bold text-gray-800 mt-2">3</h3>
+            <h3 class="text-3xl font-bold text-gray-800 mt-2">0</h3>
             <p class="text-xs text-red-600 font-medium mt-2">Flagged for attention</p>
         </article>
     </section>
@@ -38,7 +38,7 @@
         </div>
 
         <div class="divide-y divide-gray-100">
-            @for (result of completedResults; track result.id) {
+            @for (result of results(); track result.id) {
             <div class="grid md:grid-cols-12 gap-4 items-center p-5">
                 <div class="md:col-span-4 flex items-center gap-3">
                     <div class="w-11 h-11 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center">

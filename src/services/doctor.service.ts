@@ -17,7 +17,7 @@ import { DoctorAppointmentsAPI } from '../models/appointment-interface';
 })
 export class DoctorService {
     private readonly http = inject(HttpClient);
-    private readonly apiUrl = `${environment.apiUrl}/Doctors`;
+    private readonly doctorURL = `${environment.apiUrl}/Doctors`;
     private readonly appointmentsUrl = `${environment.apiUrl}/Appointments`;
 
     readonly doctor = signal<DoctorProfileResponseAPI>(defaultDoctorProfile);
@@ -25,9 +25,9 @@ export class DoctorService {
     readonly loading = signal(false);
     readonly error = signal<string | null>(null);
     readonly appointmentCount = computed(() => this.appointments().length);
-    
+
     registerDoctor(data: RegisterDoctorAPI) {
-        return this.http.post<RegisterDoctorAPI>(this.apiUrl, data, {
+        return this.http.post<RegisterDoctorAPI>(this.doctorURL, data, {
             headers: { skipAuth: 'true' },
         });
     }
@@ -36,7 +36,7 @@ export class DoctorService {
         this.loading.set(true);
         this.error.set(null);
 
-        this.http.get<DoctorProfileResponseAPI>(`${this.apiUrl}/profile`).subscribe({
+        this.http.get<DoctorProfileResponseAPI>(`${this.doctorURL}/profile`).subscribe({
             next: (profile) => {
                 this.doctor.set(profile);
                 this.loading.set(false);
@@ -49,7 +49,7 @@ export class DoctorService {
     }
 
     updateDoctorProfile(data: Partial<DoctorProfileResponseAPI>) {
-        return this.http.put<DoctorProfileResponseAPI>(`${this.apiUrl}/profile`, data).pipe(
+        return this.http.put<DoctorProfileResponseAPI>(`${this.doctorURL}/profile`, data).pipe(
             tap({
                 next: (updated) => {
                     this.doctor.set(updated);
@@ -81,7 +81,7 @@ export class DoctorService {
     }
 
     updateSchedule(data: Partial<DoctorProfileResponseAPI>) {
-        return this.http.put<DoctorProfileResponseAPI>(`${this.apiUrl}/profile`, data).pipe(
+        return this.http.put<DoctorProfileResponseAPI>(`${this.doctorURL}/profile`, data).pipe(
             tap({
                 next: (updated) => {
                     this.doctor.set(updated);
@@ -118,8 +118,13 @@ export class DoctorService {
         );
     }
     getAllDoctors(): Observable<DoctorProfileResponseAPI[]> {
-        return this.http.get<DoctorProfileResponseAPI[]>(`${this.apiUrl}/GetAllDoctors`, {
+        return this.http.get<DoctorProfileResponseAPI[]>(`${this.doctorURL}/GetAllDoctors`, {
             headers: { skipAuth: 'true' },
         });
+    }
+    uploadProfileImage(image: File): Observable<any> {
+        const formData = new FormData();
+        formData.append('file', image);
+        return this.http.post<string>(`${this.doctorURL}/upload-picture`, formData);
     }
 }

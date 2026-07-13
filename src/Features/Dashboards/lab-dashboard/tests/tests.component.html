@@ -6,9 +6,8 @@
         </div>
 
         <div class="flex items-center gap-3">
-            <p-select appendTo="body" [options]="statuses" placeholder="Filter by status" class="w-45" [ngModel]="selectedStatus()" (ngModelChange)="selectedStatus.set($event)"></p-select>
-
-            <p-button label="New Test" icon="pi pi-plus" styleClass="bg-violet-500! hover:bg-violet-600! border-violet-500! hover:border-violet-600!" severity="success" (onClick)="openNewTestDialog()"></p-button>
+            <p-select appendTo="body" [options]="statuses" placeholder="Filter by status" class="w-45" [ngModel]="selectedStatus()" (ngModelChange)="selectedStatus.set($event)">
+            </p-select>
         </div>
     </section>
 
@@ -46,7 +45,7 @@
 
                     <div class="bg-gray-50 p-3 rounded-xl md:col-span-2">
                         <p class="text-xs text-gray-400">Time</p>
-                        <p class="font-medium text-gray-700">{{ test.time }}</p>
+                        <p class="font-medium text-gray-700">{{ test.time || '--:--' }}</p>
                     </div>
 
                     <div class="md:col-span-2 flex md:justify-center">
@@ -189,64 +188,18 @@
                 </div>
             </section>
         </div>
+                            @if(selectedTest()?.status=='Pending') {
+                    <div class="flex justify-end items-center gap-5 col-span-full">
+
+                        <button class="rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:bg-green-700 hover:shadow-md active:scale-95">
+                            Approve
+                        </button>
+
+                        <button class="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:bg-red-700 hover:shadow-md active:scale-95">
+                            Reject
+                        </button>
+                    </div>
+                    }
         }
-    </p-dialog>
-
-    <!-- New Test Dialog -->
-    <p-dialog header="New Test Order" [modal]="true" [visible]="newTestDialogVisible()" [style]="{ width: 'min(92vw, 640px)' }" [breakpoints]="{ '640px': '94vw' }" (onHide)="newTestDialogVisible.set(false)">
-        <div class="space-y-5">
-            <section>
-                <h4 class="text-sm font-semibold text-gray-800 mb-3">Patient Information</h4>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <label class="space-y-1">
-                        <span class="text-xs font-medium text-gray-600">Patient Name *</span>
-                        <input pInputText class="w-full" [(ngModel)]="newTest.patientName" placeholder="e.g. Ahmed Hassan" />
-                    </label>
-                    <label class="space-y-1">
-                        <span class="text-xs font-medium text-gray-600">Age</span>
-                        <p-inputNumber class="w-full" [(ngModel)]="newTest.patientAge" [min]="0" [max]="150" inputStyleClass="w-full"></p-inputNumber>
-                    </label>
-                    <label class="space-y-1">
-                        <span class="text-xs font-medium text-gray-600">Gender</span>
-                        <p-select appendTo="body" [options]="['Male', 'Female']" [(ngModel)]="newTest.patientGender" class="w-full"></p-select>
-                    </label>
-                    <label class="space-y-1">
-                        <span class="text-xs font-medium text-gray-600">Phone</span>
-                        <input pInputText class="w-full" [(ngModel)]="newTest.patientPhone" placeholder="+20 100 000 0000" />
-                    </label>
-                    <label class="space-y-1 sm:col-span-2">
-                        <span class="text-xs font-medium text-gray-600">Email</span>
-                        <input pInputText class="w-full" [(ngModel)]="newTest.patientEmail" placeholder="patient@example.com" />
-                    </label>
-                </div>
-            </section>
-
-            <section>
-                <h4 class="text-sm font-semibold text-gray-800 mb-3">Test Details</h4>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <label class="space-y-1 sm:col-span-2">
-                        <span class="text-xs font-medium text-gray-600">Test Type *</span>
-                        <p-select appendTo="body" [options]="testTypes" optionLabel="label" optionValue="value" [(ngModel)]="newTest.testName" placeholder="Select test type" class="w-full"></p-select>
-                    </label>
-                    <label class="space-y-1">
-                        <span class="text-xs font-medium text-gray-600">Ordered By</span>
-                        <input pInputText class="w-full" [(ngModel)]="newTest.orderedBy" placeholder="Dr. Name or Walk-in" />
-                    </label>
-                    <label class="space-y-1">
-                        <span class="text-xs font-medium text-gray-600">Date *</span>
-                        <input pInputText type="date" class="w-full" [(ngModel)]="newTest.date" />
-                    </label>
-                    <label class="space-y-1">
-                        <span class="text-xs font-medium text-gray-600">Time *</span>
-                        <input pInputText type="time" class="w-full" [(ngModel)]="newTest.time" />
-                    </label>
-                </div>
-            </section>
-
-            <div class="flex justify-end gap-3 pt-2 border-t border-gray-100">
-                <p-button label="Cancel" severity="secondary" outlined (onClick)="newTestDialogVisible.set(false)"></p-button>
-                <p-button label="Add Test" icon="pi pi-plus" styleClass="bg-violet-500! hover:bg-violet-600! border-violet-500! hover:border-violet-600!" (onClick)="addTest()"></p-button>
-            </div>
-        </div>
     </p-dialog>
 </div>

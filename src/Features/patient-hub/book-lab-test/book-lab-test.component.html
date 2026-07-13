@@ -1,10 +1,10 @@
 <section class="min-h-screen bg-slate-50 text-slate-900 pb-16">
   <main class="mx-auto px-4 md:px-6 py-8 md:py-10">
-
-    <div class="mb-6">
-      <a routerLink="/patient-hub/explore" class="inline-flex items-center gap-2 text-sm font-semibold text-violet-600 hover:text-violet-700 transition">
-        <i class="pi pi-arrow-left"></i>
-        Back to Patient Hub
+    <!-- BACK BUTTON -->
+    <div class="absolute top-25 w-fit backdrop-blur-sm p-3  border border-slate-200 rounded-lg z-1000 ">
+      <a routerLink="/patient-hub" class="inline-flex items-center gap-2 text-xl font-semibold text-gray-500 hover:text-primary-700 transition">
+        <i class="pi pi-angle-left"></i>
+        Patient Hub 
       </a>
     </div>
 
@@ -23,10 +23,10 @@
     </header>
 
     <section class="grid grid-cols-12">
-      <section class="col-span-12 col-start-3 col-end-11 bg-white/70 backdrop-blur-xl border border-slate-100 p-5 rounded-3xl shadow-sm mb-8">
+      <section class="col-span-12 col-start-3 col-end-11 bg-white/70 backdrop-blur-xl border border-slate-100 p-3 rounded-3xl shadow-sm mb-8">
         <div class="relative">
           <i class="pi pi-search absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-          <input pInputText type="text" placeholder="Search by lab name, city or test type..." [fluid]="true" [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" />
+          <input pInputText type="text" placeholder="Search by lab name, city or test type..." class="border-0" [fluid]="true" [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" />
         </div>
       </section>
     </section>
@@ -51,24 +51,38 @@
         </header>
         <div class="grid grid-cols-1 gap-3 mt-4 pt-4 border-t border-slate-100">
           <div>
-            <span class="text-sm font-semibold text-slate-500">Sort by</span>
-            <p-select [options]="sortOptions" [ngModel]="sortBy()" [fluid]="true" (ngModelChange)="sortBy.set($event)" optionLabel="label" optionValue="value">
-            </p-select>
-          </div>
-          <div>
             <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Test Category</label>
-            <p-select [options]="testCategories" [ngModel]="selectedTestCategory()" [fluid]="true" (ngModelChange)="selectedTestCategory.set($event)" optionLabel="label" optionValue="value" placeholder="All Tests">
+            <p-select [options]="testCategories()" [ngModel]="selectedTestCategory()" [fluid]="true" (ngModelChange)="selectedTestCategory.set($event)" optionLabel="label" optionValue="value" placeholder="All Tests">
             </p-select>
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">City</label>
-            <p-select [options]="cities" [ngModel]="selectedCity()" [fluid]="true" (ngModelChange)="selectedCity.set($event)" optionLabel="label" optionValue="value" placeholder="All Cities">
+            <p-select [options]="cities()" [ngModel]="selectedCity()" [fluid]="true" (ngModelChange)="selectedCity.set($event)" optionLabel="label" optionValue="value" placeholder="All Cities">
             </p-select>
           </div>
         </div>
       </section>
 
       <section class="col-span-9">
+
+        @if (loading()) {
+        <div class="bg-white/60 border border-slate-100 rounded-3xl p-12 text-center max-w-xl mx-auto">
+          <i class="pi pi-spin pi-spinner text-4xl text-violet-600"></i>
+          <p class="mt-4 text-sm text-slate-500">Loading labs...</p>
+        </div>
+        } @else if (error()) {
+        <div class="bg-white/60 border border-slate-100 rounded-3xl p-12 text-center max-w-xl mx-auto">
+          <div class="w-16 h-16 bg-red-50 text-red-400 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="pi pi-exclamation-triangle text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-slate-800 mb-2">Something went wrong</h3>
+          <p class="text-sm text-slate-500 mb-6">{{ error() }}</p>
+          <button (click)="loadLabs()" class="px-6 py-2.5 bg-violet-600 text-white font-semibold rounded-2xl">
+            Try Again
+          </button>
+        </div>
+        } @else {
+
         <div class="mb-5 flex justify-between items-center px-2">
           <span class="text-sm font-semibold text-slate-500">
             Showing {{ filteredLabs().length }} lab{{ filteredLabs().length === 1 ? '' : 's' }}
@@ -84,14 +98,9 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           @for (lab of filteredLabs(); track lab.id) {
           <article class="bg-white/80 border border-slate-100 rounded-3xl overflow-hidden shadow-sm hover:-translate-y-1.5 hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
-            <div class="relative w-full h-44 md:h-52 overflow-hidden bg-gradient-to-br from-violet-500 to-violet-700 flex items-center justify-center">
-              <i class="pi pi-flask text-white/30 text-8xl"></i>
+            <div class="relative w-full h-44 md:h-52 overflow-hidden">
+              <img [src]="lab.picture || 'lab.webp'" alt="Laboratory" class="w-full h-full object-cover" />
               <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
-              <div class="absolute top-3 right-3 flex items-center gap-1 bg-white/90 text-violet-700 px-2.5 py-1 rounded-xl text-xs font-bold shadow">
-                <i class="pi pi-star-fill text-[10px]"></i>
-                {{ lab.rating }}
-                <span class="text-slate-500 font-normal">({{ lab.reviewsCount }})</span>
-              </div>
             </div>
 
             <div class="p-6 flex flex-col justify-between flex-1">
@@ -153,6 +162,7 @@
             Clear Search & Filters
           </button>
         </div>
+        }
         }
       </section>
     </section>

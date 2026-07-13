@@ -84,4 +84,10 @@ export class PatientService {
     getPatientAppointments(): Observable<PatientAppointmentsAPI[]> {
         return this.http.get<PatientAppointmentsAPI[]>(`${this.appointmentsURL}/patient/MyAppointments`);
     }
+    getAvailbelSlots(date:string): Observable<any> 
+    {
+
+        return this.http.get<[string]>(`${this.appointmentsURL}/available-slots`);
+
+    }
 }

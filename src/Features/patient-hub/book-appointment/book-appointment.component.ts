@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, computed } from '@angular/core';
+import { Component, OnInit, signal, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, FormsModule, Validators } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
@@ -7,6 +7,9 @@ import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { DatePickerModule } from 'primeng/datepicker';
 import { RouterLink } from '@angular/router';
+import { DoctorService } from '../../../services/doctor.service';
+import { AppointmentService } from '../../../services/appointment.service';
+import { DoctorProfileResponseAPI } from '../../../models/doctor-api.interface';
 
 export interface Doctor {
   id: number;
@@ -44,14 +47,18 @@ export interface Doctor {
   styleUrl: './book-appointment.component.css',
 })
 export class BookAppointmentComponent implements OnInit {
+  private doctorService = inject(DoctorService);
+  private appointmentService = inject(AppointmentService);
+
   // State Signals
   doctors = signal<Doctor[]>([]);
+  loading = signal(false);
+  error = signal<string | null>(null);
   searchQuery = signal<string>('');
   selectedSpecialty = signal<string | null>(null);
+  selectedMedicalLevel = signal<string | null>(null);
   selectedDay = signal<string | null>(null);
   selectedGender = signal<string | null>(null);
-  selectedRating = signal<number | null>(null);
-  sortBy = signal<string>('rating'); // 'rating' | 'priceAsc' | 'priceDesc'
 
   // Booking Modal States
   displayBookingDialog = signal<boolean>(false);
@@ -68,18 +75,15 @@ export class BookAppointmentComponent implements OnInit {
   });
 
   // Filter Options
-  specialties = [
-    { label: 'All Specialties', value: null },
-    { label: 'Cardiology', value: 'Cardiology' },
-    { label: 'Dermatology', value: 'Dermatology' },
-    { label: 'General Medicine', value: 'General Medicine' },
-    { label: 'Internal Medicine', value: 'Internal Medicine' },
-    { label: 'Neurology', value: 'Neurology' },
-    { label: 'Orthopedics', value: 'Orthopedics' },
-    { label: 'Pediatrics', value: 'Pediatrics' },
-    { label: 'Gynecology & Obstetrics', value: 'Gynecology & Obstetrics' },
-    { label: 'Dentistry', value: 'Dentistry' },
-  ];
+  specialties = computed(() => {
+    const unique = [...new Set(this.doctors().map(d => d.specialty).filter(Boolean))];
+    return [{ label: 'All Specialties', value: null }, ...unique.map(s => ({ label: s, value: s }))];
+  });
+
+  medicalLevels = computed(() => {
+    const unique = [...new Set(this.doctors().map(d => d.medicalLevel).filter(Boolean))];
+    return [{ label: 'All Levels', value: null }, ...unique.map(l => ({ label: l, value: l }))];
+  });
 
   daysOfWeek = [
     { label: 'Any Day', value: null },
@@ -98,18 +102,7 @@ export class BookAppointmentComponent implements OnInit {
     { label: 'Female', value: 'female' },
   ];
 
-  ratings = [
-    { label: 'Any Rating', value: null },
-    { label: '4.8 ★ & Above', value: 4.8 },
-    { label: '4.5 ★ & Above', value: 4.5 },
-    { label: '4.0 ★ & Above', value: 4.0 },
-  ];
 
-  sortOptions = [
-    { label: 'Top Rated', value: 'rating' },
-    { label: 'Price: Low to High', value: 'priceAsc' },
-    { label: 'Price: High to Low', value: 'priceDesc' },
-  ];
 
   // Available slots for selected day (Mock Slots)
   availableTimeSlots: string[] = [
@@ -120,128 +113,42 @@ export class BookAppointmentComponent implements OnInit {
   ];
 
   ngOnInit() {
-    // Populate rich mock data
-    this.doctors.set([
-      {
-        id: 1,
-        firstName: 'Ahmed',
-        lastName: 'Mansour',
-        specialty: 'Cardiology',
-        medicalLevel: 'Consultant',
-        gender: 'male',
-        workingDays: ['Sunday', 'Tuesday', 'Thursday'],
-        workingHourStart: '09:00 AM',
-        workingHourEnd: '05:00 PM',
-        price: 500,
-        rating: 4.9,
-        reviewsCount: 142,
-        governorate: 'Cairo',
-        city: 'Maadi',
-        about: 'Senior Consultant of Cardiology with over 15 years of experience in managing chronic cardiovascular disorders.'
+    this.loadDoctors();
+  }
+
+  loadDoctors() {
+    this.loading.set(true);
+    this.error.set(null);
+    this.doctorService.getAllDoctors().subscribe({
+      next: (apiDoctors) => {
+        this.doctors.set(apiDoctors.map(d => this.mapApiDoctor(d)));
+        this.loading.set(false);
       },
-      {
-        id: 2,
-        firstName: 'Sarah',
-        lastName: 'Hassan',
-        specialty: 'Dermatology',
-        medicalLevel: 'Specialist',
-        gender: 'female',
-        workingDays: ['Monday', 'Wednesday', 'Saturday'],
-        workingHourStart: '10:00 AM',
-        workingHourEnd: '06:00 PM',
-        price: 350,
-        rating: 4.8,
-        reviewsCount: 96,
-        governorate: 'Alexandria',
-        city: 'Smouha',
-        about: 'Expert clinical and cosmetic dermatologist specializing in advanced skin therapies and laser treatments.'
+      error: (err) => {
+        this.error.set(err?.error?.message ?? 'Failed to load doctors. Please try again.');
+        this.loading.set(false);
       },
-      {
-        id: 3,
-        firstName: 'Mahmoud',
-        lastName: 'El-Khouly',
-        specialty: 'Orthopedics',
-        medicalLevel: 'Consultant',
-        gender: 'male',
-        workingDays: ['Sunday', 'Monday', 'Wednesday'],
-        workingHourStart: '11:00 AM',
-        workingHourEnd: '07:00 PM',
-        price: 600,
-        rating: 4.7,
-        reviewsCount: 110,
-        governorate: 'Giza',
-        city: 'Dokki',
-        about: 'Joint replacement specialist and orthopedic consultant focused on arthroscopy and sports injuries.'
-      },
-      {
-        id: 4,
-        firstName: 'Nour',
-        lastName: 'Al-Farabi',
-        specialty: 'Pediatrics',
-        medicalLevel: 'Specialist',
-        gender: 'female',
-        workingDays: ['Tuesday', 'Thursday', 'Friday'],
-        workingHourStart: '01:00 PM',
-        workingHourEnd: '08:00 PM',
-        price: 300,
-        rating: 4.9,
-        reviewsCount: 165,
-        governorate: 'Cairo',
-        city: 'Heliopolis',
-        about: 'Dedicated pediatrician offering comprehensive neonatal care and developmental growth monitoring.'
-      },
-      {
-        id: 5,
-        firstName: 'Sherif',
-        lastName: 'Abdel-Aziz',
-        specialty: 'Neurology',
-        medicalLevel: 'Consultant',
-        gender: 'male',
-        workingDays: ['Monday', 'Wednesday', 'Thursday'],
-        workingHourStart: '10:00 AM',
-        workingHourEnd: '04:00 PM',
-        price: 550,
-        rating: 4.6,
-        reviewsCount: 78,
-        governorate: 'Alexandria',
-        city: 'Kafr Abdo',
-        about: 'Neurologist specialized in headache management, neurodegenerative disorders, and stroke rehabilitation.'
-      },
-      {
-        id: 6,
-        firstName: 'Laila',
-        lastName: 'Salem',
-        specialty: 'Gynecology & Obstetrics',
-        medicalLevel: 'Consultant',
-        gender: 'female',
-        workingDays: ['Sunday', 'Tuesday', 'Wednesday'],
-        workingHourStart: '09:00 AM',
-        workingHourEnd: '03:00 PM',
-        price: 450,
-        rating: 4.8,
-        reviewsCount: 130,
-        governorate: 'Giza',
-        city: '6th of October',
-        about: 'Consultant in fetal medicine, maternal care, and advanced obstetric healthcare.'
-      },
-      {
-        id: 7,
-        firstName: 'Omar',
-        lastName: 'Farouk',
-        specialty: 'Dentistry',
-        medicalLevel: 'Specialist',
-        gender: 'male',
-        workingDays: ['Monday', 'Tuesday', 'Thursday', 'Saturday'],
-        workingHourStart: '12:00 PM',
-        workingHourEnd: '09:00 PM',
-        price: 400,
-        rating: 4.5,
-        reviewsCount: 88,
-        governorate: 'Cairo',
-        city: 'Nasr City',
-        about: 'Cosmetic dentist and implant specialist utilizing modern techniques in root canal therapies and teeth whitening.'
-      }
-    ]);
+    });
+  }
+
+  private mapApiDoctor(api: DoctorProfileResponseAPI): Doctor {
+    return {
+      id: api.id,
+      firstName: api.firstName,
+      lastName: api.lastName,
+      specialty: api.specialty,
+      medicalLevel: api.medicalLevel,
+      gender: api.gender === 'male' || api.gender === 'female' ? api.gender : 'male',
+      workingDays: api.workingDay ?? [],
+      workingHourStart: api.workingHourStart ?? '--:--',
+      workingHourEnd: api.workingHourEnd ?? '--:--',
+      price: api.price ?? 0,
+      rating: api.rate ?? 0,
+      reviewsCount: 0,
+      governorate: api.governorate,
+      city: api.city,
+      about: '',
+    };
   }
 
   // Filtered and Sorted Doctors list
@@ -266,33 +173,22 @@ export class BookAppointmentComponent implements OnInit {
       list = list.filter(doc => doc.specialty === specialty);
     }
 
-    // 3. Availability Day Filter
+    // 3. Medical Level Filter
+    const medLevel = this.selectedMedicalLevel();
+    if (medLevel) {
+      list = list.filter(doc => doc.medicalLevel === medLevel);
+    }
+
+    // 4. Availability Day Filter
     const day = this.selectedDay();
     if (day) {
       list = list.filter(doc => doc.workingDays.includes(day));
     }
 
-    // 4. Gender Filter
+    // 5. Gender Filter
     const gender = this.selectedGender();
     if (gender) {
       list = list.filter(doc => doc.gender === gender);
-    }
-
-    // 5. Rating Filter
-    const rating = this.selectedRating();
-    if (rating) {
-      list = list.filter(doc => doc.rating >= rating);
-    }
-
-    // 6. Sorting
-    const sort = this.sortBy();
-    list = [...list]; // clone before sorting
-    if (sort === 'rating') {
-      list.sort((a, b) => b.rating - a.rating);
-    } else if (sort === 'priceAsc') {
-      list.sort((a, b) => a.price - b.price);
-    } else if (sort === 'priceDesc') {
-      list.sort((a, b) => b.price - a.price);
     }
 
     return list;
@@ -303,12 +199,12 @@ export class BookAppointmentComponent implements OnInit {
     this.selectedDoctorForBooking.set(doctor);
     this.bookingSuccess.set(false);
     
-    // Autofill default template details
+    // Autofill with logged-in user's email (name/phone filled by patient)
     this.bookingForm.patchValue({
       appointmentDate: null,
       appointmentTime: '',
-      patientName: 'Mostafa Elabsawy', // prefilled mock logged-in patient
-      patientPhone: '01012345678',
+      patientName: '',
+      patientPhone: '',
       notes: ''
     });
     this.bookingForm.markAsPristine();
@@ -333,11 +229,10 @@ export class BookAppointmentComponent implements OnInit {
     return doctor.workingDays.includes(selectedDayName);
   }
 
-  // Confirm and submit mock booking
+  // Confirm and submit booking via API
   submitBooking() {
     if (this.bookingForm.valid) {
       if (!this.isDoctorAvailableOnSelectedDate()) {
-        // Set custom error on date control
         this.bookingForm.get('appointmentDate')?.setErrors({ doctorUnavailable: true });
         return;
       }
@@ -345,22 +240,27 @@ export class BookAppointmentComponent implements OnInit {
       const formVal = this.bookingForm.value;
       const doctor = this.selectedDoctorForBooking();
       
-      console.log('--- APPOINTMENT BOOKED ---');
-      console.log('Doctor:', `Dr. ${doctor?.firstName} ${doctor?.lastName}`);
-      console.log('Date:', formVal.appointmentDate);
-      console.log('Time Slot:', formVal.appointmentTime);
-      console.log('Patient:', formVal.patientName);
-      console.log('Phone:', formVal.patientPhone);
-      console.log('Notes:', formVal.notes);
+      if (!doctor || !formVal.appointmentDate) return;
 
-      // Trigger success state
-      this.bookingSuccess.set(true);
-      
-      // Close modal after brief delay to show booking success animation/message
-      setTimeout(() => {
-        this.displayBookingDialog.set(false);
-        this.bookingSuccess.set(false);
-      }, 2500);
+      const date = formVal.appointmentDate;
+      const dateStr = `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}`;
+
+      this.appointmentService.bookAppointment({
+        doctorId: doctor.id,
+        date: dateStr,
+        time: formVal.appointmentTime || '',
+      }).subscribe({
+        next: () => {
+          this.bookingSuccess.set(true);
+          setTimeout(() => {
+            this.displayBookingDialog.set(false);
+            this.bookingSuccess.set(false);
+          }, 2500);
+        },
+        error: () => {
+          // Optionally show error feedback
+        },
+      });
     } else {
       this.bookingForm.markAllAsTouched();
     }

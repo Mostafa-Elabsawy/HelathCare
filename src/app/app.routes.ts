@@ -27,9 +27,10 @@ import { LabDashboard } from '../Features/Dashboards/lab-dashboard/main/lab-dash
 import { LabDashboardOverview } from '../Features/Dashboards/lab-dashboard/dashboard/dashboard.component';
 import { LabTests } from '../Features/Dashboards/lab-dashboard/tests/tests.component';
 import { LabUpload } from '../Features/Dashboards/lab-dashboard/upload/upload.component';
-import { LabResultsView } from '../Features/Dashboards/lab-dashboard/results/results.component';
+
 import { LabProfile } from '../Features/Dashboards/lab-dashboard/profile/profile.component';
 import { LabSchedule } from '../Features/Dashboards/lab-dashboard/schedule/schedule.component';
+import { TestCatalog } from '../Features/Dashboards/lab-dashboard/test-catalog/test-catalog.component';
 import { PatientHubComponent } from '../Features/patient-hub/main/patient-hub.component';
 import { BookLabTestComponent } from '../Features/patient-hub/book-lab-test/book-lab-test.component';
 import { AiLabAnalysisComponent } from '../Features/patient-hub/ai-lab-analysis/ai-lab-analysis.component';
@@ -134,8 +135,9 @@ export const routes: Routes = [
                     { path: 'Dashboard', component: LabDashboardOverview },
                     { path: 'Tests', component: LabTests },
                     { path: 'Schedule', component: LabSchedule },
+                    { path: 'TestCatalog', component: TestCatalog },
                     { path: 'Upload', component: LabUpload },
-                    { path: 'Results', component: LabResultsView },
+
                     { path: 'Profile', component: LabProfile },
                 ],
             },

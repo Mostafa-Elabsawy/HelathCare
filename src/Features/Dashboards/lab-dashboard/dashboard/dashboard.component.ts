@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { LabService } from '../../../../services/lab.service';
+import { formatDate, formatTime, isToday } from '../../../../utils/date-format';
 
 @Component({
   selector: 'app-lab-dashboard-overview',
@@ -7,78 +9,53 @@ import { CommonModule } from '@angular/common';
   templateUrl: './dashboard.component.html',
 })
 export class LabDashboardOverview {
-  testRequests = [
-    {
-      id: 1,
-      patientName: 'Ahmed Ali',
-      avatar: 'A',
-      avatarColor: 'violet',
-      phone: '+20 0123456789',
-      date: '2026-07-06',
-      time: '09:00 AM',
-      testType: 'CBC',
-      urgency: 'normal',
-      status: 'pending',
-    },
-    {
-      id: 2,
-      patientName: 'Sara Mohamed',
-      avatar: 'S',
-      avatarColor: 'pink',
-      phone: '+20 0123456790',
-      date: '2026-07-06',
-      time: '10:30 AM',
-      testType: 'Blood Sugar',
-      urgency: 'normal',
-      status: 'pending',
-    },
-    {
-      id: 3,
-      patientName: 'Mohamed Ibrahim',
-      avatar: 'M',
-      avatarColor: 'violet',
-      phone: '+20 0123456791',
-      date: '2026-07-06',
-      time: '11:45 AM',
-      testType: 'Lipid Panel',
-      urgency: 'high',
-      status: 'pending',
-    },
-    {
-      id: 4,
-      patientName: 'Nour Adel',
-      avatar: 'N',
-      avatarColor: 'amber',
-      phone: '+20 0123456792',
-      date: '2026-07-06',
-      time: '01:00 PM',
-      testType: 'Thyroid Function',
-      urgency: 'medium',
-      status: 'pending',
-    },
-    {
-      id: 5,
-      patientName: 'Youssef Kareem',
-      avatar: 'Y',
-      avatarColor: 'violet',
-      phone: '+20 0123456793',
-      date: '2026-07-06',
-      time: '02:15 PM',
-      testType: 'Urinalysis',
-      urgency: 'normal',
-      status: 'pending',
-    },
-    {
-      id: 6,
-      patientName: 'Mariam Ali',
-      avatar: 'M',
-      avatarColor: 'pink',
-      phone: '+20 0123456794',
-      date: '2026-07-06',
-      time: '03:30 PM',
-      testType: 'Vitamin D',
-      urgency: 'medium',
-      status: 'pending',
-    },
-  ];
+  private labService = inject(LabService);
+
+  private appointments = this.labService.appointments;
+
+  totalTestsToday = computed(() =>
+    this.appointments().filter((a) => isToday(a.date)).length,
+  );
+
+  pendingResults = computed(() =>
+    this.appointments().filter((a) => a.status === 'Pending').length,
+  );
+
+  completedToday = computed(() =>
+    this.appointments().filter((a) => a.status === 'Approved' && isToday(a.date)).length,
+  );
+
+  patientsServed = computed(() =>
+    new Set(this.appointments().map((a) => a.patientId)).size,
+  );
+
+  testRequests = computed(() =>
+    this.appointments()
+      .filter((a) => a.status === 'Pending')
+      .map((a) => ({
+        id: a.id,
+        patientName: `${a.firstName} ${a.lastName}`,
+        avatar: a.firstName.charAt(0),
+        avatarColor: 'violet',
+        phone: a.phone ?? '',
+        date: formatDate(a.date),
+        time: formatTime(a.date),
+        testType: a.testName ?? 'General',
+        urgency: 'normal' as const,
+        status: 'pending' as const,
+      })),
+  );
+
+  queue = computed(() =>
+    this.appointments()
+      .filter((a) => isToday(a.date))
+      .map((a) => ({
+        id: a.id,
+        patientName: `${a.firstName} ${a.lastName}`,
+        testName: a.testName ?? '',
+        time: formatTime(a.date),
+        lab: '',
+        status: a.status,
+      })),
+  );
 }

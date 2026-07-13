@@ -2,22 +2,27 @@ import {
     ChangeDetectionStrategy,
     Component,
     computed,
+    effect,
+    inject,
     signal,
+    untracked,
 } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
-import { InputNumberModule } from 'primeng/inputnumber';
 import { SelectModule } from 'primeng/select';
 import { SelectOption, WorkingDay, Hours } from './schedule.interface';
 import { Dialog } from 'primeng/dialog';
+import { LabService } from '../../../../services/lab.service';
 
 @Component({
     selector: 'app-lab-schedule',
-    imports: [ButtonModule, InputNumberModule, SelectModule, ReactiveFormsModule, Dialog],
+    imports: [ButtonModule, SelectModule, ReactiveFormsModule, Dialog],
     templateUrl: './schedule.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LabSchedule {
+    private labService = inject(LabService);
+
     StartHourOptions = signal<SelectOption<string>[]>(Hours);
     EndHourOptions = signal<SelectOption<string>[]>(Hours);
 
@@ -27,6 +32,7 @@ export class LabSchedule {
         { label: '45 minutes', value: 45 },
         { label: '60 minutes', value: 60 },
     ];
+
     working_days = signal<WorkingDay[]>([
         { label: 'Saturday', value: 'Saturday', enabled: true },
         { label: 'Sunday', value: 'Sunday', enabled: true },
@@ -36,34 +42,76 @@ export class LabSchedule {
         { label: 'Thursday', value: 'Thursday', enabled: true },
         { label: 'Friday', value: 'Friday', enabled: false },
     ]);
-    startHour = new FormControl<string>('09:00', {
+
+    startHour = new FormControl<string >('09:00', {
         nonNullable: true,
         validators: [Validators.required],
     });
-    endHour = new FormControl<string>('17:00', { nonNullable: true, validators: [Validators.required] });
+    endHour = new FormControl<string>('17:00', {
+        nonNullable: true,
+        validators: [Validators.required],
+    });
     duration = new FormControl<number>(30, {
         nonNullable: true,
         validators: [Validators.required],
     });
-    price = new FormControl<number>(300, { nonNullable: true, validators: [Validators.required] });
-    workingDays = new FormControl<string[]>([
-        'Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday',
-    ], {
-        nonNullable: true,
-        validators: [Validators.required],
-    });
+    workingDays = new FormControl<string[]>(
+        ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'],
+        {
+            nonNullable: true,
+            validators: [Validators.required],
+        },
+    );
 
     scheduleData = new FormGroup({
         startHour: this.startHour,
         endHour: this.endHour,
         duration: this.duration,
-        price: this.price,
         workingDays: this.workingDays,
     });
+
     editMode = signal(false);
     saved = signal(false);
-
     weeklySlots = signal<number>(0);
+
+    private readonly lab = this.labService.lab;
+
+    constructor() {
+        effect(() => {
+            const profile = this.lab();
+            untracked(() => {
+                if (!profile?.id) return;
+                this.startHour.setValue(profile.workingHourStart ?? '09:00');
+                this.endHour.setValue(profile.workingHourEnd ?? '17:00');
+                this.duration.setValue(profile.duration ?? 30);
+                if (profile.workingDays?.length) {
+                    this.workingDays.setValue(profile.workingDays);
+                    this.working_days.set(
+                        this.working_days().map((d) => ({
+                            ...d,
+                            enabled: profile.workingDays!.includes(d.value),
+                        })),
+                    );
+                }
+                this.weeklySlots.set(this.computeWorkingSlots());
+            });
+        });
+
+        this.startHour.valueChanges.subscribe(() => {
+            this.EndHourOptions.set(this.computeEndHoursOptions());
+            this.weeklySlots.set(this.computeWorkingSlots());
+        });
+        this.endHour.valueChanges.subscribe(() => {
+            this.weeklySlots.set(this.computeWorkingSlots());
+        });
+        this.duration.valueChanges.subscribe(() => {
+            this.weeklySlots.set(this.computeWorkingSlots());
+        });
+        this.workingDays.valueChanges.subscribe(() => {
+            this.weeklySlots.set(this.computeWorkingSlots());
+        });
+        this.weeklySlots.set(this.computeWorkingSlots());
+    }
 
     computeWorkingSlots(): number {
         const start = this.startHour.value;
@@ -81,23 +129,6 @@ export class LabSchedule {
         const currStart = this.startHour.value;
         const startIndex = Hours.findIndex((hour) => hour.value === currStart);
         return Hours.slice(startIndex + 1);
-    }
-
-    constructor() {
-        this.startHour.valueChanges.subscribe(() => {
-            this.EndHourOptions.set(this.computeEndHoursOptions());
-            this.weeklySlots.set(this.computeWorkingSlots());
-        });
-        this.endHour.valueChanges.subscribe(() => {
-            this.weeklySlots.set(this.computeWorkingSlots());
-        });
-        this.duration.valueChanges.subscribe(() => {
-            this.weeklySlots.set(this.computeWorkingSlots());
-        });
-        this.workingDays.valueChanges.subscribe(() => {
-            this.weeklySlots.set(this.computeWorkingSlots());
-        });
-        this.weeklySlots.set(this.computeWorkingSlots());
     }
 
     formatHour(hour: string): string {
@@ -124,8 +155,19 @@ export class LabSchedule {
             this.scheduleData.markAllAsTouched();
             return;
         }
-        this.saved.set(true);
-        this.editMode.set(false);
+        this.labService
+            .updateLabProfile({
+                workingHourStart: this.startHour.value,
+                workingHourEnd: this.endHour.value,
+                duration: this.duration.value,
+                workingDays: this.workingDays.value,
+            })
+            .subscribe({
+                next: () => {
+                    this.saved.set(true);
+                    this.editMode.set(false);
+                },
+            });
     }
 
     openEdit(): void {
@@ -138,13 +180,19 @@ export class LabSchedule {
             startHour: '09:00',
             endHour: '17:00',
             duration: 30,
-            price: 300,
             workingDays: ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'],
         });
         this.working_days.set(
             this.working_days().map((day) => ({
                 ...day,
-                enabled: ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'].includes(day.value),
+                enabled: [
+                    'Saturday',
+                    'Sunday',
+                    'Monday',
+                    'Tuesday',
+                    'Wednesday',
+                    'Thursday',
+                ].includes(day.value),
             })),
         );
         this.editMode.set(false);

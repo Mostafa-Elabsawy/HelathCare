@@ -1,5 +1,6 @@
-import { Component, signal } from '@angular/core';
-import { EditLabInfoComponent, LabProfileData } from '../edit/edit-lab-info.component';
+import { Component, inject } from '@angular/core';
+import { EditLabInfoComponent } from '../edit/edit-lab-info.component';
+import { LabService } from '../../../../services/lab.service';
 
 @Component({
   selector: 'app-lab-profile',
@@ -7,12 +8,6 @@ import { EditLabInfoComponent, LabProfileData } from '../edit/edit-lab-info.comp
   templateUrl: './profile.component.html',
 })
 export class LabProfile {
-  labData = signal<LabProfileData>({
-    name: 'MedLab Analytics',
-    email: 'contact@medlab.com',
-    phone: '01001234567',
-    governorate: 'Cairo',
-    city: 'Cairo',
-    address: '42 El Tahrir St, Downtown',
-  });
+  private labService = inject(LabService);
+  labData = this.labService.lab;
 }

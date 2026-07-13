@@ -7,7 +7,7 @@
 
         <div class="flex items-center gap-3">
             <p-select appendTo="body" [options]="statusOptions" placeholder="Filter by status" class="w-44" [ngModel]="selectedStatus()" (ngModelChange)="selectedStatus.set($event)"> </p-select>
-            <a pButton label="New Appointment" icon="pi pi-plus" routerLink="/book-appointment"></a>
+            <a pButton label="New Appointment" icon="pi pi-plus" routerLink="/patient-hub/book-appointment"></a>
         </div>
     </section>
 

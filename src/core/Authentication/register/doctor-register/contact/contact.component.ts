@@ -1,4 +1,4 @@
-import { Component, computed, input, OnInit, output, signal } from '@angular/core';
+import { Component, computed, inject, input, OnInit, output, signal } from '@angular/core';
 import { DatePickerModule } from 'primeng/datepicker';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
@@ -6,9 +6,9 @@ import { ButtonModule } from 'primeng/button';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { debounceTime, elementAt } from 'rxjs';
-import { ContatactDataSchema, GOV, default_GOV, CTY } from '../doctor-register.interface';
-import { governorates, cities } from 'egydata';
+import { debounceTime } from 'rxjs';
+import { ContatactDataSchema } from '../doctor-register.interface';
+import { EgyDataService } from '../../../../../services/egy-data.service';
 @Component({
   selector: 'doctor-contact-info',
   imports: [
@@ -25,10 +25,10 @@ import { governorates, cities } from 'egydata';
 })
 export class Contact {
   output = output<ContatactDataSchema>();
-  GovernatesNames: string[] = [];
+  private egyDataService = inject(EgyDataService);
+  GovernatesNames = this.egyDataService.GovernatesNames;
   citiesName = signal<string[]>([]);
   valid(input: FormControl): boolean {
-    // console.log(input.invalid && (input.touched || input.dirty));
     return input.invalid && (input.touched || input.dirty);
   }
   governate = new FormControl('', { nonNullable: true, validators: [Validators.required] });
@@ -50,28 +50,16 @@ export class Contact {
     address: this.address,
   });
   constructor() {
-    let AllGovernatesData: GOV[] = governorates.getAll();
-    this.GovernatesNames = AllGovernatesData.map((element: any) => element.nameEn);
     this.governate.valueChanges.subscribe((value) => {
       this.city.setValue('');
-      let selectedGovernateData: GOV =
-        AllGovernatesData.find((element: any) => element.nameEn == value) ?? default_GOV;
-      let citiesData: CTY[] | [] = cities.getByGovernorate(selectedGovernateData.code);
-      let allnames: string[] = citiesData.map((element: any) => element.nameEn);
-      this.citiesName.set(allnames);
-      // console.log(selectedGovernateData, allnames);
+      this.citiesName.set(this.egyDataService.getCities(value) ?? []);
     });
     this.contactData.valueChanges.pipe(debounceTime(500)).subscribe((value) => {
       let data: ContatactDataSchema = {
         value: this.contactData.getRawValue(),
         valid: this.contactData.valid,
       };
-      // console.log(data);
-
       this.output.emit(data);
     });
-    // this.egyptGovernates=governorates.map(element => {
-
-    // });
   }
 }

@@ -28,7 +28,7 @@
                 </div>
             </div>
 
-            <div class="mt-5 grid md:grid-cols-3 gap-4">
+            <div class="mt-5 grid md:grid-cols-2 gap-4">
 
                 <div class="rounded-2xl bg-gray-50 border border-gray-100 p-4">
                     <p class="text-xs font-semibold uppercase text-gray-400">
@@ -39,18 +39,6 @@
                     </p>
                     <p class="text-sm text-gray-500">
                         {{ duration.value }} minutes per appointment
-                    </p>
-                </div>
-
-                <div class="rounded-2xl bg-gray-50 border border-gray-100 p-4">
-                    <p class="text-xs font-semibold uppercase text-gray-400">
-                        Test price
-                    </p>
-                    <p class="mt-1 text-lg font-bold text-gray-800">
-                        {{ price.value }} EGP
-                    </p>
-                    <p class="text-sm text-gray-500">
-                        Base price for standard tests
                     </p>
                 </div>
 
@@ -134,14 +122,6 @@
                         </p-select>
                     </label>
 
-                    <label class="space-y-2">
-                        <span class="text-sm font-semibold text-gray-700">
-                            Base test price
-                        </span>
-                        <p-inputnumber inputId="testPrice" formControlName="price" [min]="0" suffix=" EGP" class="w-full" inputStyleClass="w-full">
-                        </p-inputnumber>
-                    </label>
-
                 </div>
 
                 <div class="mt-5">
@@ -150,7 +130,7 @@
                     </p>
                     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
                         @for (day of working_days(); track $index) {
-                        <p-button [label]="day.value" [icon]="day.enabled ? 'pi pi-check-circle' : 'pi pi-circle'" [severity]="day.enabled ? 'success' : 'secondary'" [outlined]="!day.enabled" styleClass="w-full justify-between" (onClick)="toggleDay(day.value)">
+                        <p-button [label]="day.value" [icon]="day.enabled ? 'pi pi-check-circle' : 'pi pi-circle'" [severity]="day.enabled ? 'help' : 'secondary'" [outlined]="!day.enabled" styleClass="w-full justify-between" (onClick)="toggleDay(day.value)">
                         </p-button>
                         }
                     </div>

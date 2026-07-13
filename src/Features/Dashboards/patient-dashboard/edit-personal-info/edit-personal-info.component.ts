@@ -1,4 +1,4 @@
-import { Component, SimpleChange, effect, inject, input, signal, untracked } from '@angular/core';
+import { Component, effect, inject, input, signal, untracked } from '@angular/core';
 import {
     AbstractControl,
     FormControl,
@@ -22,7 +22,7 @@ import {
     PatientProfileResponseAPI,
     UpdatePatientProfileAPI,
 } from '../../../../models/patient-api.interface';
-import { governorates, cities } from 'egydata';
+import { EgyDataService } from '../../../../services/egy-data.service';
 
 @Component({
     selector: 'app-edit-personal-info',
@@ -44,6 +44,7 @@ import { governorates, cities } from 'egydata';
 })
 export class EditPersonalInfo {
     private patientService = inject(PatientService);
+    private egyDataService = inject(EgyDataService);
 
     patientData = input<PatientProfileResponseAPI>(defaultPatientProfil);
 
@@ -133,6 +134,9 @@ export class EditPersonalInfo {
         }),
     });
 
+    GovernatesNames = this.egyDataService.GovernatesNames;
+    citiesName = signal<string[]>([]);
+
     valid(input: AbstractControl): boolean {
         return input.invalid && (input.touched || input.dirty);
     }
@@ -147,9 +151,7 @@ export class EditPersonalInfo {
 
     addValue(input: FormControl<string>, array: FormControl<string[]>): void {
         const value = input.getRawValue().trim();
-
         if (!value) return;
-
         array.setValue([...array.getRawValue(), value]);
         input.reset('');
         array.markAsDirty();
@@ -162,20 +164,15 @@ export class EditPersonalInfo {
 
     pressed(event: KeyboardEvent, input: FormControl<string>, array: FormControl<string[]>): void {
         if (event.key !== 'Enter') return;
-
         event.preventDefault();
         this.addValue(input, array);
     }
 
     updateProfilePicture(event: FileUploadHandlerEvent): void {
         const file = event.files[0];
-
         if (!file) return;
-
         this.imagePreview.set(URL.createObjectURL(file));
         this.profileFileName.set(file);
-
-        console.log('profile picture updated successfully');
     }
 
     saveChanges(): void {
@@ -197,26 +194,17 @@ export class EditPersonalInfo {
             dateOfBirth: formValue.dateOfBirth,
         };
 
-        console.log('data = ', data);
-
         this.patientService.updatePatientProfile(data).subscribe({
-            next: (res) => console.log(res),
+            next: () => {},
             error: (err) => console.log(err),
         });
         if (this.profileFileName() != null) {
-            this.patientService.uploadProfileImage(this.profileFileName() as File).subscribe({
-                next:(res)=>{
-                    console.log(res);
-                },
-                error: (err) => console.log(err)
-            });
+            this.patientService.uploadProfileImage(this.profileFileName() as File).subscribe();
         }
         this.closeEditDialog();
         this.patientService.loadPatientProfile();
     }
 
-    GovernatesNames: string[] = [];
-    citiesName = signal<string[]>([]);
     constructor() {
         effect(() => {
             const patient = this.patientService.patient();
@@ -241,18 +229,9 @@ export class EditPersonalInfo {
                 this.imagePreview.set(patient.picture ?? 'placeholder1.jpg');
             });
         });
-        let AllGovernatesData = governorates.getAll();
-        const default_GOV = { id: 0, code: '', name: '', nameEn: '' };
-        this.GovernatesNames = AllGovernatesData.map((element: any) => element.nameEn);
         this.personalInfoForm.controls.governorate.valueChanges.subscribe((value) => {
             this.personalInfoForm.controls.city.setValue('');
-            let selectedGovernateData =
-                AllGovernatesData.find((element: any) => element.nameEn == value) ?? default_GOV;
-            let citiesData = cities.getByGovernorate(selectedGovernateData.code);
-            let allnames: string[] = citiesData.map((element: any) => element.nameEn);
-            this.citiesName.set(allnames);
-            // console.log(selectedGovernateData, allnames);
+            this.citiesName.set(this.egyDataService.getCities(value) ?? []);
         });
-        // console.log(selectedGovernateData, allnames);
     }
 }

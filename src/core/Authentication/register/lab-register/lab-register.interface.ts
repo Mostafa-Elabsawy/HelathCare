@@ -73,7 +73,4 @@ export const LabTestCategories = [
   'Blood Bank',
 ];
 
-export interface LabRegisterData {
-  labInformations: LabInformationsComponent;
-  securityInformations: SecurityDataSchema;
-}
+

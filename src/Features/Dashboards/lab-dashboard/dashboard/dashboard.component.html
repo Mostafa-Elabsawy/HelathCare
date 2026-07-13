@@ -14,7 +14,7 @@
                 <i class="fa-solid text-4xl fa-vial"></i>
             </div>
             <div class="flex flex-col items-end gap-2">
-                <h3 class="text-3xl font-bold text-gray-800">36</h3>
+                <h3 class="text-3xl font-bold text-gray-800">{{ totalTestsToday() }}</h3>
                 <p class="text-sm font-semibold text-gray-500">Total Tests Today</p>
             </div>
         </article>
@@ -24,7 +24,7 @@
                 <i class="fa-solid text-4xl fa-hourglass-half"></i>
             </div>
             <div class="flex flex-col items-end gap-2">
-                <h3 class="text-3xl font-bold text-gray-800">12</h3>
+                <h3 class="text-3xl font-bold text-gray-800">{{ pendingResults() }}</h3>
                 <p class="text-sm font-semibold text-gray-500">Pending Results</p>
             </div>
         </article>
@@ -34,7 +34,7 @@
                 <i class="fa-solid text-4xl fa-check-circle"></i>
             </div>
             <div class="flex flex-col items-end gap-2">
-                <h3 class="text-3xl font-bold text-gray-800">24</h3>
+                <h3 class="text-3xl font-bold text-gray-800">{{ completedToday() }}</h3>
                 <p class="text-sm font-semibold text-gray-500">Completed Today</p>
             </div>
         </article>
@@ -44,7 +44,7 @@
                 <i class="fa-solid text-4xl fa-users"></i>
             </div>
             <div class="flex flex-col items-end gap-2">
-                <h3 class="text-3xl font-bold text-gray-800">28</h3>
+                <h3 class="text-3xl font-bold text-gray-800">{{ patientsServed() }}</h3>
                 <p class="text-sm font-semibold text-gray-500">Patients Served</p>
             </div>
         </article>
@@ -57,12 +57,12 @@
                 <p class="text-sm text-gray-400">Pending test orders</p>
             </div>
             <span class="px-3 py-1 rounded-full bg-violet-50 text-violet-600 text-xs font-semibold">
-                {{ testRequests.length }} New
+                {{ testRequests().length }} New
             </span>
         </div>
 
         <div class="grid xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
-            @for (item of testRequests; track $index) {
+            @for (item of testRequests(); track $index) {
             <article class="col-span-1 bg-violet-50/60 border border-gray-100 rounded-2xl p-4 hover:bg-gray-100 transition">
                 <div class="flex items-center gap-3">
                     <div class="w-12 h-12 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center font-bold">
@@ -106,44 +106,30 @@
         </div>
 
         <div class="space-y-3">
+            @for (item of queue(); track item.id) {
             <article class="flex items-center justify-between gap-4 rounded-2xl border border-gray-100 bg-gray-50 p-4">
                 <div class="flex items-center gap-3 min-w-[240px]">
-                    <img src="placeholder1.jpg" class="w-12 h-12 rounded-full object-cover" alt="Patient">
+                    <div class="w-12 h-12 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center font-bold">
+                        {{ item.patientName.charAt(0) }}
+                    </div>
                     <div>
-                        <h4 class="font-semibold text-gray-800">Ahmed Hassan</h4>
-                        <p class="text-sm text-gray-500">CBC Analysis</p>
+                        <h4 class="font-semibold text-gray-800">{{ item.patientName }}</h4>
+                        <p class="text-sm text-gray-500">{{ item.testName }}</p>
                     </div>
                 </div>
-                <div class="text-sm text-gray-600 whitespace-nowrap">09:30 AM</div>
-                <div class="text-sm text-gray-600 whitespace-nowrap">Lab A</div>
-                <span class="text-xs px-3 py-1 rounded-full bg-violet-100 text-violet-700 font-medium whitespace-nowrap">In Progress</span>
+                <div class="text-sm text-gray-600 whitespace-nowrap">{{ item.time || '--:--' }}</div>
+                <div class="text-sm text-gray-600 whitespace-nowrap">{{ item.lab || 'Lab' }}</div>
+                <span class="text-xs px-3 py-1 rounded-full font-medium whitespace-nowrap"
+                    [class.bg-yellow-100]="item.status === 'Pending'"
+                    [class.text-yellow-700]="item.status === 'Pending'"
+                    [class.bg-emerald-100]="item.status === 'Approved'"
+                    [class.text-emerald-700]="item.status === 'Approved'"
+                    [class.bg-red-100]="item.status === 'Rejected'"
+                    [class.text-red-600]="item.status === 'Rejected'">
+                    {{ item.status }}
+                </span>
             </article>
-
-            <article class="flex items-center justify-between gap-4 rounded-2xl border border-gray-100 bg-gray-50 p-4">
-                <div class="flex items-center gap-3 min-w-[240px]">
-                    <img src="placeholder1.jpg" class="w-12 h-12 rounded-full object-cover" alt="Patient">
-                    <div>
-                        <h4 class="font-semibold text-gray-800">Mariam Ali</h4>
-                        <p class="text-sm text-gray-500">Blood Glucose Test</p>
-                    </div>
-                </div>
-                <div class="text-sm text-gray-600 whitespace-nowrap">10:15 AM</div>
-                <div class="text-sm text-gray-600 whitespace-nowrap">Lab B</div>
-                <span class="text-xs px-3 py-1 rounded-full bg-blue-100 text-blue-700 font-medium whitespace-nowrap">Waiting</span>
-            </article>
-
-            <article class="flex items-center justify-between gap-4 rounded-2xl border border-gray-100 bg-gray-50 p-4">
-                <div class="flex items-center gap-3 min-w-[240px]">
-                    <img src="placeholder1.jpg" class="w-12 h-12 rounded-full object-cover" alt="Patient">
-                    <div>
-                        <h4 class="font-semibold text-gray-800">Omar Samir</h4>
-                        <p class="text-sm text-gray-500">Lipid Profile</p>
-                    </div>
-                </div>
-                <div class="text-sm text-gray-600 whitespace-nowrap">11:00 AM</div>
-                <div class="text-sm text-gray-600 whitespace-nowrap">Lab A</div>
-                <span class="text-xs px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 font-medium whitespace-nowrap">Completed</span>
-            </article>
+            }
         </div>
     </section>
 </div>

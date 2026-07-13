@@ -21,6 +21,8 @@ import { Security } from '../security/security.component';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { BreakpointService } from '../../../../../services/break-point-observer.service';
 import { PatientService } from '../../../../../services/patient.service';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 @Component({
     selector: 'app-patient-register',
     imports: [
@@ -33,14 +35,16 @@ import { PatientService } from '../../../../../services/patient.service';
         Medical,
         Security,
         ReactiveFormsModule,
+        ToastModule,
     ],
-    providers: [PatientService],
+    providers: [PatientService, MessageService],
     templateUrl: './patient-register.component.html',
     styleUrl: './patient-register.component.css',
 })
 export class PatientRegister {
     patientService = inject(PatientService);
     breakpointService = inject(BreakpointService);
+    messageService = inject(MessageService);
     fluidCheck: Signal<boolean> = computed(() => this.breakpointService.isMobile());
     activeStep = 1;
     validation = signal<boolean>(false);
@@ -71,10 +75,10 @@ export class PatientRegister {
         console.log(finalObject);
         this.patientService.registerPatient(finalObject).subscribe({
             next: (res) => {
-                console.log(res);
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Registration successful! Redirecting...' });
             },
             error: (err) => {
-                console.log(err);
+                this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error?.message || 'Registration failed. Please try again.' });
             },
         });
     }

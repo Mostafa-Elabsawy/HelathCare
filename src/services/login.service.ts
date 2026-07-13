@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
     providedIn: 'root',
 })
 export class AuthService {
+
     private http = inject(HttpClient);
     private readonly authUrl = `${environment.apiUrl}/Auth/login`;
     router = inject(Router);

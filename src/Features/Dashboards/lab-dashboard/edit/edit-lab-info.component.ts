@@ -1,4 +1,4 @@
-import { Component, inject, input, signal } from '@angular/core';
+import { Component, effect, inject, input, signal, untracked } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { ButtonModule } from 'primeng/button';
@@ -7,16 +7,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
-import { governorates, cities } from 'egydata';
-
-export interface LabProfileData {
-  name: string;
-  email: string;
-  phone: string;
-  governorate: string;
-  city: string;
-  address: string;
-}
+import { LabProfile } from '../../../../models/lab-api.interface';
+import { LabService } from '../../../../services/lab.service';
+import { EgyDataService } from '../../../../services/egy-data.service';
 
 @Component({
   selector: 'app-edit-lab-info',
@@ -33,14 +26,9 @@ export interface LabProfileData {
   styleUrl: './edit-lab-info.component.css',
 })
 export class EditLabInfoComponent {
-  labData = input<LabProfileData>({
-    name: '',
-    email: '',
-    phone: '',
-    governorate: '',
-    city: '',
-    address: '',
-  });
+  private labService = inject(LabService);
+  private egyDataService = inject(EgyDataService);
+  labData = input<LabProfile | null>(null);
 
   editDialogVisible = signal(false);
 
@@ -71,19 +59,14 @@ export class EditLabInfoComponent {
     }),
   });
 
+  GovernatesNames = this.egyDataService.GovernatesNames;
+  citiesName = signal<string[]>([]);
+
   valid(control: AbstractControl): boolean {
     return control.invalid && (control.touched || control.dirty);
   }
 
   openEditDialog() {
-    this.labInfoForm.patchValue({
-      name: this.labData().name,
-      email: this.labData().email,
-      phone: this.labData().phone,
-      governorate: this.labData().governorate,
-      city: this.labData().city,
-      address: this.labData().address,
-    });
     this.editDialogVisible.set(true);
   }
 
@@ -96,24 +79,29 @@ export class EditLabInfoComponent {
       this.labInfoForm.markAllAsTouched();
       return;
     }
-
-    console.log('Lab profile update:', this.labInfoForm.getRawValue());
-    this.closeEditDialog();
+    this.labService.updateLabProfile(this.labInfoForm.getRawValue()).subscribe({
+      next: () => this.closeEditDialog(),
+    });
   }
 
-  GovernatesNames: string[] = [];
-  citiesName = signal<string[]>([]);
-
   constructor() {
-    const AllGovernatesData = governorates.getAll();
-    const default_GOV = { id: 0, code: '', name: '', nameEn: '' };
-    this.GovernatesNames = AllGovernatesData.map((element: any) => element.nameEn);
+    effect(() => {
+      const data = this.labData();
+      untracked(() => {
+        this.labInfoForm.patchValue({
+          name: data?.name ?? '',
+          email: data?.email ?? '',
+          phone: data?.phone ?? '',
+          governorate: data?.governorate ?? '',
+          city: data?.city ?? '',
+          address: data?.address ?? '',
+        });
+      });
+    });
+
     this.labInfoForm.controls.governorate.valueChanges.subscribe((value) => {
       this.labInfoForm.controls.city.setValue('');
-      const selectedGovernateData =
-        AllGovernatesData.find((element: any) => element.nameEn == value) ?? default_GOV;
-      const citiesData = cities.getByGovernorate(selectedGovernateData.code);
-      this.citiesName.set(citiesData.map((element: any) => element.nameEn));
+      this.citiesName.set(this.egyDataService.getCities(value) ?? []);
     });
   }
 }

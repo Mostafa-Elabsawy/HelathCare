@@ -1,0 +1,32 @@
+@reference "tailwindcss";
+
+.nav-link {
+    @apply px-3 py-2 text-sm font-medium text-gray-500 rounded-lg relative cursor-pointer transition-colors;
+}
+
+.nav-link:hover,
+.nav-link.active,
+.nav-link:active,
+.nav-link:focus {
+    @apply text-blue-500 bg-none;
+}
+
+.nav-link::after {
+    content: '';
+    @apply absolute left-1/2 -bottom-0.5 w-0 h-0.5 bg-blue-500 rounded-full transition-all duration-300 ease-in-out;
+}
+
+:is(.nav-link:hover, .nav-link:active, .nav-link:focus, .nav-link.active)::after {
+    width: 60%;
+    left: 20%;
+}
+
+@media (max-width: 1023px) {
+    .nav-link {
+        @apply block w-full rounded-lg;
+    }
+
+    .nav-link::after {
+        @apply hidden;
+    }
+}

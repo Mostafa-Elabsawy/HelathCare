@@ -1,38 +1,39 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
+import { SelectModule } from 'primeng/select';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AiService } from '../../../services/ai.service';
+import { AiRepsonse } from '../../../models/ait.interface';
 
 type AnalysisStatus = 'healthy' | 'unhealthy';
 
 interface AnalysisResult {
     status: AnalysisStatus;
+    diagnosis: string;
     comment: string;
+    confidence: number;
     fileName: string;
 }
 
 @Component({
     selector: 'app-ai-lab-analysis',
-    imports: [ButtonModule, CommonModule],
+    imports: [ButtonModule, SelectModule, CommonModule, FormsModule],
     templateUrl: './ai-lab-analysis.component.html',
     styleUrl: './ai-lab-analysis.component.css',
 })
 export class AiLabAnalysisComponent {
+    private aiService = inject(AiService);
+
     isDragOver = signal(false);
     isAnalyzing = signal(false);
     result = signal<AnalysisResult | null>(null);
+    error = signal<string | null>(null);
+    testType = signal<'cbc' | 'diabetes'>('cbc');
 
-    private readonly healthyComments = [
-        'Your laboratory results are within normal ranges. All measured values appear normal. Maintain your current healthy lifestyle and follow up with your annual checkup.',
-        'All tested markers are in the optimal range. Your blood work, lipid profile, and organ function indicators show excellent health. Keep up your wellness routine!',
-        'Great news! Your report shows no abnormalities. Every parameter falls within the expected healthy range. Continue your regular health maintenance schedule.',
-        'Your results are perfectly balanced. From complete blood count to metabolic panel, everything looks great. A clean bill of health!',
-    ];
-
-    private readonly unhealthyComments = [
-        'Some values in your report fall outside the normal range. We recommend consulting your healthcare provider for a thorough evaluation of these results.',
-        'A few markers show elevated levels that may require medical attention. Please share this report with your doctor for proper interpretation and guidance.',
-        'Our analysis detected several values偏离 the reference ranges. It is advisable to review these findings with a healthcare professional who can recommend next steps.',
-        'Certain parameters in your lab report require clinical correlation. Please schedule a consultation with your physician to discuss these results in detail.',
+    testTypeOptions = [
+        { label: 'CBC Analysis', value: 'cbc' },
+        { label: 'Diabetes Analysis', value: 'diabetes' },
     ];
 
     onDragOver(event: DragEvent): void {
@@ -73,6 +74,7 @@ export class AiLabAnalysisComponent {
 
     resetAnalysis(): void {
         this.result.set(null);
+        this.error.set(null);
     }
 
     private handleFile(file: File): void {
@@ -90,14 +92,27 @@ export class AiLabAnalysisComponent {
         }
 
         this.isAnalyzing.set(true);
+        this.error.set(null);
 
-        const status: AnalysisStatus = Math.random() < 0.5 ? 'healthy' : 'unhealthy';
-        const pool = status === 'healthy' ? this.healthyComments : this.unhealthyComments;
-        const comment = pool[Math.floor(Math.random() * pool.length)];
+        const request$ = this.testType() === 'cbc'
+            ? this.aiService.checkCBC(file)
+            : this.aiService.checkDiabeties(file);
 
-        setTimeout(() => {
-            this.result.set({ status, comment, fileName: file.name });
-            this.isAnalyzing.set(false);
-        }, 2500);
+        request$.subscribe({
+            next: (apiResult: AiRepsonse) => {
+                this.result.set({
+                    status: apiResult.diagnosis === 'Healthy' ? 'healthy' : 'unhealthy',
+                    diagnosis: apiResult.diagnosis,
+                    comment: apiResult.comment,
+                    confidence: apiResult.confidence,
+                    fileName: file.name,
+                });
+                this.isAnalyzing.set(false);
+            },
+            error: (err) => {
+                this.error.set(err?.error?.message ?? err?.message ?? 'Analysis failed. Please try again.');
+                this.isAnalyzing.set(false);
+            },
+        });
     }
 }

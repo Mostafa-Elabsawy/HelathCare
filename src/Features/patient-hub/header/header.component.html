@@ -1,24 +1,37 @@
-<header class="sticky top-0 z-50 bg-white/70 backdrop-blur-xl border-b border-gray-200 shadow-sm py-2">
+<header class="sticky top-0 z-50 bg-white/70 backdrop-blur-xl border-b border-gray-200 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 md:px-6">
         <div class="flex items-center justify-between h-16">
 
-            <a routerLink="/home" class="flex items-center gap-3 cursor-pointer">
-                <div class="bg-primary p-2 rounded-xl shadow">
-                    <i class="fa-solid fa-heart-pulse text-white text-lg"></i>
-                </div>
-                <div class="leading-tight">
-                    <p class="font-bold text-lg text-gray-800">Medical Pulse</p>
-                    <p class="text-xs text-gray-500">Patient Health Platform</p>
-                </div>
-            </a>
+            <div class="flex items-center gap-3">
+                <button (click)="toggleMobileMenu()" class="lg:hidden p-2 rounded-xl hover:bg-gray-100 transition">
+                    <i class="fa fa-bars text-lg text-gray-600"></i>
+                </button>
+
+                <a routerLink="/home" class="flex items-center gap-3 cursor-pointer">
+                    <div class="bg-primary p-2 rounded-xl shadow">
+                        <i class="fa-solid fa-heart-pulse text-white text-lg"></i>
+                    </div>
+                    <div class="leading-tight hidden sm:block">
+                        <p class="font-bold text-lg text-gray-800">Medical Pulse</p>
+                        <p class="text-xs text-gray-500">Patient Health Platform</p>
+                    </div>
+                </a>
+            </div>
+
+            <nav [class.max-lg:hidden]="!mobileMenuOpen()" class="max-lg:absolute max-lg:top-16 max-lg:left-0 max-lg:w-full max-lg:bg-white/95 max-lg:backdrop-blur-xl max-lg:border-b max-lg:border-gray-200 max-lg:shadow-lg max-lg:p-4 max-lg:flex-col lg:flex items-center gap-4">
+                <a routerLink="/patient-hub/explore" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">Explore</a>
+                <a routerLink="/patient-hub/book-appointment" routerLinkActive="active" class="nav-link">Book Appointment</a>
+                <a routerLink="/patient-hub/book-lab-test" routerLinkActive="active" class="nav-link">Book Lab Test</a>
+                <a routerLink="/patient-hub/ai-lab-analysis" routerLinkActive="active" class="nav-link">AI Analysis</a>
+            </nav>
 
             <div class="flex items-center gap-4">
                 <a routerLink="/dashboard" class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition">
                     <i class="fa-solid fa-border-all text-sm"></i>
                 </a>
 
-                <button class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition relative">
-                    <i class="fa-regular fa-bell text-sm"></i>
+                <button routerLink="/home" class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition relative">
+                    <i class="fa-regular fa-home text-sm"></i>
                 </button>
 
                 <div class="flex items-center gap-3 pl-4 border-l border-gray-200">

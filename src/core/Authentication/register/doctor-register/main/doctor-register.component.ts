@@ -18,6 +18,8 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { BreakpointService } from '../../../../../services/break-point-observer.service';
 import { RegisterDoctorAPI } from '../../../../../models/doctor-api.interface';
 import { DoctorService } from '../../../../../services/doctor.service';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 @Component({
     selector: 'app-doctor-register',
     imports: [
@@ -29,7 +31,9 @@ import { DoctorService } from '../../../../../services/doctor.service';
         Contact,
         Security,
         ReactiveFormsModule,
+        ToastModule,
     ],
+    providers: [MessageService],
     templateUrl: './doctor-register.component.html',
     styleUrl: './doctor-register.component.css',
 })
@@ -54,6 +58,7 @@ export class DoctorRegister {
         // console.log(data.value, data.valid);
     }
     doctorService = inject(DoctorService);
+    messageService = inject(MessageService);
     submitForm() {
         if (this.personaldata().valid && this.contactdata().valid && this.securitydata().valid) {
             // console.log(this.personaldata());
@@ -66,10 +71,10 @@ export class DoctorRegister {
             };
             this.doctorService.registerDoctor(finalObject).subscribe({
                 next: (res) => {
-                    console.log(res);
+                    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Registration successful! Redirecting...' });
                 },
                 error: (err) => {
-                    console.log(err);
+                    this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error?.message || 'Registration failed. Please try again.' });
                 },
             });
             console.log('finalobjec', finalObject);

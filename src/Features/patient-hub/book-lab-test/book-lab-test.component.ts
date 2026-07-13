@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, computed } from '@angular/core';
+import { Component, OnInit, signal, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, FormsModule, Validators } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
@@ -7,6 +7,8 @@ import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { DatePickerModule } from 'primeng/datepicker';
 import { RouterLink } from '@angular/router';
+import { LabService } from '../../../services/lab.service';
+import { AppointmentService } from '../../../services/appointment.service';
 
 export interface Lab {
   id: number;
@@ -21,6 +23,7 @@ export interface Lab {
   reviewsCount: number;
   about: string;
   testCategories: string[];
+  picture: string | null;
 }
 
 @Component({
@@ -41,11 +44,15 @@ export interface Lab {
   styleUrl: './book-lab-test.component.css',
 })
 export class BookLabTestComponent implements OnInit {
+  private labService = inject(LabService);
+  private appointmentService = inject(AppointmentService);
+
   labs = signal<Lab[]>([]);
+  loading = signal(false);
+  error = signal<string | null>(null);
   searchQuery = signal<string>('');
   selectedTestCategory = signal<string | null>(null);
   selectedCity = signal<string | null>(null);
-  sortBy = signal<string>('rating');
 
   displayBookingDialog = signal<boolean>(false);
   selectedLabForBooking = signal<Lab | null>(null);
@@ -60,29 +67,15 @@ export class BookLabTestComponent implements OnInit {
     notes: new FormControl(''),
   });
 
-  testCategories = [
-    { label: 'All Tests', value: null },
-    { label: 'Blood Tests', value: 'Blood Tests' },
-    { label: 'Urine Analysis', value: 'Urine Analysis' },
-    { label: 'Radiology & Imaging', value: 'Radiology & Imaging' },
-    { label: 'Hormone Profile', value: 'Hormone Profile' },
-    { label: 'Allergy Testing', value: 'Allergy Testing' },
-    { label: 'Genetic Screening', value: 'Genetic Screening' },
-    { label: 'Microbiology', value: 'Microbiology' },
-  ];
+  testCategories = computed(() => {
+    const unique = [...new Set(this.labs().flatMap(l => l.testCategories).filter(Boolean))];
+    return [{ label: 'All Tests', value: null }, ...unique.map(c => ({ label: c, value: c }))];
+  });
 
-  cities = [
-    { label: 'All Cities', value: null },
-    { label: 'Cairo', value: 'Cairo' },
-    { label: 'Giza', value: 'Giza' },
-    { label: 'Alexandria', value: 'Alexandria' },
-  ];
-
-  sortOptions = [
-    { label: 'Top Rated', value: 'rating' },
-    { label: 'Price: Low to High', value: 'priceAsc' },
-    { label: 'Price: High to Low', value: 'priceDesc' },
-  ];
+  cities = computed(() => {
+    const unique = [...new Set(this.labs().map(l => l.city).filter(Boolean))];
+    return [{ label: 'All Cities', value: null }, ...unique.map(c => ({ label: c, value: c }))];
+  });
 
   availableTimeSlots: string[] = [
     '08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM',
@@ -91,50 +84,43 @@ export class BookLabTestComponent implements OnInit {
   ];
 
   ngOnInit() {
-    this.labs.set([
-      {
-        id: 1, name: 'Al-Borg Laboratories', city: 'Maadi', governorate: 'Cairo',
-        testsCount: 250, openingTime: '08:00 AM', closingTime: '11:00 PM',
-        basePrice: 180, rating: 4.8, reviewsCount: 312,
-        about: 'State-of-the-art diagnostic center offering comprehensive blood work, imaging, and specialized testing with rapid digital reporting.',
-        testCategories: ['Blood Tests', 'Radiology & Imaging', 'Hormone Profile'],
+    this.loadLabs();
+  }
+
+  loadLabs() {
+    this.loading.set(true);
+    this.error.set(null);
+    this.labService.getAllLabs().subscribe({
+      next: (apiLabs) => {
+        this.labs.set(apiLabs.map((l: any) => this.mapApiLab(l)));
+        this.loading.set(false);
       },
-      {
-        id: 2, name: 'Alfa Laboratories', city: 'Dokki', governorate: 'Giza',
-        testsCount: 195, openingTime: '09:00 AM', closingTime: '10:00 PM',
-        basePrice: 150, rating: 4.7, reviewsCount: 256,
-        about: 'Accredited lab network known for precision in clinical chemistry, microbiology, and endocrine profiling.',
-        testCategories: ['Blood Tests', 'Microbiology', 'Allergy Testing'],
+      error: (err) => {
+        this.error.set(err?.error?.message ?? 'Failed to load labs. Please try again.');
+        this.loading.set(false);
       },
-      {
-        id: 3, name: 'Al-Mokhtabar Labs', city: 'Smouha', governorate: 'Alexandria',
-        testsCount: 310, openingTime: '08:00 AM', closingTime: '11:00 PM',
-        basePrice: 200, rating: 4.9, reviewsCount: 428,
-        about: 'Premier reference laboratory with advanced genetic screening and molecular diagnostics capabilities.',
-        testCategories: ['Genetic Screening', 'Hormone Profile', 'Blood Tests'],
-      },
-      {
-        id: 4, name: 'Speed Lab', city: 'Nasr City', governorate: 'Cairo',
-        testsCount: 140, openingTime: '10:00 AM', closingTime: '09:00 PM',
-        basePrice: 120, rating: 4.5, reviewsCount: 189,
-        about: 'Quick-turnaround diagnostic service specializing in routine checkups, urine analysis, and rapid result delivery.',
-        testCategories: ['Urine Analysis', 'Blood Tests', 'Allergy Testing'],
-      },
-      {
-        id: 5, name: 'PathCare Egypt', city: 'Zamalek', governorate: 'Cairo',
-        testsCount: 280, openingTime: '07:00 AM', closingTime: '10:00 PM',
-        basePrice: 220, rating: 4.8, reviewsCount: 367,
-        about: 'Multi-disciplinary lab offering high-complexity testing in oncology, immunology, and infectious diseases.',
-        testCategories: ['Microbiology', 'Hormone Profile', 'Genetic Screening'],
-      },
-      {
-        id: 6, name: 'ClearView Diagnostics', city: '6th of October', governorate: 'Giza',
-        testsCount: 170, openingTime: '08:00 AM', closingTime: '08:00 PM',
-        basePrice: 160, rating: 4.6, reviewsCount: 145,
-        about: 'Modern diagnostic facility with a focus on radiology imaging, ultrasound, and preventive health screening packages.',
-        testCategories: ['Radiology & Imaging', 'Blood Tests', 'Urine Analysis'],
-      },
-    ]);
+    });
+  }
+
+  private mapApiLab(api: any): Lab {
+    const tests = api.labTests ?? [];
+    const categories = tests.map((t: any) => t.testName).filter(Boolean);
+    const prices = tests.map((t: any) => t.price).filter((p: any) => p != null);
+    return {
+      id: api.id,
+      name: api.name,
+      city: api.city,
+      governorate: api.governorate,
+      testsCount: tests.length,
+      openingTime: api.workingHourStart ?? '--:--',
+      closingTime: api.workingHourEnd ?? '--:--',
+      basePrice: prices.length ? Math.min(...prices) : 0,
+      rating: 0,
+      reviewsCount: 0,
+      about: '',
+      testCategories: categories,
+      picture: api.picture ?? null,
+    };
   }
 
   filteredLabs = computed(() => {
@@ -160,12 +146,6 @@ export class BookLabTestComponent implements OnInit {
       list = list.filter(lab => lab.city === city || lab.governorate === city);
     }
 
-    const sort = this.sortBy();
-    list = [...list];
-    if (sort === 'rating') list.sort((a, b) => b.rating - a.rating);
-    else if (sort === 'priceAsc') list.sort((a, b) => a.basePrice - b.basePrice);
-    else if (sort === 'priceDesc') list.sort((a, b) => b.basePrice - a.basePrice);
-
     return list;
   });
 
@@ -175,8 +155,8 @@ export class BookLabTestComponent implements OnInit {
     this.bookingForm.patchValue({
       testDate: null,
       testTime: '',
-      patientName: 'Mostafa Elabsawy',
-      patientPhone: '01012345678',
+      patientName: '',
+      patientPhone: '',
       selectedTest: '',
       notes: '',
     });
@@ -189,20 +169,25 @@ export class BookLabTestComponent implements OnInit {
     if (this.bookingForm.valid) {
       const formVal = this.bookingForm.value;
       const lab = this.selectedLabForBooking();
-      console.log('--- LAB TEST BOOKED ---');
-      console.log('Lab:', lab?.name);
-      console.log('Test:', formVal.selectedTest);
-      console.log('Date:', formVal.testDate);
-      console.log('Time:', formVal.testTime);
-      console.log('Patient:', formVal.patientName);
-      console.log('Phone:', formVal.patientPhone);
-      console.log('Notes:', formVal.notes);
+      if (!lab || !formVal.testDate) return;
 
-      this.bookingSuccess.set(true);
-      setTimeout(() => {
-        this.displayBookingDialog.set(false);
-        this.bookingSuccess.set(false);
-      }, 2500);
+      const date = formVal.testDate;
+      const dateStr = `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}`;
+
+      this.appointmentService.bookAppointment({
+        doctorId: lab.id,
+        date: dateStr,
+        time: formVal.testTime || '',
+      }).subscribe({
+        next: () => {
+          this.bookingSuccess.set(true);
+          setTimeout(() => {
+            this.displayBookingDialog.set(false);
+            this.bookingSuccess.set(false);
+          }, 2500);
+        },
+        error: () => {},
+      });
     } else {
       this.bookingForm.markAllAsTouched();
     }

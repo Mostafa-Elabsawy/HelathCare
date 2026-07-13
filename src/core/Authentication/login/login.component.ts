@@ -8,6 +8,8 @@ import { ButtonDirective } from 'primeng/button';
 import { Router } from '@angular/router';
 import { LoginAPI, LoginResponseAPI } from '../../../models/auth.interface';
 import { AuthService } from '../../../services/login.service';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 type RoleType = 'patient' | 'doctor' | 'lab';
 @Component({
@@ -19,7 +21,9 @@ type RoleType = 'patient' | 'doctor' | 'lab';
         ReactiveFormsModule,
         ButtonDirective,
         RadioButtonModule,
+        ToastModule,
     ],
+    providers: [MessageService],
     templateUrl: './login.component.html',
 })
 export class Login {
@@ -46,14 +50,16 @@ export class Login {
     remember = false;
     router = inject(Router);
     loginService = inject(AuthService);
+    messageService = inject(MessageService);
     onSubmit() {
         const data: LoginAPI = this.loginData.getRawValue();
         this.loginService.login(data).subscribe({
             next: (res: LoginResponseAPI) => {
-                this.router.navigate(['/dashboard']);
+                this.messageService.add({ severity: 'success', summary: 'Welcome', detail: 'Login successful!' });
+                setTimeout(() => this.router.navigate(['/dashboard']), 1000);
             },
             error: (err: any) => {
-                console.log(err);
+                this.messageService.add({ severity: 'error', summary: 'Login Failed', detail: err.error?.message || 'Invalid credentials. Please try again.' });
             },
         });
     }
