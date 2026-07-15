@@ -46,7 +46,7 @@
                         <div class="bg-white/70 backdrop-blur-xl border border-gray-100 rounded-3xl shadow-sm p-6 md:p-8">
 
                             <h1 class="text-2xl font-bold text-slate-800 mb-1">Book Lab Test</h1>
-                            <p class="text-sm text-slate-500 mb-6">at <span class="font-semibold text-slate-700">{{ lab.name }}</span></p>
+                            <p class="text-sm text-slate-500 mb-6">at <span class="font-semibold text-slate-700">{{ lab.name || 'Laboratory' }}</span></p>
 
                             <form [formGroup]="bookingForm" (ngSubmit)="submitBooking()" class="space-y-6">
 
@@ -120,7 +120,7 @@
                                 <div>
                                     <h2 class="text-xl font-bold text-slate-800">{{ lab.name }}</h2>
                                     <div class="flex items-center gap-2 mt-1">
-                                        <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 border">{{ lab.labTests?.length ?? 0 }} Tests</span>
+                                        <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 border">{{ lab.labTests?.length || 'Various' }} Tests</span>
                                         <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-violet-50 text-violet-700 border border-violet-100">Certified</span>
                                     </div>
                                 </div>
@@ -128,11 +128,11 @@
                                 <div class="space-y-3 border-t border-slate-100 pt-4">
                                     <div class="flex items-center gap-3 text-sm text-slate-600">
                                         <i class="pi pi-clock text-violet-500 w-4"></i>
-                                        <span>Hours: {{ lab.workingHourStart || '---' }} - {{ lab.workingHourEnd || '---' }}</span>
+                                        <span>Hours: {{ lab.workingHourStart || '08:00' }} - {{ lab.workingHourEnd || '20:00' }}</span>
                                     </div>
                                     <div class="flex items-center gap-3 text-sm text-slate-600">
                                         <i class="pi pi-map-marker text-violet-500 w-4"></i>
-                                        <span>{{ lab.city }}, {{ lab.governorate }}</span>
+                                        <span>{{ lab.city || 'Unknown' }}, {{ lab.governorate || 'Unknown' }}</span>
                                     </div>
                                 </div>
 
@@ -142,7 +142,7 @@
                                         @for (test of lab.labTests; track $index) {
                                             <div class="flex items-center justify-between text-sm">
                                                 <span class="text-slate-700">{{ test.testName }}</span>
-                                                <span class="font-semibold text-slate-800">{{ test.price }} <span class="text-xs text-slate-400">EGP</span></span>
+                                                <span class="font-semibold text-slate-800">{{ test.price || '---' }} <span class="text-xs text-slate-400">EGP</span></span>
                                             </div>
                                         }
                                     </div>

@@ -48,7 +48,7 @@ export class LabCheckoutComponent implements OnInit {
             { label: 'Urinalysis - 60 EGP', value: 'Urinalysis' },
             { label: 'ECG (Electrocardiogram) - 120 EGP', value: 'ECG' },
         ];
-        const real = (this.lab()?.labTests ?? []).map((t: any) => ({ label: `${t.testName} - ${t.price} EGP`, value: t.testName }));
+        const real = (this.lab()?.labTests ?? []).map((t: any) => ({ label: `${t.testName} - ${t.price || '---'} EGP`, value: t.testName }));
         const options = real.length > 0 ? real : fake;
         return [{ label: 'Select a test type', value: '', disabled: true }, ...options];
     });

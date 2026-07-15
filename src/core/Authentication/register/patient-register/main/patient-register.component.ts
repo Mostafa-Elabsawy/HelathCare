@@ -1,4 +1,5 @@
 import { Component, computed, inject, Signal, signal, WritableSignal } from '@angular/core';
+import { Router } from '@angular/router';
 import { Personal } from '../personal/personal.component';
 import { AnimateOnScrollModule } from 'primeng/animateonscroll';
 import { StepperModule } from 'primeng/stepper';
@@ -45,6 +46,7 @@ export class PatientRegister {
     patientService = inject(PatientService);
     breakpointService = inject(BreakpointService);
     messageService = inject(MessageService);
+    router = inject(Router);
     fluidCheck: Signal<boolean> = computed(() => this.breakpointService.isMobile());
     activeStep = 1;
     validation = signal<boolean>(false);
@@ -76,6 +78,7 @@ export class PatientRegister {
         this.patientService.registerPatient(finalObject).subscribe({
             next: (res) => {
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Registration successful! Redirecting...' });
+                setTimeout(() => this.router.navigate(['/login']), 1000);
             },
             error: (err) => {
                 this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error?.message || 'Registration failed. Please try again.' });

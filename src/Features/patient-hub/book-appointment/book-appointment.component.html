@@ -141,7 +141,7 @@
               <div class="absolute top-3 right-3 flex items-center gap-1 bg-white/90 text-amber-700 px-2.5 py-1 rounded-xl text-xs font-bold shadow">
                 <i class="pi pi-star-fill text-[10px]"></i>
                 {{ doctor.rating }}
-                <span class="text-slate-500 font-normal">({{ doctor.reviewsCount }})</span>
+                <span class="text-slate-500 font-normal">({{ doctor.reviewsCount || 0 }})</span>
               </div>
 
             </div>
@@ -169,20 +169,20 @@
               <!-- INFO -->
               <div class="space-y-2 border-t border-slate-100 pt-4 mt-4 mb-5">
 
-                <div class="flex items-center gap-2 text-xs text-slate-500">
-                  <i class="pi pi-calendar text-primary-500"></i>
-                  Days: {{ doctor.workingDays.join(', ') }}
-                </div>
+                  <div class="flex items-center gap-2 text-xs text-slate-500">
+                    <i class="pi pi-calendar text-primary-500"></i>
+                    Days: {{ (doctor.workingDays.length ? doctor.workingDays.join(', ') : 'Not specified') }}
+                  </div>
 
-                <div class="flex items-center gap-2 text-xs text-slate-500">
-                  <i class="pi pi-clock text-primary-500"></i>
-                  Hours: {{ doctor.workingHourStart }} - {{ doctor.workingHourEnd }}
-                </div>
+                  <div class="flex items-center gap-2 text-xs text-slate-500">
+                    <i class="pi pi-clock text-primary-500"></i>
+                    Hours: {{ doctor.workingHourStart || '--:--' }} - {{ doctor.workingHourEnd || '--:--' }}
+                  </div>
 
-                <div class="flex items-center gap-2 text-xs text-slate-500">
-                  <i class="pi pi-map-marker text-primary-500"></i>
-                  Clinic: {{ doctor.city }}, {{ doctor.governorate }}
-                </div>
+                  <div class="flex items-center gap-2 text-xs text-slate-500">
+                    <i class="pi pi-map-marker text-primary-500"></i>
+                    {{ doctor.city || 'Unknown' }}, {{ doctor.governorate || 'Unknown' }}
+                  </div>
 
               </div>
 
@@ -192,7 +192,7 @@
                 <div>
                   <p class="text-[10px] uppercase font-bold text-slate-400">Consultation Fee</p>
                   <p class="text-xl font-extrabold text-slate-800">
-                    {{ doctor.price }} <span class="text-xs text-slate-400">EGP</span>
+                    {{ doctor.price || '---' }} <span class="text-xs text-slate-400">EGP</span>
                   </p>
                 </div>
 

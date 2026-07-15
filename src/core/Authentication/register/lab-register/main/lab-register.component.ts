@@ -1,4 +1,5 @@
 import { Component, computed, inject, Signal, signal, WritableSignal } from '@angular/core';
+import { Router } from '@angular/router';
 import { AnimateOnScrollModule } from 'primeng/animateonscroll';
 import { StepperModule } from 'primeng/stepper';
 import { ButtonModule } from 'primeng/button';
@@ -37,6 +38,7 @@ export class LabRegister {
     breakpointService = inject(BreakpointService);
     labService = inject(LabService);
     messageService = inject(MessageService);
+    router = inject(Router);
     fluidCheck: Signal<boolean> = computed(() => this.breakpointService.isMobile());
     title = new FormControl('');
     activeStep = 1;
@@ -64,6 +66,7 @@ export class LabRegister {
         this.labService.registerLab(finalObject).subscribe({
             next: (res) => {
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Registration successful! Redirecting...' });
+                setTimeout(() => this.router.navigate(['/login']), 1000);
             },
             error: (err) => {
                 this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error?.message || 'Registration failed. Please try again.' });

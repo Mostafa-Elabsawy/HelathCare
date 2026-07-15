@@ -111,7 +111,7 @@
 
               <div class="flex items-center gap-2 mt-1">
                 <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 border">
-                  {{ lab.testsCount }} Tests
+                  {{ lab.testsCount || 'Various' }} Tests
                 </span>
                 <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-violet-50 text-violet-700 border border-violet-100">
                   Certified
@@ -119,25 +119,25 @@
               </div>
 
               <div class="space-y-2 border-t border-slate-100 pt-4 mt-4 mb-5">
-                <div class="flex items-center gap-2 text-xs text-slate-500">
-                  <i class="pi pi-clock text-violet-500"></i>
-                  {{ lab.openingTime }} - {{ lab.closingTime }}
-                </div>
-                <div class="flex items-center gap-2 text-xs text-slate-500">
-                  <i class="pi pi-map-marker text-violet-500"></i>
-                  {{ lab.city }}, {{ lab.governorate }}
-                </div>
-                <div class="flex items-center gap-2 text-xs text-slate-500">
-                  <i class="pi pi-tags text-violet-500"></i>
-                  {{ lab.testCategories.join(', ') }}
-                </div>
+                  <div class="flex items-center gap-2 text-xs text-slate-500">
+                    <i class="pi pi-clock text-violet-500"></i>
+                    {{ lab.openingTime || '08:00' }} - {{ lab.closingTime || '20:00' }}
+                  </div>
+                  <div class="flex items-center gap-2 text-xs text-slate-500">
+                    <i class="pi pi-map-marker text-violet-500"></i>
+                    {{ lab.city || 'Unknown' }}, {{ lab.governorate || 'Unknown' }}
+                  </div>
+                  <div class="flex items-center gap-2 text-xs text-slate-500">
+                    <i class="pi pi-tags text-violet-500"></i>
+                    {{ lab.testCategories.length ? lab.testCategories.join(', ') : 'Various tests available' }}
+                  </div>
               </div>
 
               <div class="border-t border-slate-100 pt-4 mt-auto flex items-center justify-between gap-4">
                 <div>
                   <p class="text-[10px] uppercase font-bold text-slate-400">Starting From</p>
                   <p class="text-xl font-extrabold text-slate-800">
-                    {{ lab.basePrice }} <span class="text-xs text-slate-400">EGP</span>
+                    {{ lab.basePrice || '---' }} <span class="text-xs text-slate-400">EGP</span>
                   </p>
                 </div>
                 <a [routerLink]="['/patient-hub/book-lab-test', lab.id]" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-violet-600 text-white font-semibold hover:bg-violet-700 transition cursor-pointer">

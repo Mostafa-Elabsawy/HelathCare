@@ -1,4 +1,5 @@
 import { Component, computed, inject, Signal, signal, WritableSignal } from '@angular/core';
+import { Router } from '@angular/router';
 import { Personal } from '../personal/personal.component';
 import { AnimateOnScrollModule } from 'primeng/animateonscroll';
 import { StepperModule } from 'primeng/stepper';
@@ -59,6 +60,7 @@ export class DoctorRegister {
     }
     doctorService = inject(DoctorService);
     messageService = inject(MessageService);
+    router = inject(Router);
     submitForm() {
         if (this.personaldata().valid && this.contactdata().valid && this.securitydata().valid) {
             // console.log(this.personaldata());
@@ -72,6 +74,7 @@ export class DoctorRegister {
             this.doctorService.registerDoctor(finalObject).subscribe({
                 next: (res) => {
                     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Registration successful! Redirecting...' });
+                    setTimeout(() => this.router.navigate(['/login']), 1000);
                 },
                 error: (err) => {
                     this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error?.message || 'Registration failed. Please try again.' });

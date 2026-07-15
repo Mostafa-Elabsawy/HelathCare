@@ -16,12 +16,12 @@ export class DashboardsComponent {
         effect(() => {
             let currentRole = this.authService.role();
             console.log('user = ', this.authService.user());
-            // if (currentRole) {
-            //     console.log('role = ', currentRole);
-            //     this.router.navigate([`/dashboard/${currentRole.toLowerCase()}`], {
-            //         replaceUrl: true,
-            //     });
-            // }
+            if (currentRole) {
+                console.log('role = ', currentRole);
+                this.router.navigate([`/dashboard/${currentRole.toLowerCase()}`], {
+                    replaceUrl: true,
+                });
+            }
         });
     }
 }

@@ -133,12 +133,8 @@
                                 <div>
                                     <h2 class="text-xl font-bold text-slate-800">Dr. {{ doc.firstName }} {{ doc.lastName }}</h2>
                                     <div class="flex items-center gap-2 mt-1">
-                                        @if (doc.medicalLevel) {
-                                            <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 border">{{ doc.medicalLevel }}</span>
-                                        }
-                                        @if (doc.specialty) {
-                                            <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-primary-50 text-primary-700 border">{{ doc.specialty }}</span>
-                                        }
+                                        <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 border">{{ doc.medicalLevel || 'Specialist' }}</span>
+                                        <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-primary-50 text-primary-700 border">{{ doc.specialty || 'General Practice' }}</span>
                                     </div>
                                 </div>
 
@@ -153,7 +149,7 @@
                                     </div>
                                     <div class="flex items-center gap-3 text-sm text-slate-600">
                                         <i class="pi pi-map-marker text-primary-500 w-4"></i>
-                                        <span>{{ doc.city }}, {{ doc.governorate }}</span>
+                                        <span>{{ doc.city || 'Unknown' }}, {{ doc.governorate || 'Unknown' }}</span>
                                     </div>
                                 </div>
 

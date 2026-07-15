@@ -43,7 +43,7 @@ export const routes: Routes = [
     //redirect to home if path is empty
     {
         path: '',
-        redirectTo: '/dashboard/patient',
+        redirectTo: '/home',
         pathMatch: 'full',
     },
 
