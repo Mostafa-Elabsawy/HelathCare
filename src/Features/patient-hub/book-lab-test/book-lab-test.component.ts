@@ -1,14 +1,11 @@
 import { Component, OnInit, signal, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormGroup, ReactiveFormsModule, FormsModule, Validators } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
-import { DialogModule } from 'primeng/dialog';
-import { DatePickerModule } from 'primeng/datepicker';
 import { RouterLink } from '@angular/router';
 import { LabService } from '../../../services/lab.service';
-import { AppointmentService } from '../../../services/appointment.service';
 
 export interface Lab {
   id: number;
@@ -31,13 +28,10 @@ export interface Lab {
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule,
     FormsModule,
     InputTextModule,
     SelectModule,
     ButtonModule,
-    DialogModule,
-    DatePickerModule,
     RouterLink
   ],
   templateUrl: './book-lab-test.component.html',
@@ -45,7 +39,6 @@ export interface Lab {
 })
 export class BookLabTestComponent implements OnInit {
   private labService = inject(LabService);
-  private appointmentService = inject(AppointmentService);
 
   labs = signal<Lab[]>([]);
   loading = signal(false);
@@ -53,19 +46,6 @@ export class BookLabTestComponent implements OnInit {
   searchQuery = signal<string>('');
   selectedTestCategory = signal<string | null>(null);
   selectedCity = signal<string | null>(null);
-
-  displayBookingDialog = signal<boolean>(false);
-  selectedLabForBooking = signal<Lab | null>(null);
-  bookingSuccess = signal<boolean>(false);
-
-  bookingForm = new FormGroup({
-    testDate: new FormControl<Date | null>(null, [Validators.required]),
-    testTime: new FormControl<string>('', [Validators.required]),
-    patientName: new FormControl('', [Validators.required]),
-    patientPhone: new FormControl('', [Validators.required, Validators.pattern('^[0-9]{11}$')]),
-    selectedTest: new FormControl('', [Validators.required]),
-    notes: new FormControl(''),
-  });
 
   testCategories = computed(() => {
     const unique = [...new Set(this.labs().flatMap(l => l.testCategories).filter(Boolean))];
@@ -76,12 +56,6 @@ export class BookLabTestComponent implements OnInit {
     const unique = [...new Set(this.labs().map(l => l.city).filter(Boolean))];
     return [{ label: 'All Cities', value: null }, ...unique.map(c => ({ label: c, value: c }))];
   });
-
-  availableTimeSlots: string[] = [
-    '08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM',
-    '12:00 PM', '01:00 PM', '02:00 PM', '03:00 PM',
-    '04:00 PM', '05:00 PM', '06:00 PM', '07:00 PM',
-  ];
 
   ngOnInit() {
     this.loadLabs();
@@ -148,53 +122,4 @@ export class BookLabTestComponent implements OnInit {
 
     return list;
   });
-
-  openBookingDialog(lab: Lab) {
-    this.selectedLabForBooking.set(lab);
-    this.bookingSuccess.set(false);
-    this.bookingForm.patchValue({
-      testDate: null,
-      testTime: '',
-      patientName: '',
-      patientPhone: '',
-      selectedTest: '',
-      notes: '',
-    });
-    this.bookingForm.markAsPristine();
-    this.bookingForm.markAsUntouched();
-    this.displayBookingDialog.set(true);
-  }
-
-  submitBooking() {
-    if (this.bookingForm.valid) {
-      const formVal = this.bookingForm.value;
-      const lab = this.selectedLabForBooking();
-      if (!lab || !formVal.testDate) return;
-
-      const date = formVal.testDate;
-      const dateStr = `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}`;
-
-      this.appointmentService.bookAppointment({
-        doctorId: lab.id,
-        date: dateStr,
-        time: formVal.testTime || '',
-      }).subscribe({
-        next: () => {
-          this.bookingSuccess.set(true);
-          setTimeout(() => {
-            this.displayBookingDialog.set(false);
-            this.bookingSuccess.set(false);
-          }, 2500);
-        },
-        error: () => {},
-      });
-    } else {
-      this.bookingForm.markAllAsTouched();
-    }
-  }
-
-  isInvalid(controlName: string): boolean {
-    const control = this.bookingForm.get(controlName);
-    return !!(control && control.invalid && (control.touched || control.dirty));
-  }
 }

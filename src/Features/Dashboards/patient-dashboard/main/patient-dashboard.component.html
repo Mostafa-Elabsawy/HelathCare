@@ -48,6 +48,12 @@
                     <span class="text-sm font-medium">Appointments</span>
                 </a>
 
+                <a routerLink="Lab-Appointments" [replaceUrl]="true" routerLinkActive="active" class="nav-item">
+
+                    <i class="fa-solid fa-flask text-sm"></i>
+                    <span class="text-sm font-medium">Lab Appointments</span>
+                </a>
+
                 <a routerLink="Visits" [replaceUrl]="true" routerLinkActive="active" class="nav-item">
 
                     <i class="fa-solid fa-house-medical text-sm"></i>
@@ -105,6 +111,13 @@
             <h1 class="text-lg font-semibold text-gray-700">
                 Patient Portal
             </h1>
+
+            <div class="ml-auto flex items-center gap-2">
+                <a routerLink="/patient-hub" class="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium text-gray-500 hover:text-primary-600 hover:bg-primary-50 transition">
+                    <i class="fa-solid fa-store text-xs"></i>
+                    Explore Services
+                </a>
+            </div>
 
         </header>
 

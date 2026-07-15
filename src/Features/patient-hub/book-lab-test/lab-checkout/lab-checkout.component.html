@@ -1,0 +1,163 @@
+<div class="min-h-screen bg-slate-50 text-slate-900 pb-16">
+    <main class="mx-auto px-4 md:px-6 py-8 md:py-10 max-w-7xl">
+
+        @if (success()) {
+            <div class="max-w-lg mx-auto mt-20 text-center bg-white/70 backdrop-blur-xl border border-gray-100 rounded-3xl shadow-sm p-10">
+                <div class="mx-auto w-20 h-20 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mb-5 border border-emerald-100">
+                    <i class="pi pi-check text-4xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-slate-800">Test Booked Successfully</h2>
+                <p class="text-sm text-slate-500 mt-2 leading-relaxed">
+                    Your lab test at
+                    <span class="font-semibold text-slate-700">{{ lab()?.name }}</span>
+                    has been successfully booked.
+                </p>
+                <div class="mt-8 flex gap-3 justify-center">
+                    <a routerLink="/patient-hub/book-lab-test" class="px-6 py-2.5 rounded-2xl border border-slate-200 text-slate-600 font-semibold hover:bg-slate-50 transition">Back to Labs</a>
+                    <a routerLink="/dashboard/patient/Lab-Appointments" class="px-6 py-2.5 rounded-2xl bg-violet-600 text-white font-semibold hover:bg-violet-700 transition">View Appointments</a>
+                </div>
+            </div>
+        } @else {
+
+            <div class="mb-6">
+                <a routerLink="/patient-hub/book-lab-test" class="inline-flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-violet-700 transition">
+                    <i class="pi pi-angle-left"></i>
+                    Back to Laboratories
+                </a>
+            </div>
+
+            @if (loading()) {
+                <div class="flex items-center justify-center py-20">
+                    <i class="pi pi-spin pi-spinner text-4xl text-violet-600"></i>
+                </div>
+            } @else if (error()) {
+                <div class="max-w-md mx-auto mt-10 bg-white/70 border border-gray-100 rounded-3xl p-8 text-center">
+                    <div class="w-16 h-16 bg-red-50 text-red-400 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="pi pi-exclamation-triangle text-2xl"></i>
+                    </div>
+                    <p class="text-slate-600">{{ error() }}</p>
+                </div>
+            } @else if (lab(); as lab) {
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+                    <!-- Left — Booking Form -->
+                    <div class="lg:col-span-7">
+                        <div class="bg-white/70 backdrop-blur-xl border border-gray-100 rounded-3xl shadow-sm p-6 md:p-8">
+
+                            <h1 class="text-2xl font-bold text-slate-800 mb-1">Book Lab Test</h1>
+                            <p class="text-sm text-slate-500 mb-6">at <span class="font-semibold text-slate-700">{{ lab.name }}</span></p>
+
+                            <form [formGroup]="bookingForm" (ngSubmit)="submitBooking()" class="space-y-6">
+
+                                <!-- Test Type -->
+                                <div>
+                                    <label class="block text-xs font-bold uppercase text-slate-500 mb-2">Test Type</label>
+                                    <p-select formControlName="selectedTest" [options]="testOptions()" class="w-full" placeholder="Select a test"></p-select>
+                                    @if (isInvalid('selectedTest')) {
+                                        <p class="text-xs text-red-500 mt-1">Please select a test type.</p>
+                                    }
+                                </div>
+
+                                <!-- Date -->
+                                <div>
+                                    <label class="block text-xs font-bold uppercase text-slate-500 mb-2">Appointment Date</label>
+                                    <p-date-picker formControlName="appointmentDate" class="w-full" [minDate]="minDate"></p-date-picker>
+                                    @if (isInvalid('appointmentDate')) {
+                                        <p class="text-xs text-red-500 mt-1">Please select a valid date.</p>
+                                    }
+                                </div>
+
+                                <!-- Time -->
+                                <div>
+                                    <label class="block text-xs font-bold uppercase text-slate-500 mb-2">Time Slot</label>
+                                    <div class="grid grid-cols-4 md:grid-cols-5 gap-2">
+                                        @for (slot of availableTimeSlots; track slot) {
+                                            <button type="button"
+                                                (click)="bookingForm.get('appointmentTime')?.setValue(slot)"
+                                                class="px-2 py-2.5 rounded-xl text-xs font-semibold border transition"
+                                                [ngClass]="{
+                                                    'bg-violet-600 text-white border-violet-600': bookingForm.value.appointmentTime === slot,
+                                                    'bg-white text-slate-600 border-slate-200 hover:border-violet-300': bookingForm.value.appointmentTime !== slot
+                                                }">
+                                                {{ slot }}
+                                            </button>
+                                        }
+                                    </div>
+                                    @if (isInvalid('appointmentTime')) {
+                                        <p class="text-xs text-red-500 mt-1">Please select a time slot.</p>
+                                    }
+                                </div>
+
+                                <!-- Submit -->
+                                <div class="border-t border-slate-100 pt-6">
+                                    <button type="submit" [disabled]="submitting()"
+                                        class="w-full py-3 rounded-2xl bg-violet-600 text-white font-semibold hover:bg-violet-700 disabled:bg-slate-300 transition flex items-center justify-center gap-2">
+                                        @if (submitting()) {
+                                            <i class="pi pi-spin pi-spinner"></i>
+                                        }
+                                        {{ submitting() ? 'Booking...' : 'Confirm Booking' }}
+                                    </button>
+                                </div>
+
+                            </form>
+
+                        </div>
+                    </div>
+
+                    <!-- Right — Lab Card -->
+                    <div class="lg:col-span-5">
+                        <div class="bg-white/70 backdrop-blur-xl border border-gray-100 rounded-3xl shadow-sm overflow-hidden sticky top-6">
+
+                            <div class="relative w-full h-52 overflow-hidden">
+                                <img [src]="lab.picture || 'lab.webp'"
+                                    alt="Laboratory" class="w-full h-full object-cover" />
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+                            </div>
+
+                            <div class="p-6 space-y-5">
+
+                                <div>
+                                    <h2 class="text-xl font-bold text-slate-800">{{ lab.name }}</h2>
+                                    <div class="flex items-center gap-2 mt-1">
+                                        <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 border">{{ lab.labTests?.length ?? 0 }} Tests</span>
+                                        <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-violet-50 text-violet-700 border border-violet-100">Certified</span>
+                                    </div>
+                                </div>
+
+                                <div class="space-y-3 border-t border-slate-100 pt-4">
+                                    <div class="flex items-center gap-3 text-sm text-slate-600">
+                                        <i class="pi pi-clock text-violet-500 w-4"></i>
+                                        <span>Hours: {{ lab.workingHourStart || '---' }} - {{ lab.workingHourEnd || '---' }}</span>
+                                    </div>
+                                    <div class="flex items-center gap-3 text-sm text-slate-600">
+                                        <i class="pi pi-map-marker text-violet-500 w-4"></i>
+                                        <span>{{ lab.city }}, {{ lab.governorate }}</span>
+                                    </div>
+                                </div>
+
+                                <div class="border-t border-slate-100 pt-4">
+                                    <p class="text-[10px] uppercase font-bold text-slate-400 mb-2">Available Tests</p>
+                                    <div class="space-y-2">
+                                        @for (test of lab.labTests; track $index) {
+                                            <div class="flex items-center justify-between text-sm">
+                                                <span class="text-slate-700">{{ test.testName }}</span>
+                                                <span class="font-semibold text-slate-800">{{ test.price }} <span class="text-xs text-slate-400">EGP</span></span>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            }
+
+        }
+
+    </main>
+</div>

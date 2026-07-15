@@ -13,11 +13,13 @@ import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { RouterLink } from '@angular/router';
 import { PatientService } from '../../../../services/patient.service';
-import { PatientAppointmentsAPI } from '../../../../models/appointment-interface';
+import { FullPatientLabAppointmentAPI } from '../../../../models/appointment-interface';
 
-interface PatientAppointmentDisplay extends PatientAppointmentsAPI {
+interface LabAppointmentDisplay extends FullPatientLabAppointmentAPI {
     day: string;
     month: string;
+    formattedDate: string;
+    formattedTime: string;
     period: 'today' | 'upcoming';
 }
 
@@ -32,13 +34,17 @@ const MONTH_NAMES = [
     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
 ];
 
+function parseIsoDate(dateStr: string): Date {
+    const d = new Date(dateStr);
+    return isNaN(d.getTime()) ? new Date() : d;
+}
+
 function formatDate(dateStr: string): { day: string; month: string; formattedDate: string } {
-    const [y, m, d] = dateStr.split('-').map(Number);
-    return {
-        day: d.toString().padStart(2, '0'),
-        month: MONTH_NAMES[m - 1] || '---',
-        formattedDate: `${d} ${MONTH_NAMES[m - 1] || '---'} ${y}`,
-    };
+    const d = parseIsoDate(dateStr);
+    const day = d.getDate().toString().padStart(2, '0');
+    const month = MONTH_NAMES[d.getMonth()] || '---';
+    const formattedDate = `${day} ${month} ${d.getFullYear()}`;
+    return { day, month, formattedDate };
 }
 
 function formatTime12h(time: string): string {
@@ -50,24 +56,28 @@ function formatTime12h(time: string): string {
 }
 
 function isToday(dateStr: string): boolean {
-    const [y, m, d] = dateStr.split('-').map(Number);
+    const d = parseIsoDate(dateStr);
     const today = new Date();
-    return y === today.getFullYear() && m === today.getMonth() + 1 && d === today.getDate();
+    return (
+        d.getFullYear() === today.getFullYear() &&
+        d.getMonth() === today.getMonth() &&
+        d.getDate() === today.getDate()
+    );
 }
 
 @Component({
-    selector: 'app-appointments',
+    selector: 'app-lab-appointments',
     imports: [FormsModule, SelectModule, ButtonModule, DialogModule, RouterLink],
-    templateUrl: './appointments.component.html',
+    templateUrl: './lab-appointments.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Appointments {
+export class LabAppointments {
     private patientService = inject(PatientService);
 
     selectedStatus = signal<string>('All');
-    selectedAppointment = signal<PatientAppointmentDisplay | null>(null);
+    selectedAppointment = signal<LabAppointmentDisplay | null>(null);
     detailsVisible = signal(false);
-    displayAppointments = signal<PatientAppointmentDisplay[]>([]);
+    displayAppointments = signal<LabAppointmentDisplay[]>([]);
 
     statusOptions = ['All', 'Pending', 'Approved', 'Rejected'];
 
@@ -75,7 +85,7 @@ export class Appointments {
         const status = this.selectedStatus();
         return status === 'All'
             ? this.displayAppointments()
-            : this.displayAppointments().filter((a) => a.state === status);
+            : this.displayAppointments().filter((a) => a.status === status);
     });
 
     todayAppointments = computed(() =>
@@ -90,7 +100,7 @@ export class Appointments {
         return STATUS_STYLES[state] || 'bg-gray-100 text-gray-600';
     }
 
-    openDetails(appointment: PatientAppointmentDisplay): void {
+    openDetails(appointment: LabAppointmentDisplay): void {
         this.selectedAppointment.set(appointment);
         this.detailsVisible.set(true);
     }
@@ -99,15 +109,15 @@ export class Appointments {
         this.detailsVisible.set(false);
     }
 
-    private formatAppointments(ap: PatientAppointmentsAPI[]): PatientAppointmentDisplay[] {
+    private formatAppointments(ap: FullPatientLabAppointmentAPI[]): LabAppointmentDisplay[] {
         return ap.map((a) => {
             const { day, month, formattedDate } = formatDate(a.date);
             return {
                 ...a,
                 day,
                 month,
-                date: formattedDate,
-                time: formatTime12h(a.time),
+                formattedDate,
+                formattedTime: formatTime12h(a.time),
                 period: isToday(a.date) ? 'today' : 'upcoming',
             };
         });
@@ -115,7 +125,7 @@ export class Appointments {
 
     constructor() {
         effect(() => {
-            const appointments = this.patientService.appointments();
+            const appointments = this.patientService.labAppointments();
             untracked(() => {
                 this.displayAppointments.set(this.formatAppointments(appointments));
             });

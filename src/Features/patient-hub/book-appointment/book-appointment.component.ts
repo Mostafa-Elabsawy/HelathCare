@@ -1,14 +1,11 @@
 import { Component, OnInit, signal, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormGroup, ReactiveFormsModule, FormsModule, Validators } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
-import { DialogModule } from 'primeng/dialog';
-import { DatePickerModule } from 'primeng/datepicker';
 import { RouterLink } from '@angular/router';
 import { DoctorService } from '../../../services/doctor.service';
-import { AppointmentService } from '../../../services/appointment.service';
 import { DoctorProfileResponseAPI } from '../../../models/doctor-api.interface';
 
 export interface Doctor {
@@ -34,13 +31,10 @@ export interface Doctor {
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule,
     FormsModule,
     InputTextModule,
     SelectModule,
     ButtonModule,
-    DialogModule,
-    DatePickerModule,
     RouterLink
   ],
   templateUrl: './book-appointment.component.html',
@@ -48,9 +42,7 @@ export interface Doctor {
 })
 export class BookAppointmentComponent implements OnInit {
   private doctorService = inject(DoctorService);
-  private appointmentService = inject(AppointmentService);
 
-  // State Signals
   doctors = signal<Doctor[]>([]);
   loading = signal(false);
   error = signal<string | null>(null);
@@ -59,20 +51,6 @@ export class BookAppointmentComponent implements OnInit {
   selectedMedicalLevel = signal<string | null>(null);
   selectedDay = signal<string | null>(null);
   selectedGender = signal<string | null>(null);
-
-  // Booking Modal States
-  displayBookingDialog = signal<boolean>(false);
-  selectedDoctorForBooking = signal<Doctor | null>(null);
-  bookingSuccess = signal<boolean>(false);
-
-  // Booking Form
-  bookingForm = new FormGroup({
-    appointmentDate: new FormControl<Date | null>(null, [Validators.required]),
-    appointmentTime: new FormControl<string>('', [Validators.required]),
-    patientName: new FormControl('', [Validators.required]),
-    patientPhone: new FormControl('', [Validators.required, Validators.pattern('^[0-9]{11}$')]),
-    notes: new FormControl(''),
-  });
 
   // Filter Options
   specialties = computed(() => {
@@ -103,14 +81,6 @@ export class BookAppointmentComponent implements OnInit {
   ];
 
 
-
-  // Available slots for selected day (Mock Slots)
-  availableTimeSlots: string[] = [
-    '09:00 AM', '09:30 AM', '10:00 AM', '10:30 AM', 
-    '11:00 AM', '11:30 AM', '01:00 PM', '01:30 PM', 
-    '02:00 PM', '02:30 PM', '03:00 PM', '03:30 PM',
-    '05:00 PM', '05:30 PM', '06:00 PM', '06:30 PM'
-  ];
 
   ngOnInit() {
     this.loadDoctors();
@@ -194,81 +164,4 @@ export class BookAppointmentComponent implements OnInit {
     return list;
   });
 
-  // Open booking flow
-  openBookingDialog(doctor: Doctor) {
-    this.selectedDoctorForBooking.set(doctor);
-    this.bookingSuccess.set(false);
-    
-    // Autofill with logged-in user's email (name/phone filled by patient)
-    this.bookingForm.patchValue({
-      appointmentDate: null,
-      appointmentTime: '',
-      patientName: '',
-      patientPhone: '',
-      notes: ''
-    });
-    this.bookingForm.markAsPristine();
-    this.bookingForm.markAsUntouched();
-    
-    this.displayBookingDialog.set(true);
-  }
-
-  // Get weekday name from selected date
-  getWeekdayName(date: Date | null): string {
-    if (!date) return '';
-    return date.toLocaleDateString('en-US', { weekday: 'long' });
-  }
-
-  // Check if selected date corresponds to a day the doctor works
-  isDoctorAvailableOnSelectedDate(): boolean {
-    const doctor = this.selectedDoctorForBooking();
-    const date = this.bookingForm.value.appointmentDate;
-    if (!doctor || !date) return false;
-    
-    const selectedDayName = this.getWeekdayName(date);
-    return doctor.workingDays.includes(selectedDayName);
-  }
-
-  // Confirm and submit booking via API
-  submitBooking() {
-    if (this.bookingForm.valid) {
-      if (!this.isDoctorAvailableOnSelectedDate()) {
-        this.bookingForm.get('appointmentDate')?.setErrors({ doctorUnavailable: true });
-        return;
-      }
-
-      const formVal = this.bookingForm.value;
-      const doctor = this.selectedDoctorForBooking();
-      
-      if (!doctor || !formVal.appointmentDate) return;
-
-      const date = formVal.appointmentDate;
-      const dateStr = `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}`;
-
-      this.appointmentService.bookAppointment({
-        doctorId: doctor.id,
-        date: dateStr,
-        time: formVal.appointmentTime || '',
-      }).subscribe({
-        next: () => {
-          this.bookingSuccess.set(true);
-          setTimeout(() => {
-            this.displayBookingDialog.set(false);
-            this.bookingSuccess.set(false);
-          }, 2500);
-        },
-        error: () => {
-          // Optionally show error feedback
-        },
-      });
-    } else {
-      this.bookingForm.markAllAsTouched();
-    }
-  }
-
-  // Helper validation styling
-  isInvalid(controlName: string): boolean {
-    const control = this.bookingForm.get(controlName);
-    return !!(control && control.invalid && (control.touched || control.dirty));
-  }
 }

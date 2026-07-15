@@ -15,7 +15,7 @@
 
         <div class="flex items-center gap-2 text-sm text-gray-600 bg-gray-100 px-4 py-2 rounded-xl font-medium">
             <i class="pi pi-file text-xs"></i>
-            {{ labReports.length }} reports
+            {{ labReports().length }} reports
         </div>
 
     </div>
@@ -23,7 +23,7 @@
     <!-- Grid -->
     <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-6">
 
-        @for (item of labReports; track $index) {
+        @for (item of labReports(); track $index) {
         <div>
 
             <div class="flex flex-col h-full bg-white/70 backdrop-blur rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-5 border border-gray-100">

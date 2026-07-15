@@ -7,13 +7,16 @@ import { Visitis } from '../Features/Dashboards/patient-dashboard/visitis/visiti
 import { Login } from '../core/Authentication/login/login.component';
 import { Home } from '../Features/home/main/home.component';
 import { Appointments } from '../Features/Dashboards/patient-dashboard/appointments/appointments.component';
+import { LabAppointments } from '../Features/Dashboards/patient-dashboard/lab-appointments/lab-appointments.component';
 import { DoctorRegister } from '../core/Authentication/register/doctor-register/main/doctor-register.component';
 import { LabRegister } from '../core/Authentication/register/lab-register/main/lab-register.component';
 import { ExploreComponent } from '../Features/patient-hub/explore/explore.component';
 import { BookAppointmentComponent } from '../Features/patient-hub/book-appointment/book-appointment.component';
+import { CheckoutComponent } from '../Features/patient-hub/book-appointment/checkout/checkout.component';
 import { DoctorDashboard } from '../Features/Dashboards/doctor-dashboard/main/doctor-dashboard.component';
 import { DoctorOverview } from '../Features/Dashboards/doctor-dashboard/over-view/over-view.component';
 import { DoctorAppointments } from '../Features/Dashboards/doctor-dashboard/appointments/appointments.component';
+import { DoctorVisits } from '../Features/Dashboards/doctor-dashboard/visits/visits.component';
 import { DoctorSchedule } from '../Features/Dashboards/doctor-dashboard/schedule/schedule.component';
 import { DoctorNotifications } from '../Features/Dashboards/doctor-dashboard/notifications/notifications.component';
 import { DoctorReports } from '../Features/Dashboards/doctor-dashboard/reports/reports.component';
@@ -26,6 +29,7 @@ import { UnauthorizedComponent } from '../Features/unauthorized/unauthorized.com
 import { LabDashboard } from '../Features/Dashboards/lab-dashboard/main/lab-dashboard.component';
 import { LabDashboardOverview } from '../Features/Dashboards/lab-dashboard/dashboard/dashboard.component';
 import { LabTests } from '../Features/Dashboards/lab-dashboard/tests/tests.component';
+import { LabVisits } from '../Features/Dashboards/lab-dashboard/visits/visits.component';
 import { LabUpload } from '../Features/Dashboards/lab-dashboard/upload/upload.component';
 
 import { LabProfile } from '../Features/Dashboards/lab-dashboard/profile/profile.component';
@@ -33,6 +37,7 @@ import { LabSchedule } from '../Features/Dashboards/lab-dashboard/schedule/sched
 import { TestCatalog } from '../Features/Dashboards/lab-dashboard/test-catalog/test-catalog.component';
 import { PatientHubComponent } from '../Features/patient-hub/main/patient-hub.component';
 import { BookLabTestComponent } from '../Features/patient-hub/book-lab-test/book-lab-test.component';
+import { LabCheckoutComponent } from '../Features/patient-hub/book-lab-test/lab-checkout/lab-checkout.component';
 import { AiLabAnalysisComponent } from '../Features/patient-hub/ai-lab-analysis/ai-lab-analysis.component';
 export const routes: Routes = [
     //redirect to home if path is empty
@@ -98,6 +103,7 @@ export const routes: Routes = [
                     { path: '', redirectTo: 'overview', pathMatch: 'full' },
                     { path: 'overview', component: DoctorOverview },
                     { path: 'appointments', component: DoctorAppointments },
+                    { path: 'visits', component: DoctorVisits },
                     { path: 'schedule', component: DoctorSchedule },
                     { path: 'Notifications', component: DoctorNotifications },
                     { path: 'Reports', component: DoctorReports },
@@ -118,6 +124,14 @@ export const routes: Routes = [
                         component: LabResults,
                     },
                     {
+                        path: 'Appointments',
+                        component: Appointments,
+                    },
+                    {
+                        path: 'Lab-Appointments',
+                        component: LabAppointments,
+                    },
+                    {
                         path: 'Visits',
                         component: Visitis,
                     },
@@ -134,6 +148,7 @@ export const routes: Routes = [
                     { path: '', redirectTo: 'Dashboard', pathMatch: 'full' },
                     { path: 'Dashboard', component: LabDashboardOverview },
                     { path: 'Tests', component: LabTests },
+                    { path: 'Visits', component: LabVisits },
                     { path: 'Schedule', component: LabSchedule },
                     { path: 'TestCatalog', component: TestCatalog },
                     { path: 'Upload', component: LabUpload },
@@ -163,8 +178,16 @@ export const routes: Routes = [
                 component: BookAppointmentComponent,
             },
             {
+                path: 'book-appointment/:id',
+                component: CheckoutComponent,
+            },
+            {
                 path: 'book-lab-test',
                 component: BookLabTestComponent,
+            },
+            {
+                path: 'book-lab-test/:id',
+                component: LabCheckoutComponent,
             },
             {
                 path: 'ai-lab-analysis',

@@ -26,5 +26,7 @@ export class PatientDashboard {
     constructor() {
         this.patientService.loadPatientProfile();
         this.patientService.loadPatientAppointments();
+        this.patientService.loadLabAppointments();
+        this.patientService.loadLabResults();
     }
 }

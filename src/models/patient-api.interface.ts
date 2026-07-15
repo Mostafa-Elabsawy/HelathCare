@@ -98,3 +98,18 @@ export const defaultPatientProfil: PatientProfileResponseAPI = {
 
   role: 'Patient',
 };
+export class LabResult {
+  id!: number;
+  pdfUrl!: string;
+  uploadedAt!: string;
+  testName?: string;
+
+  get link(): string {
+    return `https://healthsystem.runasp.net${this.pdfUrl}`;
+  }
+}
+export interface LabResultDisplay {
+  title: string;
+  date: string;
+  link: string;
+}

@@ -1,8 +1,12 @@
 export interface PostNewDoctorAppointment  {
   doctorId: number;
-  date: string; // yyyy/mm/dd
+  date: string; // yyyy-mm-dd
   time: string; // hh:mm
-    
+}
+export interface PostNewLabAppointment  {
+  labId: number,
+  date: string,// yyyy-mm-dd
+  time:string
 }
 
 export interface PatientAppointmentsAPI {
@@ -39,4 +43,18 @@ export interface DoctorAppointmentsAPI {
     chronic: string[];
     previousSurgery: string[];
     gender: string;
+}
+import { LabWithIdAPI } from './lab-api.interface';
+
+export interface PatientLabAppointments{
+  id: number;
+  date: string; // ISO 8601 date (e.g., "2026-07-13T12:00:00")
+  patientId: number;
+  labId: number;
+  status: string;
+}
+export interface FullPatientLabAppointmentAPI extends PatientLabAppointments, LabWithIdAPI {
+  time: string;
+  testName: string;
+  price: number;
 }

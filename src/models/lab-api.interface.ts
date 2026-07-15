@@ -38,3 +38,17 @@ export interface LabTest {
 export interface UpdateLabTestAPI {
     tests: LabTest[];
 }
+
+export const DEFAULT_LAB_TEST: LabTest = {
+    testName: 'General Checkup',
+    price: 150,
+    testDetails: 'Standard laboratory test',
+};
+export interface LabWithIdAPI {
+  name: string;
+  phone: string;
+  governorate: string;
+  city: string;
+  duration: number | null;
+  tests: { testName: string; price: number ; testDetails: string}[];
+}

@@ -1,236 +1,95 @@
-<section class=" bg-gray-50 min-h-screen">
-
-    <!-- Header -->
-
-    <div class="flex items-center  bg-white/70 backdrop-blur px-6 py-5 rounded-2xl border border-gray-100 shadow-sm">
-    
+<section class="space-y-5">
+    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5 bg-white/70 backdrop-blur-xl border border-gray-100 rounded-2xl shadow-sm p-6">
         <div>
             <h2 class="text-2xl font-bold text-gray-800 tracking-tight">Medical Visits</h2>
-
-    
-        <p class="text-gray-500 mt-1">Unified timeline across all healthcare providers</p>
-
+            <p class="text-gray-500 text-sm mt-1">Past appointments across all healthcare providers.</p>
+        </div>
+        <div class="flex items-center gap-3">
+            <p-select appendTo="body" [options]="typeOptions" placeholder="Type" class="w-40" [ngModel]="selectedType()" (ngModelChange)="selectedType.set($event)"> </p-select>
+            <p-select appendTo="body" [options]="statusOptions" placeholder="Status" class="w-44" [ngModel]="selectedStatus()" (ngModelChange)="selectedStatus.set($event)"> </p-select>
+            <span class="rounded-full bg-gray-100 px-3 py-1 text-sm font-semibold text-gray-600">
+                {{ filteredVisits().length }}
+            </span>
         </div>
     </div>
-    
 
-    <!-- Timeline -->
-    <div class="relative border-l-2 border-gray-200 space-y-8 mt-5">
-
-        <!-- ================= DOCTOR ================= -->
-        <div class="relative pl-6">
-            <div class="absolute -left-2.25 top-2 w-4 h-4 bg-blue-500 rounded-full border-4 border-white shadow"></div>
-
-            <div class="bg-white/70 backdrop-blur rounded-2xl shadow-sm hover:shadow-lg transition-all p-6 border border-gray-100">
-
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h2 class="font-semibold text-lg text-gray-800">Dr. Ahmed Ali</h2>
-                        <p class="text-sm text-gray-500">Cardiology • Al Noor Clinic</p>
+    <div class="relative border-l-2 border-gray-200 space-y-6 mt-2">
+        @if (filteredVisits().length) {
+            @for (visit of filteredVisits(); track visit.id) {
+                <div class="relative pl-6">
+                    <div class="absolute -left-2.25 top-2 w-4 h-4 rounded-full border-4 border-white shadow"
+                        [class.bg-blue-500]="visit.type === 'doctor'"
+                        [class.bg-purple-500]="visit.type === 'lab'">
                     </div>
-                    <span class="text-xs px-3 py-1 bg-green-100 text-green-700 rounded-full font-medium">Completed</span>
+                    <div class="bg-white/70 backdrop-blur rounded-2xl shadow-sm hover:shadow-lg transition-all p-5 border border-gray-100">
+                        <div class="flex justify-between items-start">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-xl flex items-center justify-center"
+                                    [class.bg-blue-50]="visit.type === 'doctor'"
+                                    [class.bg-purple-50]="visit.type === 'lab'">
+                                    <i class="text-lg"
+                                        [class.fa-user-md]="visit.type === 'doctor'"
+                                        [class.fa-flask]="visit.type === 'lab'"
+                                        [class.text-blue-500]="visit.type === 'doctor'"
+                                        [class.text-purple-500]="visit.type === 'lab'">
+                                    </i>
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <h3 class="font-semibold text-gray-800">{{ visit.title }}</h3>
+                                        <span class="text-[10px] px-2 py-0.5 rounded-full font-medium"
+                                            [class.bg-blue-100]="visit.type === 'doctor'"
+                                            [class.text-blue-700]="visit.type === 'doctor'"
+                                            [class.bg-purple-100]="visit.type === 'lab'"
+                                            [class.text-purple-700]="visit.type === 'lab'">
+                                            {{ visit.type === 'doctor' ? 'Doctor' : 'Lab' }}
+                                        </span>
+                                    </div>
+                                    <p class="text-sm text-gray-500">{{ visit.subtitle }}</p>
+                                </div>
+                            </div>
+                            <span [class]="'shrink-0 text-xs px-3 py-1 rounded-full font-medium ' + statusClass(visit.status)">
+                                {{ visit.status }}
+                            </span>
+                        </div>
+
+                        <div class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                            <div class="bg-gray-50 p-3 rounded-xl">
+                                <p class="text-gray-400 text-xs">Date</p>
+                                <p class="font-medium text-gray-700">{{ visit.date }}</p>
+                            </div>
+                            <div class="bg-gray-50 p-3 rounded-xl">
+                                <p class="text-gray-400 text-xs">Time</p>
+                                <p class="font-medium text-gray-700">{{ visit.time }}</p>
+                            </div>
+                            <div class="bg-gray-50 p-3 rounded-xl">
+                                <p class="text-gray-400 text-xs">Duration</p>
+                                <p class="font-medium text-gray-700">{{ visit.duration ? visit.duration + ' mins' : '---' }}</p>
+                            </div>
+                            <div class="bg-gray-50 p-3 rounded-xl">
+                                <p class="text-gray-400 text-xs">Price</p>
+                                <p class="font-medium text-gray-700">{{ visit.price ? visit.price + ' EGP' : '---' }}</p>
+                            </div>
+                            <div class="bg-gray-50 p-3 rounded-xl col-span-2 md:col-span-4">
+                                <p class="text-gray-400 text-xs">Location</p>
+                                <p class="font-medium text-gray-700">{{ visit.location || '---' }}</p>
+                            </div>
+                        </div>
+
+                        @if (visit.type === 'lab' && visit.subtitle && visit.subtitle !== 'Lab Test') {
+                            <div class="mt-3 p-3 rounded-xl bg-purple-50 border border-purple-100">
+                                <p class="text-sm font-medium text-purple-700">Test: {{ visit.subtitle }}</p>
+                            </div>
+                        }
+                    </div>
                 </div>
-
-                <div class="mt-4 grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
-                    <div class="bg-gray-50 p-3 rounded-xl">
-                        <p class="text-gray-400 text-xs">Service</p>
-                        <p class="font-medium">Consultation</p>
-                    </div>
-                    <div class="bg-gray-50 p-3 rounded-xl">
-                        <p class="text-gray-400 text-xs">Provided</p>
-                        <p class="font-medium">Heart Check-up</p>
-                    </div>
-                    <div class="bg-gray-50 p-3 rounded-xl">
-                        <p class="text-gray-400 text-xs">Date</p>
-                        <p class="font-medium">20 Apr 2026</p>
-                    </div>
-                    <div class="bg-gray-50 p-3 rounded-xl">
-                        <p class="text-gray-400 text-xs">Time</p>
-                        <p class="font-medium">10:00 AM</p>
-                    </div>
-                    <div class="bg-gray-50 p-3 rounded-xl col-span-2 md:col-span-1">
-                        <p class="text-gray-400 text-xs">Location</p>
-                        <p class="font-medium">Al Noor Clinic</p>
-                    </div>
+            }
+        } @else {
+            <div class="pl-6">
+                <div class="rounded-2xl border border-dashed border-gray-200 bg-white/60 p-6 text-sm text-gray-500 text-center">
+                    No past visits match the selected filters.
                 </div>
-                <div class="mt-4 p-4 rounded-xl bg-blue-50 border border-blue-100">
-                    <p class="font-semibold text-blue-700 text-sm mb-1">Notes</p>
-                    <p class="text-sm text-gray-700">Patient is stable, mild chest discomfort, no emergency signs.</p>
-                </div>
-                <div class="mt-3 p-4 rounded-xl bg-gray-50 border">
-                    <p class="font-semibold text-sm mb-1">Details</p>
-                    <p class="text-sm text-gray-600">Full consultation completed. No further tests required at this time.</p>
-                </div>
-
-                <div class="mt-4">
-                    <button class="px-4 py-2 text-sm bg-white border rounded-xl hover:bg-gray-100 transition">📄 Prescription.pdf</button>
-                </div>
-
             </div>
-        </div>
-
-        <!-- ================= LAB ================= -->
-        <div class="relative pl-6">
-            <div class="absolute -left-2.25 top-2 w-4 h-4 bg-purple-500 rounded-full border-4 border-white shadow"></div>
-
-            <div class="bg-white/70 backdrop-blur rounded-2xl shadow-sm hover:shadow-lg transition-all p-6 border border-gray-100">
-
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h2 class="font-semibold text-lg text-gray-800">Al Hayat Lab</h2>
-                        <p class="text-sm text-gray-500">Diagnostics • Central Lab Branch</p>
-                    </div>
-                    <span class="text-xs px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full font-medium">Completed</span>
-                </div>
-
-                <div class="mt-4 grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
-                    <div class="bg-gray-50 p-3 rounded-xl">
-                        <p class="text-gray-400 text-xs">Service</p>
-                        <p class="font-medium">Laboratory</p>
-                    </div>
-                    <div class="bg-gray-50 p-3 rounded-xl">
-                        <p class="text-gray-400 text-xs">Provided</p>
-                        <p class="font-medium">CBC Blood Test</p>
-                    </div>
-                    <div class="bg-gray-50 p-3 rounded-xl">
-                        <p class="text-gray-400 text-xs">Date</p>
-                        <p class="font-medium">20 Apr 2026</p>
-                    </div>
-                    <div class="bg-gray-50 p-3 rounded-xl">
-                        <p class="text-gray-400 text-xs">Time</p>
-                        <p class="font-medium">09:00 AM</p>
-                    </div>
-                    <div class="bg-gray-50 p-3 rounded-xl col-span-2 md:col-span-1">
-                        <p class="text-gray-400 text-xs">Location</p>
-                        <p class="font-medium">Al Hayat Lab</p>
-                    </div>
-                </div>
-
-                <div class="mt-4 p-4 rounded-xl bg-purple-50 border border-purple-100">
-                    <p class="font-semibold text-purple-700 text-sm mb-1">Notes</p>
-                    <p class="text-sm text-gray-700">White blood cells slightly elevated, no critical issues.</p>
-                </div>
-
-                <div class="mt-3 p-4 rounded-xl bg-gray-50 border">
-                    <p class="font-semibold text-sm mb-1">Details</p>
-                    <p class="text-sm text-gray-600">Lab analysis completed using automated hematology system.</p>
-                </div>
-
-                <div class="mt-4">
-                    <button class="px-4 py-2 text-sm bg-white border rounded-xl hover:bg-gray-100 transition">📄 Lab_Report.pdf</button>
-                </div>
-
-            </div>
-        </div>
-
-        <!-- ================= RADIOLOGY ================= -->
-        <div class="relative pl-6">
-            <div class="absolute -left-2.25 top-2 w-4 h-4 bg-indigo-500 rounded-full border-4 border-white shadow"></div>
-
-            <div class="bg-white/70 backdrop-blur rounded-2xl shadow-sm hover:shadow-lg transition-all p-6 border border-gray-100">
-
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h2 class="font-semibold text-lg text-gray-800">City Imaging Center</h2>
-                        <p class="text-sm text-gray-500">Radiology • Imaging Department</p>
-                    </div>
-                    <span class="text-xs px-3 py-1 bg-green-100 text-green-700 rounded-full font-medium">Completed</span>
-                </div>
-
-                <div class="mt-4 grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
-                    <div class="bg-gray-50 p-3 rounded-xl">
-                        <p class="text-gray-400 text-xs">Service</p>
-                        <p class="font-medium">Radiology</p>
-                    </div>
-                    <div class="bg-gray-50 p-3 rounded-xl">
-                        <p class="text-gray-400 text-xs">Provided</p>
-                        <p class="font-medium">Chest X-Ray</p>
-                    </div>
-                    <div class="bg-gray-50 p-3 rounded-xl">
-                        <p class="text-gray-400 text-xs">Date</p>
-                        <p class="font-medium">20 Apr 2026</p>
-                    </div>
-                    <div class="bg-gray-50 p-3 rounded-xl">
-                        <p class="text-gray-400 text-xs">Time</p>
-                        <p class="font-medium">11:00 AM</p>
-                    </div>
-                    <div class="bg-gray-50 p-3 rounded-xl col-span-2 md:col-span-1">
-                        <p class="text-gray-400 text-xs">Location</p>
-                        <p class="font-medium">City Imaging Center</p>
-                    </div>
-                </div>
-
-                <div class="mt-4 p-4 rounded-xl bg-indigo-50 border border-indigo-100">
-                    <p class="font-semibold text-indigo-700 text-sm mb-1">Notes</p>
-                    <p class="text-sm text-gray-700">No abnormal findings detected in chest scan.</p>
-                </div>
-
-                <div class="mt-3 p-4 rounded-xl bg-gray-50 border">
-                    <p class="font-semibold text-sm mb-1">Details</p>
-                    <p class="text-sm text-gray-600">High-resolution imaging performed, results within normal range.</p>
-                </div>
-
-                <div class="mt-4">
-                    <button class="px-4 py-2 text-sm bg-white border rounded-xl hover:bg-gray-100 transition">📄 Xray.png</button>
-                </div>
-
-            </div>
-        </div>
-
-        <!-- ================= HOSPITAL ================= -->
-        <div class="relative pl-6">
-            <div class="absolute -left-2.25 top-2 w-4 h-4 bg-red-500 rounded-full border-4 border-white shadow"></div>
-
-            <div class="bg-white/70 backdrop-blur rounded-2xl shadow-sm hover:shadow-lg transition-all p-6 border border-gray-100">
-
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h2 class="font-semibold text-lg text-gray-800">El Shifa Hospital</h2>
-                        <p class="text-sm text-gray-500">Hospital Care • Emergency Department</p>
-                    </div>
-                    <span class="text-xs px-3 py-1 bg-red-100 text-red-700 rounded-full font-medium">Admitted</span>
-                </div>
-
-                <div class="mt-4 grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
-                    <div class="bg-gray-50 p-3 rounded-xl">
-                        <p class="text-gray-400 text-xs">Service</p>
-                        <p class="font-medium">Hospital Admission</p>
-                    </div>
-                    <div class="bg-gray-50 p-3 rounded-xl">
-                        <p class="text-gray-400 text-xs">Provided</p>
-                        <p class="font-medium">Emergency Treatment</p>
-                    </div>
-                    <div class="bg-gray-50 p-3 rounded-xl">
-                        <p class="text-gray-400 text-xs">Date</p>
-                        <p class="font-medium">18 Apr 2026</p>
-                    </div>
-                    <div class="bg-gray-50 p-3 rounded-xl">
-                        <p class="text-gray-400 text-xs">Time</p>
-                        <p class="font-medium">02:00 PM</p>
-                    </div>
-                    <div class="bg-gray-50 p-3 rounded-xl col-span-2 md:col-span-1">
-                        <p class="text-gray-400 text-xs">Location</p>
-                        <p class="font-medium">El Shifa Hospital</p>
-                    </div>
-                </div>
-
-                <div class="mt-4 p-4 rounded-xl bg-red-50 border border-red-100">
-                    <p class="font-semibold text-red-700 text-sm mb-1">Notes</p>
-                    <p class="text-sm text-gray-700">Patient treated for severe dehydration with IV fluids.</p>
-                </div>
-
-                <div class="mt-3 p-4 rounded-xl bg-gray-50 border">
-                    <p class="font-semibold text-sm mb-1">Details</p>
-                    <p class="text-sm text-gray-600">Patient admitted for 2 days, stable condition on discharge.</p>
-                </div>
-
-                <div class="mt-4">
-                    <button class="px-4 py-2 text-sm bg-white border rounded-xl hover:bg-gray-100 transition">📄 Discharge_Summary.pdf</button>
-                </div>
-
-            </div>
-        </div>
-
+        }
     </div>
-
 </section>
