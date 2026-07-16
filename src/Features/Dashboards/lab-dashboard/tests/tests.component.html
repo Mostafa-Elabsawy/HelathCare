@@ -191,11 +191,11 @@
                             @if(selectedTest()?.status=='Pending') {
                     <div class="flex justify-end items-center gap-5 col-span-full">
 
-                        <button class="rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:bg-green-700 hover:shadow-md active:scale-95">
+                        <button (click)="approveTest(test.id)" class="rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:bg-green-700 hover:shadow-md active:scale-95">
                             Approve
                         </button>
 
-                        <button class="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:bg-red-700 hover:shadow-md active:scale-95">
+                        <button (click)="rejectTest(test.id)" class="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:bg-red-700 hover:shadow-md active:scale-95">
                             Reject
                         </button>
                     </div>

@@ -58,4 +58,12 @@ export class LabDashboardOverview {
         status: a.status,
       })),
   );
+
+  acceptRequest(id: number) {
+    this.labService.approveLabAppointments(id).subscribe();
+  }
+
+  declineRequest(id: number) {
+    this.labService.rejectLabAppointments(id).subscribe();
+  }
 }

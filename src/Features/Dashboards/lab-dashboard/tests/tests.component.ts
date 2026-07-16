@@ -96,4 +96,16 @@ export class LabTests {
     statusClass(state: string): string {
         return STATUS_STYLES[state] || 'bg-gray-100 text-gray-600';
     }
+
+    approveTest(id: number) {
+        this.labService.approveLabAppointments(id).subscribe(() => {
+            this.closeDetails();
+        });
+    }
+
+    rejectTest(id: number) {
+        this.labService.rejectLabAppointments(id).subscribe(() => {
+            this.closeDetails();
+        });
+    }
 }

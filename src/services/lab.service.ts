@@ -32,15 +32,15 @@ export class LabService {
     }
 
     updateLabProfile(data: any): Observable<any> {
-        return this.http.put<any>(this.labURL + '/profile', data).pipe(
-            tap((updated) => this.lab.set(updated)),
-        );
+        return this.http
+            .put<any>(this.labURL + '/profile', data)
+            .pipe(tap((updated) => this.lab.set(updated)));
     }
 
     updateTests(data: UpdateLabTestAPI) {
-        return this.http.put<any>(this.labURL + '/profile', data).pipe(
-            tap((updated) => this.lab.set(updated)),
-        );
+        return this.http
+            .put<any>(this.labURL + '/profile', data)
+            .pipe(tap((updated) => this.lab.set(updated)));
     }
 
     getAllLabs(): Observable<any[]> {
@@ -50,7 +50,8 @@ export class LabService {
     }
 
     loadLabAppointments(): void {
-        this.http.get<LabAppointmentsAPI[]>(this.appoinmentURL + '/lab/MyAppointments')
+        this.http
+            .get<LabAppointmentsAPI[]>(this.appoinmentURL + '/lab/MyAppointments')
             .pipe(
                 switchMap((appointments) =>
                     forkJoin(
@@ -86,9 +87,7 @@ export class LabService {
         return this.http.post<any>(`${this.labURL}/upload-result`, formData).pipe(
             tap(() => {
                 this.appointments.update((list) =>
-                    list.map((a) =>
-                        a.patientId === patientId ? { ...a, status: 'Approved' } : a,
-                    ),
+                    list.map((a) => (a.patientId === patientId ? { ...a, status: 'Approved' } : a)),
                 );
             }),
         );
@@ -97,5 +96,27 @@ export class LabService {
     loadAll(): void {
         this.loadLabProfile();
         this.loadLabAppointments();
+    }
+    approveLabAppointments(id: number) {
+        return this.http.put<any>(`${this.appoinmentURL}/approve/${id}`, {}).pipe(
+            tap(() => {
+                this.appointments.update((list) =>
+                    list.map((a) =>
+                        a.id === id ? { ...a, status: 'Approved' } : a,
+                    ),
+                );
+            }),
+        );
+    }
+    rejectLabAppointments(id: number) {
+        return this.http.put<any>(`${this.appoinmentURL}/reject/${id}`, {}).pipe(
+            tap(() => {
+                this.appointments.update((list) =>
+                    list.map((a) =>
+                        a.id === id ? { ...a, status: 'Rejected' } : a,
+                    ),
+                );
+            }),
+        );
     }
 }
